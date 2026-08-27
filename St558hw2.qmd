@@ -1,0 +1,143 @@
+---
+title: "St558hw2"
+format: html
+editor: visual
+---
+
+## Task 1
+
+### Vectors for data
+
+```{r}
+preTreat <- c(130, 128, 116, 124, 133, 134, 118, 126, 114, 127, 141, 138, 128, 140, 137, 131, 120, 128, 139, 135)
+
+postTreat <- c(114, 98, 113, 99, 107, 116, 113, 111, 119, 117, 101, 119, 130, 122, 106, 106, 124, 102, 117, 113)
+
+names(preTreat) <- paste("Subject", 1:20, sep = "_")
+
+names(postTreat) <- paste("Subject", 1:20, sep = "_")
+```
+
+### Change in blood pressure
+
+```{r}
+changeTreat <- preTreat - postTreat
+
+avgChange <- mean(changeTreat)
+```
+
+On average people lost 17 bp after the treatment.
+
+### Subsetting data so that only a those with a positive change show up
+
+```{r}
+isPositiveChange <- which(postTreat < preTreat)
+
+preTreatSub <- preTreat[names(isPositiveChange)]
+postTreatSub <- postTreat[names(isPositiveChange)]
+
+changeTreatSub <- preTreatSub - postTreatSub
+
+avgChangeSub <- mean(changeTreatSub)
+```
+
+People who were positively impacted by the treatment has their bp decreased by around 20.6470 bp.
+
+## Task 2
+
+### Dataframe creation and creating new column for low bp
+
+```{r}
+bpTrtDf <- data.frame(names(preTreat), preTreat, postTreat, changeTreat, row.names = NULL)
+names(bpTrtDf) <- c("patient", "pre_bp", "post_bp", "diff_bp")
+
+negbp <- subset(bpTrtDf, diff_bp < 0)
+
+# Low bp
+bpTrtDf$low_bp <- bpTrtDf$post_bp < 120
+
+# Knit
+knitr::kable(bpTrtDf)
+```
+
+## Task 3
+
+### Setting up the data also making similar to Task 2
+
+```{r}
+# Vectors
+prePlacebo <- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+postPlacebo <- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+
+names(prePlacebo) <- paste("Subject", 1:10, sep = "_")
+names(postPlacebo) <- paste("Subject", 1:10, sep = "_")
+
+# Diff
+changePlacebo <- prePlacebo - postPlacebo
+
+# Making df and adding col
+bpPlaceboDf <- data.frame(names(prePlacebo), prePlacebo, postPlacebo, changePlacebo)
+names(bpPlaceboDf) <- c("patient", "pre_bp", "post_bp", "diff_bp")
+
+
+negPlbp <- subset(bpPlaceboDf, diff_bp < 0)
+
+# Low bp
+bpPlaceboDf$low_bp <- bpPlaceboDf$post_bp < 120
+
+```
+
+### Making a list of all bp df and accessing the first list element (3 ways)
+
+```{r}
+bpList <- list(bpTrtDf, bpPlaceboDf)
+names(bpList) <- c("treatment", "placebo")
+
+bpList[1]
+bpList$treatment
+bpList[[1]]
+```
+
+### pre_bp placebo column
+
+```{r}
+bpList[[2]]$pre_bp
+```
+
+## Task 4
+
+### Adding status col, based on bp in post trt. Using conditional logic. Done for all df in list
+
+```{r}
+bpList[[1]]$status <- character(20)
+bpList[[2]]$status <- character(10)
+
+# Loop and logic for bp trt
+for (i in seq_along(bpList[[1]]$post_bp)) {
+  pbpVal <- bpList[[1]]$post_bp[i]
+  if (pbpVal <= 120) { 
+    bpList[[1]]$status[i] <- "optimal"
+  } else if (pbpVal > 130){
+    bpList[[1]]$status[i] <- "high"
+  } else if ((pbpVal > 120) & (pbpVal <= 130)) {
+    bpList[[1]]$status[i] <-  "borderline"
+  } else {
+    bpList[[1]]$status[i] <- "error"
+  }
+}
+
+# Loop and logic for bp placebo
+for (i in seq_along(bpList[[2]]$post_bp)) {
+  pbpVal <- bpList[[2]]$post_bp[i]
+  if (pbpVal <= 120) { 
+    bpList[[2]]$status[i] <- "optimal"
+  } else if (pbpVal > 130){
+    bpList[[2]]$status[i] <- "high"
+  } else if ((pbpVal > 120) & (pbpVal <= 130)) {
+    bpList[[2]]$status[i] <-  "borderline"
+  } else {
+    bpList[[2]]$status[i] <- "error"
+  }
+}
+
+```
