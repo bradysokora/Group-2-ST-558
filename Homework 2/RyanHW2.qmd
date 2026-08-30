@@ -5,19 +5,58 @@ editor: visual
 ---
 ## Task 1: Basic Vector practice
 
-1.
+1. 
+```{r}
+# Pre-treatment vector
+pre <- c(130, 128, 116, 124, 133, 134, 118, 126, 114, 127,
+         141, 138, 128, 140, 137, 131, 120, 128, 139, 135)
+#Post-treatment vector
+post <- c(114, 98, 113, 99, 107, 116, 113, 111, 119, 117,
+          101, 119, 130, 122, 106, 106, 124, 102, 117, 113)
+
+```
 
 2.
+```{r}
+# Subject name labels
+subject_names <- paste("Subject", 1:20, sep = "_")
+subject_names
+# Assigning names
+names(pre) <- subject_names
+names(post) <- subject_names
+```
 
 3.
+```{r}
+# Change in blood pressure
+change <- pre - post
+change
+```
 
 4.
+```{r}
+# Average decrease in blood pressure
+mean(change)
+```
 
 5.
+```{r}
+# Which patients had a positive change
+which(change > 0)
+```
+We can see that subjects number 9, 13, and 17 are missing because they did not have a positive change in blood pressure (i.e. their blood pressures went up).
 
 6.
+```{r}
+# Subsetting vector of only positive change subjects
+positive_change <- change[change > 0]
+positive_change
+```
 
 7.
+```{r}
+mean(positive_change)
+```
 
 ## Task 2: Basic Data Frame practice
 
