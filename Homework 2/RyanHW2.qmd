@@ -61,12 +61,36 @@ mean(positive_change)
 ## Task 2: Basic Data Frame practice
 
 1.
+```{r}
+# Data frame of task 1 data
+bp_df <- data.frame(
+  patient = subject_names,
+  pre_bp = pre,
+  post_bp = post,
+  diff_bp = change
+)
+bp_df
+```
 
 2.
+```{r}
+# Only rows where diff_bp is negative
+bp_df[bp_df$diff_bp < 0, ]
+```
+As we saw before, this subset only includes subjects 9, 13, and 17.
 
 3.
+```{r}
+# New column: TRUE if post_bp<120
+bp_df$under_120 <- bp_df$post_bp < 120
+bp_df
+```
 
 4.
+```{r}
+# Print data frame
+knitr::kable(bp_df)
+```
 
 ## Task 3: List practice
 
