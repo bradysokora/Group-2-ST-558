@@ -39,14 +39,12 @@ mean(diff)
 ```
 
 I determine which patients blodd pressures decreased, which is a positive change
-
 ```{r}
 # Patients with positvie change in bp list
 which(diff>0)
 ```
 
 I subset the diff vector to show only patients with positive bp change
-
 ```{r}
 #keep only positive bp changes
 pos_diff <- diff[diff>0]
@@ -54,17 +52,10 @@ pos_diff
 ```
 
 I calculated average decrease in bp for only patients whos bp decreased
-
 ```{r}
 # Average decrease among patients who decreased
 mean(pos_diff)
 ```
 
-## Task 2: Basic Data Frame Practice
-
-
-```{r}
-#
-
-```
+## Task 2: Basic Data Frame Practice`
 
