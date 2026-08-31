@@ -1,0 +1,113 @@
+---
+title: "ST558 Mason HW2"
+format: html
+editor: visual
+---
+
+##Task 1
+
+```{r}
+#Creating vectors for pre and post treatment
+pre <- c(130, 128, 116, 124, 133, 134, 118, 126, 114, 127, 141, 138, 128, 140, 137, 131, 120, 128, 139, 135)
+
+post <- c(114, 98, 113, 99, 107, 116, 113, 111, 119, 117, 101, 119, 130, 122, 106, 106, 124, 102, 117, 113)
+
+#Giving each value a name corresponding to subject number
+names(pre) <- paste("Subject", 1:20, sep = " ")
+names(post) <- paste("Subject", 1:20, sep = " ")
+
+#Difference in pre and post treatment
+diff <- pre - post
+diff
+
+#Average difference in pre and post treatment
+avg_diff <- mean(diff)
+avg_diff
+
+#Finding which subjects had an improvement (decrease in blood pressure)
+improvement <- which(diff > 0)
+improvement
+
+#Subsetting the pre and post treatment vectors for only those who saw improvement
+pre_sub <- pre[names(improvement)]
+post_sub <- post[names(improvement)]
+
+#Finding average difference in pre and post treatment for those who saw improvement
+avg_diff_sub <- mean(pre_sub - post_sub)
+avg_diff_sub
+```
+
+##Task 2
+```{r}
+#Creating data frame
+bp_data <- data.frame(patient = names(pre), pre_bp = pre, post_bp = post, diff_bp = diff, row.names = NULL) 
+
+#Returning subset of values where diff_bp < 0
+subset(bp_data, diff_bp < 0)
+
+#Creating new column that returns TRUE if post_bp < 120
+bp_data$post_bp_low <- bp_data$post_bp < 120
+bp_data$post_bp_low
+
+knitr::kable(bp_data)
+```
+
+##Task 3
+```{r}
+#Creating vectors for subjects in placebo experiment
+placebo_pre <- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+placebo_post <- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+
+#Creating data frame with data from above
+names(placebo_pre) <- paste("Subject", 1:10, sep = " ")
+names(placebo_post) <- paste("Subject", 1:10, sep = " ")
+
+placebo_diff <- placebo_pre - placebo_post
+
+placebo_df <- data.frame(patient = names(placebo_pre), placebo_pre = placebo_pre, placebo_post = placebo_post, placebo_diff = placebo_diff, placebo_post_bp_low = placebo_post < 120, row.names = NULL)
+
+#Creating list with both data frames inside
+bp_list <- list(treatment = bp_data, placebo = placebo_df)
+
+#Accessing first element 3 different ways
+bp_list[1]
+bp_list$treatment
+bp_list[[1]]
+
+#Accessing the placebo_pre column from the placebo data frame
+bp_list[[2]][[2]]
+```
+
+##Task 4
+```{r}
+#Creating status column in both data frames
+bp_data$status <- character(20)
+placebo_df$status <- character(10)
+
+#Updating list so I can loop through it
+bp_list <- list(treatment = bp_data, placebo = placebo_df)
+
+#Creating for loop to update status variable for the non-placebo data frame
+for(i in seq_along(bp_list[[1]][[3]])){
+  bp_val <- bp_list[[1]]$post_bp[i]
+  if (bp_val <= 120){
+    bp_list[[1]]$status[i] <- "optimal"
+  } else if ((bp_val > 120) & (bp_val <= 130)){
+    bp_list[[1]]$status[i] <- "borderline"
+  } else if (bp_val > 130){
+    bp_list[[1]]$status[i] <- "high"
+  }
+}
+
+#Doing same thing as above for placebo data frame
+for(i in seq_along(bp_list[[2]][[3]])){
+  bp_val <- bp_list[[2]]$placebo_post[i]
+  if (bp_val <= 120){
+    bp_list[[2]]$status[i] <- "optimal"
+  } else if ((bp_val > 120) & (bp_val <= 130)){
+    bp_list[[2]]$status[i] <- "borderline"
+  } else if (bp_val > 130){
+    bp_list[[2]]$status[i] <- "high"
+  }
+}
+```
