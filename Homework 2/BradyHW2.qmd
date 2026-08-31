@@ -39,23 +39,57 @@ mean(diff)
 ```
 
 I determine which patients blodd pressures decreased, which is a positive change
+
 ```{r}
 # Patients with positvie change in bp list
 which(diff>0)
 ```
 
 I subset the diff vector to show only patients with positive bp change
+
 ```{r}
 #keep only positive bp changes
 pos_diff <- diff[diff>0]
 pos_diff
 ```
 
-I calculated average decrease in bp for only patients whos bp decreased
+I calculated average decrease in bp for only patients who bp decreased
+
 ```{r}
 # Average decrease among patients who decreased
 mean(pos_diff)
 ```
 
-## Task 2: Basic Data Frame Practice`
+## Task 2: Basic Data Frame Practice
 
+I creates data frame object with 4 columns
+
+```{r}
+# 4 new columns in Data Frame
+df_bp <- data.frame(patient = names(pre),
+                    pre_bp = pre,
+                    post_bp = post,
+                    diff_bp = diff)
+```
+
+I get only the patients with diff_bp is negative.
+
+```{r}
+# Only diff_bp negative rows
+df_bp[df_bp$diff_bp<0, ]
+```
+
+I created a new column for if post_bp is under 120
+
+```{r}
+# Adding a column, read back TRUE if post_bp is under 120
+df_bp$below_120 <- df_bp$post_bp<120
+df_bp
+```
+
+I printed out the data frame
+
+```{r}
+#Print data frame using knitr
+knitr::kable(df_bp)
+```

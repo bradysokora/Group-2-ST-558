@@ -63,6 +63,7 @@ mean(pos_diff)
 ## Task 2: Basic Data Frame Practice
 
 I creates data frame object with 4 columns
+
 ```{r}
 # 4 new columns in Data Frame
 df_bp <- data.frame(patient = names(pre),
@@ -79,6 +80,7 @@ df_bp[df_bp$diff_bp<0, ]
 ```
 
 I created a new column for if post_bp is under 120
+
 ```{r}
 # Adding a column, read back TRUE if post_bp is under 120
 df_bp$below_120 <- df_bp$post_bp<120
@@ -86,8 +88,8 @@ df_bp
 ```
 
 I printed out the data frame
+
 ```{r}
 #Print data frame using knitr
 knitr::kable(df_bp)
 ```
-
