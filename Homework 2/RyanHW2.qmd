@@ -150,8 +150,44 @@ experiment_list$placebo$pre_bp
 ## Task 4: Control Flow Practice
 
 1.
+```{r}
+# Creating Status column in both data frames
+experiment_list$treatment$status <- character(20)  # 20 observations in treatment
+experiment_list$placebo$status <- character(10)     # 10 observations in placebo
+
+experiment_list$treatment
+experiment_list$placebo
+```
 
 2.
+```{r}
+# Creating status column values in the treatment data frame
+for (i in 1:nrow(experiment_list$treatment)) {
+  if (experiment_list$treatment$post_bp[i] <= 120) {
+    experiment_list$treatment$status[i] <- "optimal"      # Optimal: <= 120
+  } else if (experiment_list$treatment$post_bp[i] <= 130) {
+    experiment_list$treatment$status[i] <- "borderline"   # Borderline: 120 <= bp <= 130
+  } else {
+    experiment_list$treatment$status[i] <- "high"         # High: > 130
+  }
+}
+experiment_list$treatment
+
+```
 
 3.
+```{r}
+# Creating status column values in the placebo data frame
+for (i in 1:nrow(experiment_list$placebo)) {
+  if (experiment_list$placebo$post_bp[i] <= 120) {
+    experiment_list$placebo$status[i] <- "optimal"      # Optimal: <= 120
+  } else if (experiment_list$placebo$post_bp[i] <= 130) {
+    experiment_list$placebo$status[i] <- "borderline"   # Borderline: 120 <= bp <= 130
+  } else {
+    experiment_list$placebo$status[i] <- "high"         # High: > 130
+  }
+}
+
+experiment_list$placebo
+```
 
