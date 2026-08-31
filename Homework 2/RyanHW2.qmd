@@ -95,12 +95,57 @@ knitr::kable(bp_df)
 ## Task 3: List practice
 
 1.
+```{r}
+# Placebo treatment data
+pre_placebo <- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+post_placebo <- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+
+# Assigning subjects
+placebo_names <- paste("Subject", 1:10, sep = "_")
+
+# Taking difference
+diff_placebo <- pre_placebo - post_placebo
+
+# Placebo data frame
+placebo_df <- data.frame(
+  patient = placebo_names,
+  pre_bp = pre_placebo,
+  post_bp = post_placebo,
+  diff_bp = diff_placebo
+)
+
+# Adding column: TRUE if post_bp<120
+placebo_df$under_120 <- placebo_df$post_bp < 120
+placebo_df
+
+```
 
 2.
+```{r}
+# List containing the two data frames
+experiment_list <- list(
+  treatment = bp_df,
+  placebo = placebo_df
+)
+
+experiment_list
+```
 
 3.
+```{r}
+# Accessing the first element in three different ways
+experiment_list$treatment
+
+experiment_list[["treatment"]]
+
+experiment_list[[1]]
+```
 
 4.
+```{r}
+# Accessing placebo df, pre_bp col
+experiment_list$placebo$pre_bp
+```
 
 ## Task 4: Control Flow Practice
 
