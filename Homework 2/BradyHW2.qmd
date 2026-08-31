@@ -4,7 +4,9 @@ format: html
 editor: visual
 ---
 
-# Task 1: Basic Vector Practice
+# Homework 2 ST 558 Group 2
+
+## Task 1: Basic Vector Practice
 
 I created pre and post treatment vectors
 
@@ -92,4 +94,48 @@ I printed out the data frame
 ```{r}
 #Print data frame using knitr
 knitr::kable(df_bp)
+```
+
+## Task 3: List Practice
+
+I made a new data frame with using new placebo data
+
+```{r}
+#Create new data frame with placebo 10 observations
+placebo_pre <- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+placebo_post <- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+
+# placebo difference pre - post
+placebo_diff <- c(placebo_pre - placebo_post)
+
+#Placebo data frame with 4 columns
+placebo_df <- data.frame(patient = paste("Subject", 1:10, sep = "_"),
+                         pre_bp = placebo_pre,
+                         post_bp = placebo_post,
+                         diff_bp = placebo_diff)
+```
+
+I created and stored a list for the data frames
+
+```{r}
+# List for storing both data frames
+bp_list <- list(treatment = df_bp, placebo = placebo_df)
+bp_list
+```
+
+I accessed the first element using 3 types of syntax
+
+```{r}
+# Three different methods to look at first element
+bp_list[1]           
+bp_list[[1]]         
+bp_list$treatment    
+
+```
+
+I accessed the pre_bp column of the placebo data frame
+
+```{r}
+# Access placebo data frames pre_bp column
+bp_list$placebo$pre_bp
 ```
