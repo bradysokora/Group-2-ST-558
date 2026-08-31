@@ -139,3 +139,43 @@ I accessed the pre_bp column of the placebo data frame
 # Access placebo data frames pre_bp column
 bp_list$placebo$pre_bp
 ```
+
+## Task 4: Control Flow Practice
+
+I created a new column in both data frames for how to catgeorize post bp
+```{r}
+# Create column for post_bp in both data frames
+df_bp$status <- character(20)
+placebo_df$status <- character(10)
+```
+
+I created categories for the post bp as optimal (0-120), borderline (121-130), and high (131+) in non placebo group
+```{r}
+# Create status categories in new column for non placebo
+# Fill status for treatment group
+for (i in 1:20) {
+  if (df_bp$post_bp[i] <= 120) {
+    df_bp$status[i] <- "optimal"
+  } else if (df_bp$post_bp[i] <= 130) {
+    df_bp$status[i] <- "borderline"
+  } else {
+    df_bp$status[i] <- "high"
+  }
+}
+df_bp
+```
+
+I created categories for the post bp as optimal (0-120), borderline (121-130), and high (131+) in placebo group
+```{r}
+# Create status categories in new column for placebo
+for (i in 1:10) {
+  if (placebo_df$post_bp[i] <= 120) {
+    placebo_df$status[i] <- "optimal"
+  } else if (placebo_df$post_bp[i] <= 130) {
+    placebo_df$status[i] <- "borderline"
+  } else {
+    placebo_df$status[i] <- "high"
+  }
+}
+placebo_df
+```
