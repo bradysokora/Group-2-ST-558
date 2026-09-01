@@ -14,17 +14,46 @@ change <- after_treatment - pre_treatment
 average <- sum(change)/20
 names(change)[change < 0]
 names(change[which(change < 0)])
+positivechange <- change[change < 0]
+avg_positive <- mean(positivechange)
 
 ```
 average decrease in blood pressure across all patients is 17
 Except for "Subject_9"  "Subject_13" "Subject_17" experienced a decrease in blood pressure after treatment (a positive change)
+
+# Task 2 
 ```{r}
+# 2.1 
 patient <- names(pre_treatment)
 pre_bp <- pre_treatment
 post_bp <- after_treatment
 diff_bp <- change
 df <- data.frame(patient, pre_bp, post_bp, diff_bp)
+# 2.2 
 subset(ds, diff_bp < 0)
-df$lessthan120 <- post_bp < 120 
+# 2.3 
+df$lessthan120 <- df$post_bp < 120 
+# 2.4 
 knitr::kable(df)
 ```
+
+# Task 3 
+```{r}
+# 3.1. create a data frame for placebo group
+placebo_pre <- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+placebo_pro <- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+placebo_df <- data.frame (placebo_pre, placebo_pro)
+placebo_df$lessthan120 <- placebo_df$placebo_pro < 120
+
+# 3.2 Create a list 
+listexperiment <- list(treatment = df, placebo = placebo_df) 
+
+# 3.3 three syntax 
+listexperiment[1]
+listexperiment$treatment
+listexperiment[[1]]
+
+
+```
+
+# Task 4 
