@@ -14,9 +14,17 @@ change <- after_treatment - pre_treatment
 average <- sum(change)/20
 names(change)[change < 0]
 names(change[which(change < 0)])
+
 ```
 average decrease in blood pressure across all patients is 17
 Except for "Subject_9"  "Subject_13" "Subject_17" experienced a decrease in blood pressure after treatment (a positive change)
 ```{r}
-
+patient <- names(pre_treatment)
+pre_bp <- pre_treatment
+post_bp <- after_treatment
+diff_bp <- change
+df <- data.frame(patient, pre_bp, post_bp, diff_bp)
+subset(ds, diff_bp < 0)
+df$lessthan120 <- post_bp < 120 
+knitr::kable(df)
 ```
