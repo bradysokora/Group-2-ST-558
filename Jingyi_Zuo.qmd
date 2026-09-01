@@ -71,17 +71,17 @@ else {df$status <- high}
   
   for (i=1:20) {
     if (listexperiment$treatment$post_bp[i] <= 120) listexperiment$treatment$status[i] = "optimal"
-    if (listexperiment$treatment$post_bp > 120 and listexperiment$treatment$post_bp <= 130)
-  listexperiment$treatment$status = "Bounderline"
-    listexperiment$treatment$post_bp > 130)
-    listexperiment$treatment$status = "high"}
+    if (listexperiment$treatment$post_bp[i] > 120 and listexperiment$treatment$post_bp[i] <= 130)
+  listexperiment$treatment$status[i] = "Bounderline"
+    listexperiment$treatment$post_bp[i] > 130)
+    listexperiment$treatment$status[i] = "high"}
   
     for (i=1:10) {
-    if (listexperiment$placebo$post_bp <= 120) listexperiment$placebo$status = "optimal"
-    if (listexperiment$placebo$post_bp > 120 and listexperiment$placebo$post_bp <= 130)
-  listexperiment$placebo$status = "Bounderline"
-    listexperiment$placebo$post_bp > 130)
-    listexperiment$placebo$status = "high"}
+    if (listexperiment$placebo$post_bp[i] <= 120) listexperiment$placebo$status[i] = "optimal"
+    if (listexperiment$placebo$post_bp[i] > 120 and listexperiment$placebo$post_bp[i] <= 130)
+  listexperiment$placebo$status[i] = "Bounderline"
+    listexperiment$placebo$post_bp[i] > 130)
+    listexperiment$placebo$status[i] = "high"}
   
   
     
