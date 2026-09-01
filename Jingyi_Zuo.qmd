@@ -1,0 +1,22 @@
+---
+title: "Jingyi_Zuo"
+format: html
+---
+
+# Task 1 
+```{r}
+pre_treatment <- c (130, 128, 116, 124, 133, 134, 118, 126, 114, 127, 141, 138, 128, 140, 137, 131, 120, 128, 139, 135)
+after_treatment <- c(114, 98, 113, 99, 107, 116, 113, 111, 119, 117, 101, 119, 130, 122, 106, 106, 124, 102, 117, 113)
+names(pre_treatment) <- paste("Subject", 1:20, sep = "_") 
+names(after_treatment) <- paste("Subject", 1:20, sep = "_") 
+
+change <- after_treatment - pre_treatment 
+average <- sum(change)/20
+names(change)[change < 0]
+names(change[which(change < 0)])
+```
+average decrease in blood pressure across all patients is 17
+Except for "Subject_9"  "Subject_13" "Subject_17" experienced a decrease in blood pressure after treatment (a positive change)
+```{r}
+
+```
