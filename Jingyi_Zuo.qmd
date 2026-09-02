@@ -63,32 +63,29 @@ listexperiment$treatment$status <- character(20)
 listexperiment$placebo$status <- character(10)
 
 # 2. 
-if df$post_bp <= 130 {{
-  if df$post_bp <= 120 {
-    then df$status <- optimal}
-  else {df$status <- boarderline}}
-else {df$status <- high}
-  
-  for (i=1:20) {
+for (i in 1:20 ) 
+if (df$post_bp[i] <= 130) {
+  if (df$post_bp[i] <= 120) 
+    df$status[i] <- "optimal"
+  else {df$status[i] <- "boarderline"}}
+ {df$status[i] <- "high"}
+ 
+  # 3  
+
+  for (i in 1:20) 
     if (listexperiment$treatment$post_bp[i] <= 120) listexperiment$treatment$status[i] = "optimal"
-    if (listexperiment$treatment$post_bp[i] > 120 and listexperiment$treatment$post_bp[i] <= 130)
+    if (listexperiment$treatment$post_bp[i] > 120 &  listexperiment$treatment$post_bp[i] <= 130)
   listexperiment$treatment$status[i] = "Bounderline"
-    listexperiment$treatment$post_bp[i] > 130)
-    listexperiment$treatment$status[i] = "high"}
+ if  (listexperiment$treatment$post_bp[i] > 130)
+    listexperiment$treatment$status[i] = "high"
   
-    for (i=1:10) {
-    if (listexperiment$placebo$post_bp[i] <= 120) listexperiment$placebo$status[i] = "optimal"
-    if (listexperiment$placebo$post_bp[i] > 120 and listexperiment$placebo$post_bp[i] <= 130)
+    for (i in 1:10) {
+    if (listexperiment$placebo$placebo_pro[i] <= 120) listexperiment$placebo$status[i] = "optimal"
+    if (listexperiment$placebo$placebo_pro[i] > 120 &  listexperiment$placebo$placebo_pro[i] <= 130)
   listexperiment$placebo$status[i] = "Bounderline"
-    listexperiment$placebo$post_bp[i] > 130)
-    listexperiment$placebo$status[i] = "high"}
-  
-  
-    
-    for (i in 1:5){
-  if (i == 3) break #can put code to execute on the same line
-  print(paste0("The ", words[i], " data point is ", data[i], "."))
-}
+ if   (listexperiment$placebo$placebo_pro[i] > 130)
+    listexperiment$placebo$status[i] = "high"}  
+
     
     
 
