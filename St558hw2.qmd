@@ -4,6 +4,9 @@ format: html
 editor: visual
 ---
 
+# Final version of St558 hw2 (just Logan's version). No changes to the code (all versions are similar/same) were needed as discussed by the group. 
+# Maybe we needed more comments, but we decided to hold off on them.
+
 ## Task 1
 
 ### Vectors for data
