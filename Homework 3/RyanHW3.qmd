@@ -1,0 +1,47 @@
+---
+title: "Ryan's HW3"
+format: html
+---
+
+## Task 1: Conceptual Questions
+
+1. Given a working directory of $\texttt{myfolder/homework/}$, the relative path we would use to specify a file at $\texttt{myfolder/MyData/}$ would be $\texttt{`../MyData.csv`}$. 
+
+2. The major benefits of using R projects are organization of files, integration with version control, and relative path consistency due to the working directory being set to the project root.
+
+3. Git is a system for version control. It is used to track changes and save prior versions of work. Github is a cloud platform used primarily for software development. It hosts Git repositories and allows for a collaborative environment.  
+
+4. The two main differences between a $\texttt{tibble}$ and a $\texttt{data.frame}$ are: 1) Tibbles preserve their 2D structure after using '[', and 2) tibbles allow for special printing.
+
+## Task 2: Reading Delimited Data
+
+We are reading in the glass data from its URL, which is comma-delimited with 11 name-less columns. 
+```{r}
+library(tidyverse)
+
+# Read in glass data
+glass_data <- read_csv(
+  "https://www4.stat.ncsu.edu/~online/datasets/glass.data",
+  col_names = c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca", "Ba", "Fe", "Type")
+)
+
+# Print tibble
+glass_data
+```
+
+Similarly as above, we are to read in data from a URL and print the tibble. This time it's with the yeast data, which has a fixed width field and 10 columns.
+```{r}
+# Read in yeast data
+yeast_data <- read_fwf(
+  "https://www4.stat.ncsu.edu/~online/datasets/yeast.data",
+  fwf_widths(
+    widths = c(12, 6, 6, 6, 6, 6, 6, 6, 6, 3),               # Character widths for each column
+    col_names = c("seq_name", "mcg", "gvh", "alm", "mit",
+                  "erl", "pox", "vac", "nuc", "class")
+  )
+)
+
+# Print tibble
+yeast_data
+```
+
