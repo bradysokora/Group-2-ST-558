@@ -15,6 +15,22 @@ library(readxl)
 
 1.  If our working directory is `myfolder/homework/` the relative path we would use to specify the file located at `myfolder/Mydata.csv` would be `../MyData.csv`.
 
-2. The major benefits of using R projects is that they integrate directly with Git/Github, the working directory being set to the project's root folder, and organization of files.
+2.  The major benefits of using R projects is that they integrate directly with Git/Github, the working directory being set to the project's root folder, and organization of files.
 
-3. `Git` is a version control software which keeps track of all files in an associated folder, including any changes made. `Github` is an online hosting service for Git-based projects 
+3.  `Git` is a version control software which keeps track of all files in an associated folder, including any changes made. `Github` is an online hosting service for Git-based projects, allowing you to have a remote file repository tracked by `Git`.
+
+4.  The two main differences between a `tibble` and a `data frame` is that (1) tibbles do not coerce down to a vector when you subset to only one column using `[` and (2) they print cleaner than a data frame.
+
+## Task 2: Reading Delimited Data
+
+
+###Reading in glass data from the url https://www4.stat.ncsu.edu/online/datasets/glass.data
+
+```{r}
+glass_data <- read_csv("https://www4.stat.ncsu.edu/online/datasets/glass.data", col_names = F, show_col_types = F)
+
+names(glass_data) <- c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca",
+                       "Ba", "Fe", "Type of Glass")
+
+glass_data
+```
