@@ -5,7 +5,7 @@ editor: visual
 ---
 
 ```{r}
-#| echo: FALSE
+#| include: FALSE
 library(tidyverse)
 library(readxl)
 ```
@@ -51,6 +51,7 @@ yeastData
 ## Task 3
 
 ### Reading in white wine data with read_excel
+
 ```{r}
 # Reading in the data
 wineWhiteData <- read_excel("white-wine.xlsx")
@@ -68,6 +69,7 @@ wineWhiteData <- wineWhiteData %>% mutate(wine_type = "white")
 ```
 
 ### Reading in red wine data with read_delim
+
 ```{r}
 # Reading in the data
 wineRedData <- read_delim("red-wine.csv",
@@ -84,6 +86,7 @@ wineRedData <- wineRedData %>% mutate(across(wineWhiteDataNames[[1]], as.double)
 ```
 
 ### Combining the wine data
+
 ```{r}
 wineData <- bind_rows(wineWhiteData, wineRedData)
 ```
@@ -91,8 +94,68 @@ wineData <- bind_rows(wineWhiteData, wineRedData)
 
 ## Task 4
 
-### Creating function getIQR
-```{r}
+### Creating function getIQR, uses quantile and does not have a name 
 
+```{r}
+getIQR <- function(x) {
+  iqr <- quantile(x,.75) - quantile(x,.25)
+  names(iqr) <- NULL
+  return (iqr)
+}
 ```
 
+### getIQR output for columns fixed acidity and citric acid
+
+```{r}
+getIQR(wineData$fixed_acidity)
+getIQR(wineData$citric_acid)
+```
+
+### Creating function getCoefVar
+
+```{r}
+getCoefVar <- function(x) {
+  return (mean(x) / sd(x))
+}
+```
+
+### getCoefVar output for columns fixed acidity and citric acid
+
+```{r}
+getCoefVar(wineData$fixed_acidity)
+getCoefVar(wineData$citric_acid)
+```
+### Creating function getSummaries
+
+```{r}
+getSummaries <- function(x) {
+  return (list(IQR = getIQR(x), CoefVar = getCoefVar(x)))
+}
+```
+
+### getSummaries output for columns fixed acidity and citric acid
+
+```{r}
+getSummaries(wineData$fixed_acidity)
+getSummaries(wineData$citric_acid)
+```
+
+### Infix function for cbind
+
+```{r}
+`%cb%` <- function(...) {
+  return (cbind(...))
+}
+```
+
+### Running infix cbind function
+
+```{r}
+# Example frames
+df1 <- data.frame(unif = runif(10), norm = rnorm(10))
+df2 <- data.frame(gamma = rgamma(10, shape = 1), beta = rbeta(10, shape1 = 5, shape2 = 1))
+vec1 <- rnorm(10, mean = 10)
+
+df1 %cb% df2
+df1 %cb% df2 %cb% vec1
+```
