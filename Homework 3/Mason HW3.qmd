@@ -3,3 +3,18 @@ title: "Mason HW3"
 format: html
 editor: visual
 ---
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(readxl)
+```
+
+## Task 1: Conceptual Questions
+
+1.  If our working directory is `myfolder/homework/` the relative path we would use to specify the file located at `myfolder/Mydata.csv` would be `../MyData.csv`.
+
+2. The major benefits of using R projects is that they integrate directly with Git/Github, the working directory being set to the project's root folder, and organization of files.
+
+3. 
