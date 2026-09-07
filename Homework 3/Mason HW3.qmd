@@ -26,23 +26,73 @@ library(readxl)
 ###Reading in glass data from the url https://www4.stat.ncsu.edu/online/datasets/glass.data
 
 ```{r}
+#Reading in the data
 glass_data <- read_csv("https://www4.stat.ncsu.edu/online/datasets/glass.data", col_names = F, show_col_types = F)
 
+#Setting variable names based on information from the homework
 names(glass_data) <- c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca",
                        "Ba", "Fe", "Type of Glass")
 
+#Printing tibble
 glass_data
 ```
 
 ### Reading in the yeast data now from the url https://www4.stat.ncsu.edu/online/datasets/yeast.data
 
 ```{r}
+#Reading in the data
 yeast_data <- read_table("https://www4.stat.ncsu.edu/online/datasets/yeast.data", col_names = F, show_col_types = F)
 
+#Setting variable names based on information from the homework
 names(yeast_data) <- c("Seq Name", "MCG", "GVH", "ALM", "MIT", "ERL",
                        "POX", "VAC", "NUC", "Class")
 
+#Printing the tibble
 yeast_data
 ```
 
+## Task 3: Combining Excel and Delimited Data
+### Reading in the white wine data
 
+```{r}
+#Reading in data from the first sheet
+white_data <- read_excel("white-wine.xlsx", sheet = excel_sheets("white-wine.xlsx")[1])
+
+#Printing the tibble
+white_data
+```
+
+Reading in the second sheet to get the variable names
+```{r}
+#Reading in the second sheet of the excel data
+white_names <- read_excel("white-wine.xlsx", sheet = excel_sheets("white-wine.xlsx")[2])
+
+#Setting the variable names to the values from the white_names tibble
+colnames(white_data) <- white_names[[1]]
+```
+
+Adding a column to the white wines dataset indicating that the wine is white
+
+```{r}
+white_data <- white_data %>% mutate(wine_type = "white")
+```
+
+###Reading in the red wine data 
+```{r}
+#Using delim = ";" to tell R how to separate the values
+red_data <- read_delim("red-wine.csv", delim = ";", col_names = T,
+                     show_col_types = F)
+
+#Setting the variable names to the values from the white_names tibble
+colnames(red_data) <- white_names[[1]]
+
+#Creating a variable that indicates that the wine is red
+red_data$wine_type = "red"
+```
+
+Now I am merging both datasets
+```{r}
+combined_wines <- bind_rows(white_data, red_data)
+
+combined_wines
+```
