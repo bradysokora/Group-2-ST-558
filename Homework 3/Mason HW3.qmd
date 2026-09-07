@@ -17,4 +17,4 @@ library(readxl)
 
 2. The major benefits of using R projects is that they integrate directly with Git/Github, the working directory being set to the project's root folder, and organization of files.
 
-3. 
+3. `Git` is a version control software which keeps track of all files in an associated folder, including any changes made. `Github` is an online hosting service for Git-based projects 
