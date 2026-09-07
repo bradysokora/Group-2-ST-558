@@ -44,4 +44,135 @@ yeast_data <- read_fwf(
 # Print tibble
 yeast_data
 ```
+## Task 3: Combining Excel and Delimited Data
+
+Now we will read in the white wine data set, which is an Excel data set with two sheet. The data set has been stored at the level of this .qmd file but not committed. 
+```{r}
+library(readxl)
+
+# Read in white wine data
+white_wine <- read_excel("white-wine.xlsx")
+
+# Print tibble
+white_wine
+```
+
+Renaming variables with those labels from the second sheet.
+```{r}
+# Specifying the second sheet
+white_wine_names <- read_excel("white-wine.xlsx", sheet = 2)
+
+# Renaming columns
+colnames(white_wine) <- white_wine_names$Variables
+
+# Print tibble
+white_wine
+```
+
+Adding a column to indicate the wines are white.
+```{r}
+# Column add
+white_wine$type <- "white"
+
+# Print tibble
+white_wine
+```
+
+Next, we will read in the red wine data set, which is semicolon-delimited. Afterwards, we will perform the same modifications as we did for white wine.
+```{r}
+# Read in red wine data
+red_wine <- read_delim("red-wine.csv", delim = ";")
+
+# Renaming columns
+colnames(red_wine) <- white_wine_names$Variables
+
+# Column add
+red_wine$type <- "red"
+
+# Print tibble
+red_wine
+```
+
+Finally, we shall merge the red and white wine data sets we've created.
+```{r}
+# Combine data sets
+wine_data <- dplyr::bind_rows(white_wine, red_wine)
+
+# Print tibble
+wine_data
+```
+
+## Task 4: Writing a Function
+
+We create the getIQR function that determines the interquartile range for a provided vector of numbers.
+```{r}
+# Define function
+getIQR <- function(x, ...) {                             # ... allows for other arguments to be passed
+  quartiles <- quantile(x, probs = c(0.25, 0.75), ...)   # 25th and 75th percentiles
+  iqr <- quartiles[[2]] - quartiles[[1]]                 # Removing name on vector and compute IQR
+  iqr
+}
+```
+
+Applying the getIQR function to our merged wine data set above (i.e. wine_data), specifically the fixed_acidity and citric_acid columns. 
+```{r}
+# IQR for the combined wine data set
+getIQR(wine_data$fixed_acidity)
+getIQR(wine_data$citric_acid)
+```
+
+Creating the getCoefVar function to find the sample coefficient of variation. 
+```{r}
+# Define function
+getCoefVar <- function(x, ...) {
+  cv <- sd(x, ...) / abs(mean(x, ...))  # Sample coeff of variation equation
+  cv
+}
+```
+
+Applying the getCoefVar function to our merged wine data set above (i.e. wine_data), specifically the fixed_acidity and citric_acid columns. 
+```{r}
+# Sample coefficient of variation for the combined wine data set
+getCoefVar(wine_data$fixed_acidity)
+getCoefVar(wine_data$citric_acid)
+```
+
+Creating the getCoefVar function to return the IQR and coefficient of variation. 
+```{r}
+# Define function
+getSummaries <- function(x) {
+  IQR_val <- getIQR(x)
+  CV_val <- getCoefVar(x)
+  return(list(IQR = IQR_val, CoefVar = CV_val)) # Needed to ensure both values are returned
+}
+```
+
+Applying the getSummaries function to our merged wine data set above (i.e. wine_data), specifically the fixed_acidity and citric_acid columns. 
+```{r}
+# IQR and coefficient of variation for the combined wine data set
+getSummaries(wine_data$fixed_acidity)
+getSummaries(wine_data$citric_acid)
+
+```
+
+Create a new infix function to replace cbind.
+```{r}
+# Define function
+`%new_bind%` <- function(x, y) {
+  cbind(x, y)               # Taking advantage of cbind's built-in properties
+}
+
+# Example data frames
+df1 <- data.frame(unif = runif(10), norm = rnorm(10))
+df2 <- data.frame(gamma = rgamma(10, shape = 1), beta = rbeta(10, shape1 = 5, shape2 = 1))
+vec1 <- rnorm(10, mean = 10)
+
+# Testing function
+df1 %new_bind% df2
+```
+
+```{r}
+# Testing function
+df1 %new_bind% df2 %new_bind% vec1  # Note that y = vec1
+```
 
