@@ -34,10 +34,15 @@ names(glass_data) <- c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca",
 glass_data
 ```
 
-### Reading in yeast data from the url https://www4.stat.ncsu.edu/online/datasets/yeast.data
+### Reading in the yeast data now from the url https://www4.stat.ncsu.edu/online/datasets/yeast.data
 
 ```{r}
-yeast_data <- read_csv("https://www4.stat.ncsu.edu/online/datasets/yeast.data", col_names = F, show_col_types = F)
+yeast_data <- read_table("https://www4.stat.ncsu.edu/online/datasets/yeast.data", col_names = F, show_col_types = F)
+
+names(yeast_data) <- c("Seq Name", "MCG", "GVH", "ALM", "MIT", "ERL",
+                       "POX", "VAC", "NUC", "Class")
+
+yeast_data
 ```
 
 
