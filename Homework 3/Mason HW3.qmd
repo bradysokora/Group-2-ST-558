@@ -17,6 +17,7 @@ library(readxl)
 
 2.  The major benefits of using R projects is that they integrate directly with Git/Github, the working directory being set to the project's root folder, and organization of files.
 
+<<<<<<< HEAD
 3.  `Git` is a version control software which keeps track of all files in an associated folder, including any changes made. `Github` is an online hosting service for Git-based projects, allowing you to have a remote file repository tracked by `Git`.
 
 4.  The two main differences between a `tibble` and a `data frame` is that (1) tibbles do not coerce down to a vector when you subset to only one column using `[` and (2) they print cleaner than a data frame.
@@ -34,3 +35,6 @@ names(glass_data) <- c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca",
 
 glass_data
 ```
+=======
+3. `Git` is a version control software which keeps track of all files in an associated folder, including any changes made. `Github` is an online hosting service for Git-based projects 
+>>>>>>> a62ca096ae6fcc6afcb2c489a65906ec2dc8cc09
