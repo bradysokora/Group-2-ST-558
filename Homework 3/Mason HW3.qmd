@@ -23,7 +23,7 @@ library(readxl)
 
 ## Task 2: Reading Delimited Data
 
-###Reading in glass data from the url https://www4.stat.ncsu.edu/online/datasets/glass.data
+### Reading in glass data from the url https://www4.stat.ncsu.edu/online/datasets/glass.data
 
 ```{r}
 #Reading in the data
@@ -77,7 +77,7 @@ Adding a column to the white wines dataset indicating that the wine is white
 white_data <- white_data %>% mutate(wine_type = "white")
 ```
 
-###Reading in the red wine data 
+### Reading in the red wine data 
 ```{r}
 #Using delim = ";" to tell R how to separate the values
 red_data <- read_delim("red-wine.csv", delim = ";", col_names = T,
