@@ -96,3 +96,22 @@ combined_wines <- bind_rows(white_data, red_data)
 
 combined_wines
 ```
+
+## Task 4: Writing a Function
+
+Creating the getIQR function that takes in a vector of numbers and returns the interquartile range.
+
+```{r}
+getIQR <- function(x){
+  iqr <- quantile(x, probs = .75) - quantile(x, probs = .25)
+  names(iqr) <- NULL
+  return (iqr)
+}
+```
+
+Using our getIQR function to return the IQR of the fixed_acidity and citric_acid columns from the combined wines data set.
+
+```{r}
+getIQR(combined_wines$fixed_acidity)
+getIQR(combined_wines$citric_acid)
+```
