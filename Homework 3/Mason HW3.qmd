@@ -75,6 +75,8 @@ Adding a column to the white wines dataset indicating that the wine is white
 
 ```{r}
 white_data <- white_data %>% mutate(wine_type = "white")
+
+white_data
 ```
 
 ### Reading in the red wine data 
@@ -88,6 +90,8 @@ colnames(red_data) <- white_names[[1]]
 
 #Creating a variable that indicates that the wine is red
 red_data$wine_type = "red"
+
+red_data
 ```
 
 Now I am merging both datasets
