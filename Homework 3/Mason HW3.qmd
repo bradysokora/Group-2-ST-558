@@ -99,7 +99,7 @@ combined_wines
 
 ## Task 4: Writing a Function
 
-Creating the getIQR function that takes in a vector of numbers and returns the interquartile range.
+Creating the `getIQR()` function that takes in a vector of numbers and returns the interquartile range.
 
 ```{r}
 getIQR <- function(x){
@@ -109,9 +109,55 @@ getIQR <- function(x){
 }
 ```
 
-Using our getIQR function to return the IQR of the fixed_acidity and citric_acid columns from the combined wines data set.
+Using our `getIQR()` function to return the IQR of the `fixed_acidity` and `citric_acid` columns from the combined wines data set.
 
 ```{r}
 getIQR(combined_wines$fixed_acidity)
 getIQR(combined_wines$citric_acid)
+```
+
+Creating the `getCoefVar()` function to return the sample coefficient of variation by dividing the sample standard deviation by the sample mean
+
+```{r}
+getCoefVar <- function(x){
+  CoefVar <- sd(x) / mean(x)
+  names(CoefVar) <- NULL
+  return(CoefVar)
+}
+```
+
+Using our `getCoefVar()` function to return the sample variance of the `fixed_acidity` and `citric_acid` columns from the combined wines data set.
+
+```{r}
+getCoefVar(combined_wines$fixed_acidity)
+getCoefVar(combined_wines$citric_acid)
+```
+
+Creating the `getSummaries()` function to return the IQR and the sample coefficient of variation by calling our previous functions
+
+```{r}
+getSummaries <- function(x){
+  return(list(IQR = getIQR(x), CoefVar = getCoefVar(x)))
+}
+```
+
+Using our `getSumamries()` function to return the IQR and the sample variance of the `fixed_acidity` and `citric_acid` columns from the combined wines data set.
+
+```{r}
+getSummaries(combined_wines$fixed_acidity)
+getSummaries(combined_wines$citric_acid)
+```
+
+Creating our own infix function to replace the `cbind()` function
+
+```{r}
+`%new_bind%` <- function(...){
+  return(cbind(...))
+}
+```
+
+Reading in the data frames given to us in the homework and applying our infix function to check that it works
+
+```{r}
+
 ```
