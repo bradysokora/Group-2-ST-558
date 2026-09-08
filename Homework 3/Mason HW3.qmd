@@ -159,5 +159,13 @@ Creating our own infix function to replace the `cbind()` function
 Reading in the data frames given to us in the homework and applying our infix function to check that it works
 
 ```{r}
+df1 <- data.frame(unif = runif(10), norm = rnorm(10))
+df2 <- data.frame(gamma = rgamma(10, shape = 1), beta = rbeta(10, shape1 = 5, shape2 = 1))
+vec1 <- rnorm(10, mean = 10)
 
+#Checking the function works on the two data frames first
+df1 %new_bind% df2
+
+#Checking that the function works with all three
+df1 %new_bind% df2 %new_bind% vec1
 ```
