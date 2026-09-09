@@ -124,7 +124,7 @@ Creating the `getCoefVar()` function to return the sample coefficient of variati
 
 ```{r}
 getCoefVar <- function(x){
-  CoefVar <- sd(x) / mean(x)
+  CoefVar <- sd(x) / abs(mean(x))
   names(CoefVar) <- NULL
   return(CoefVar)
 }
