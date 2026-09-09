@@ -1,0 +1,95 @@
+---
+title: "JingyiZuo_homework2 "
+format: html
+---
+
+# Task 1 
+1. path: /myfolder 
+2. it helps us to manage different docments for one project, complete version control with Git, and easy to collaborate with others. 
+3. Git is a tool to help us to do version control.Github is a platform we could use to manage project, collaborate with others, and show opensource codes on the internet. 
+4. Tibble is a special version of a dataframe. Tibble's classes include dataframe, but also include tbl_df and tbl. Tidyverse uses tibble for both of input and output. 
+
+# Task 2 
+1. glass data
+```{r glass data}
+library(tidyverse)
+glass_tbl <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/glass.data", delim = ",", col_names = c("Id","RI","Na","Mg","Al","Si","K","Ca","Ba","Fe","Type of Class"))
+
+glass_tbl 
+
+
+```
+
+
+
+2. Yeast data
+```{r Yeast data}
+library(tidyverse)
+yeast_tbl <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/yeast.data", delim = " ", col_names = c("seq_name","mcg","gvh","alm","mit","erl","pox","vac","nuc","class"))
+yeast_tbl
+```
+
+# Task 3 
+```{r combine excel and delimited data}
+# read 1st sheet 
+library(readxl)
+whitewine <- read_excel("white_wine.xlsx",
+                        sheet = excel_sheets("white_wine.xlsx")[1])
+whitewine
+
+# read 2st sheet
+whitewine_2 <- read_excel("white_wine.xlsx",
+                        sheet = excel_sheets("white_wine.xlsx")[2])
+colnames(whitewine) <- whitewine_2$Variables[1:13]
+whitewine
+
+# add type column and assign "white" as type 
+whitewine$type <- "white"
+
+# read another excel 
+library(readr)
+redwine <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/red-wine.csv", delim = ";")
+colnames(redwine) <- whitewine_2$Variables[1:13]
+redwine$type <- "red"
+
+# combine two excels
+allwine <- dplyr::bind_rows(whitewine, redwine)
+```
+# task 4 
+```{r write a function }
+# define the function
+getIQR <- function(x) {a <- quantile(x, 0.25, na.rm = TRUE) 
+b<- quantile(x,0.75, na.rm = TRUE)
+c <- unname(b-a) 
+c}
+
+# 9 
+getIQR(allwine$fixed_acidity)
+getIQR(allwine$citric_acid)
+
+# 10 define anther function
+getCoefVar <- function (x) {mean <- mean(x, na.rm = TRUE)
+sd <- sd(x, na.rm= TRUE) 
+sd/mean} 
+
+getCoefVar(allwine$fixed_acidity)
+getCoefVar(allwine$citric_acid)
+
+# 12 define summary function
+getSummaries <- function(x) {a <- getIQR(x)
+  b <- getCoefVar(x)
+  list(IQR = a, coefVae = b)
+}
+
+getSummaries(allwine$fixed_acidity)
+getSummaries(allwine$citric_acid)
+
+# 14 define infix function
+infix <- function(df1 , df2, vec1 = NULL) { if (is.null(vec1)) cbind(df1, df2)
+else cbind(df1,df2,vec1)} 
+df1 <- data.frame(unif = runif(10), norm = rnorm(10))
+df2 <- data.frame(gamma = rgamma(10, shape = 1), beta = rbeta(10, shape1 = 5, shape2 = 1))
+vec1 <- rnorm(10, mean = 10)
+infix(df1, df2)
+infix(df1, df2, vec1)
+```
