@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-# Homework 3 ST 558 Group 2
+# Homework 3 ST558 Group 2
 
 ## Task 1: Conceptual Questions
 
