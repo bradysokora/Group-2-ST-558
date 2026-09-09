@@ -115,7 +115,7 @@ getIQR(wineData$citric_acid)
 
 ```{r}
 getCoefVar <- function(x) {
-  return (mean(x) / sd(x))
+  return (sd(x) / abs(mean(x)))
 }
 ```
 
