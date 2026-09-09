@@ -4,3 +4,4 @@ format: html
 ---
 
 - [Homework 2](/St558hw2.html)
+- [Homework 3](/Homework 3/Mason HW3.html)
