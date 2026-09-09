@@ -33,13 +33,13 @@ yeast_tbl
 ```{r combine excel and delimited data}
 # read 1st sheet 
 library(readxl)
-whitewine <- read_excel("white_wine.xlsx",
-                        sheet = excel_sheets("white_wine.xlsx")[1])
+whitewine <- read_excel("white-wine.xlsx",
+                        sheet = excel_sheets("white-wine.xlsx")[1])
 whitewine
 
 # read 2st sheet
-whitewine_2 <- read_excel("white_wine.xlsx",
-                        sheet = excel_sheets("white_wine.xlsx")[2])
+whitewine_2 <- read_excel("white-wine.xlsx",
+                        sheet = excel_sheets("white-wine.xlsx")[2])
 colnames(whitewine) <- whitewine_2$Variables[1:13]
 whitewine
 
