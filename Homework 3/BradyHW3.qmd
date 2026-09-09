@@ -4,6 +4,8 @@ format: html
 editor: visual
 ---
 
+# Homework 3 ST 558 Group 2
+
 ## Task 1: Conceptual Questions
 
 1.  To go from myfolder/homework/ to myfolder/MyData.csv would take ../MyData.csv since you have to go backwards.
@@ -20,6 +22,7 @@ Reading in the glass data from URL in comma delimited file
 
 ```{r}
 # reading in glass data
+library(readxl)
 library(tidyverse)
 
 glass <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/glass.data",
@@ -30,6 +33,7 @@ glass
 ```
 
 Reading in the yeast data from URL using read_table
+
 ```{r}
 # reading in yeast data
 yeast <- read_table("https://www4.stat.ncsu.edu/~online/datasets/yeast.data",
@@ -38,5 +42,125 @@ yeast <- read_table("https://www4.stat.ncsu.edu/~online/datasets/yeast.data",
 yeast
 ```
 
-## Task 3: Combining Excel and Deliminted Data
+## Task 3: Combining Excel and Delimited Data
 
+Reading in white wine data with read_excel and renaming column
+
+```{r}
+# Reading in white wine excel data
+white_wine <- read_excel("white-wine.xlsx")
+white_wine
+
+# Read the next sheet with variable names
+white_names <- read_excel("white-wine.xlsx", sheet = 2)
+white_names
+
+# Renaming columns using the clean names from sheet 2
+colnames(white_wine) <- white_names$Variables
+white_wine
+
+# Adding a column to indicate these wines are white
+white_wine$type <- "white"
+white_wine
+```
+
+Reading in red wine data from URL as semi colon delimited
+
+```{r}
+# Reading in red wine data (semicolon delimited) from URL
+red_wine <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/red-wine.csv",
+                       delim = ";")
+red_wine
+
+# Renaming columns using the same clean names from sheet 2
+colnames(red_wine) <- white_names$Variables
+red_wine
+
+# Adding a column to indicate these wines are red
+red_wine$type <- "red"
+red_wine
+```
+
+Combining the two data sets together
+
+```{r}
+# Combining red wine and white wine data sets into one
+wine <- bind_rows(white_wine, red_wine)
+wine
+```
+
+## Task 4: Writing a Function
+
+Creating IQR Function, to calculate the interquartile range
+
+```{r}
+# Defining the IQR function
+getIQR <- function(x, ...) {
+  quants <- quantile(x, probs = c(0.25, 0.75), ...)
+  iqr <- quants[2] - quants[1]     # 75th percentile minus 25th
+  return(unname(iqr))              # remove the "75%" label
+}
+```
+
+Use the IQR Function on the wine data set columns citric acid and fixed acidity
+
+```{r}
+# Applying IQR to fixed acidity and citric acid
+getIQR(wine$fixed_acidity)
+getIQR(wine$citric_acid)
+```
+
+Creating getCoefVar Function, to calculate coefficient of variation
+
+```{r}
+# Defining coefficient of variation
+getCoefVar <- function(x, ...) {
+  cv <- sd(x, ...) / abs(mean(x, ...))
+  return(cv)
+}
+```
+
+Use the getCoefVar Function on the wine data set columns citric acid and fixed acidity
+
+```{r}
+# Applying getCoefVar to fixed acidity and citric acid
+getCoefVar(wine$fixed_acidity)
+getCoefVar(wine$citric_acid)
+```
+
+Creating getSummaries, to return IQR and getCoefVar
+
+```{r}
+# Defining getSummaries
+getSummaries <- function(x, ...) {
+  iqr <- getIQR(x, ...)
+  cv <- getCoefVar(x, ...)
+  return(list(IQR = iqr, CoefVar = cv))
+}
+```
+
+Use the getSummaries Function on the wine data set columns citric acid and fixed acidity
+
+```{r}
+# Applying getSummaries to fixed acidity and citric acid
+getSummaries(wine$fixed_acidity)
+getSummaries(wine$citric_acid)
+```
+
+Creating new infix function to replace cbind function, testing on the data frames and vector
+
+```{r}
+# Defining an infix function to replace cbind function
+`%new_bind%` <- function(x, y) {
+  cbind(x, y)   
+}
+
+# Setting up example data from HW3
+df1 <- data.frame(unif = runif(10), norm = rnorm(10))
+df2 <- data.frame(gamma = rgamma(10, shape = 1), beta = rbeta(10, shape1 = 5, shape2 = 1))
+vec1 <- rnorm(10, mean = 10)
+
+# Testing infix function on the data frames and vector
+df1 %new_bind% df2
+df1 %new_bind% df2 %new_bind% vec1
+```
