@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Mason HW3</title>
+<title>ST 558 Homework 3</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Mason HW3</h1>
+<h1 class="title">ST 558 Homework 3</h1>
 </div>
 
 
@@ -359,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Creating the <code>getCoefVar()</code> function to return the sample coefficient of variation by dividing the sample standard deviation by the sample mean</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>getCoefVar <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  CoefVar <span class="ot">&lt;-</span> <span class="fu">sd</span>(x) <span class="sc">/</span> <span class="fu">mean</span>(x)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  CoefVar <span class="ot">&lt;-</span> <span class="fu">sd</span>(x) <span class="sc">/</span> <span class="fu">abs</span>(<span class="fu">mean</span>(x))</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(CoefVar) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(CoefVar)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -415,32 +415,32 @@ $CoefVar
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Checking the function works on the two data frames first</span></span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">%new_bind%</span> df2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>         unif        norm      gamma      beta
-1  0.89523380 -0.07091290 1.72754680 0.7636927
-2  0.91368484 -0.36695397 0.52578814 0.7567471
-3  0.86792882  1.51997383 1.98808978 0.9024668
-4  0.81808888 -0.97232051 1.81370142 0.5420953
-5  0.44249738  0.07171737 1.52868663 0.9542772
-6  0.45575201 -1.05529648 0.16346289 0.9739732
-7  0.68416496  0.41783629 2.76214484 0.9934844
-8  0.08248659  0.51818455 0.21448871 0.9786076
-9  0.67796311  0.95872950 0.53509164 0.8083299
-10 0.55842521  0.62480790 0.08052455 0.6468714</code></pre>
+<pre><code>        unif        norm     gamma      beta
+1  0.1112517  1.92071220 1.6607655 0.9426186
+2  0.2192391  0.27661085 0.8762473 0.8558718
+3  0.8600365  0.60486118 0.2032286 0.9812192
+4  0.8531179 -1.13310536 0.8092773 0.9093056
+5  0.5691580  0.57871672 0.8742509 0.8600283
+6  0.2566430  0.61113468 2.1114310 0.3965398
+7  0.9904110  0.06220794 2.1510824 0.6517770
+8  0.7846340 -0.21233035 0.4478556 0.9905717
+9  0.9691761 -1.98321004 0.2085727 0.8231765
+10 0.7976073  0.85839630 2.8518441 0.8388454</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Checking that the function works with all three</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">%new_bind%</span> df2 <span class="sc">%new_bind%</span> vec1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>         unif        norm      gamma      beta      vec1
-1  0.89523380 -0.07091290 1.72754680 0.7636927 10.070868
-2  0.91368484 -0.36695397 0.52578814 0.7567471 10.102313
-3  0.86792882  1.51997383 1.98808978 0.9024668  8.010117
-4  0.81808888 -0.97232051 1.81370142 0.5420953  9.005255
-5  0.44249738  0.07171737 1.52868663 0.9542772 10.362519
-6  0.45575201 -1.05529648 0.16346289 0.9739732 10.194099
-7  0.68416496  0.41783629 2.76214484 0.9934844  7.168260
-8  0.08248659  0.51818455 0.21448871 0.9786076  9.420475
-9  0.67796311  0.95872950 0.53509164 0.8083299  9.370084
-10 0.55842521  0.62480790 0.08052455 0.6468714  9.454306</code></pre>
+<pre><code>        unif        norm     gamma      beta      vec1
+1  0.1112517  1.92071220 1.6607655 0.9426186  8.143365
+2  0.2192391  0.27661085 0.8762473 0.8558718 10.264840
+3  0.8600365  0.60486118 0.2032286 0.9812192  9.151638
+4  0.8531179 -1.13310536 0.8092773 0.9093056 11.272718
+5  0.5691580  0.57871672 0.8742509 0.8600283  9.635141
+6  0.2566430  0.61113468 2.1114310 0.3965398 10.663182
+7  0.9904110  0.06220794 2.1510824 0.6517770 11.781053
+8  0.7846340 -0.21233035 0.4478556 0.9905717  7.383683
+9  0.9691761 -1.98321004 0.2085727 0.8231765  9.385199
+10 0.7976073  0.85839630 2.8518441 0.8388454  9.317617</code></pre>
 </div>
 </div>
 
