@@ -1,0 +1,175 @@
+---
+title: "Mason HW3"
+format: html
+editor: visual
+---
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(readxl)
+```
+
+## Task 1: Conceptual Questions
+
+1.  If our working directory is `myfolder/homework/` the relative path we would use to specify the file located at `myfolder/Mydata.csv` would be `../MyData.csv`.
+
+2.  The major benefits of using R projects is that they integrate directly with Git/Github, the working directory being set to the project's root folder, and organization of files.
+
+3.  `Git` is a version control software which keeps track of all files in an associated folder, including any changes made. `Github` is an online hosting service for Git-based projects, allowing you to have a remote file repository tracked by `Git`.
+
+4.  The two main differences between a `tibble` and a `data frame` is that (1) tibbles do not coerce down to a vector when you subset to only one column using `[` and (2) they print cleaner than a data frame.
+
+## Task 2: Reading Delimited Data
+
+### Reading in glass data from the url https://www4.stat.ncsu.edu/online/datasets/glass.data
+
+```{r}
+#Reading in the data
+glass_data <- read_csv("https://www4.stat.ncsu.edu/online/datasets/glass.data", col_names = F, show_col_types = F)
+
+#Setting variable names based on information from the homework
+names(glass_data) <- c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca",
+                       "Ba", "Fe", "Type of Glass")
+
+#Printing tibble
+glass_data
+```
+
+### Reading in the yeast data now from the url https://www4.stat.ncsu.edu/online/datasets/yeast.data
+
+```{r}
+#Reading in the data
+yeast_data <- read_table("https://www4.stat.ncsu.edu/online/datasets/yeast.data", col_names = F, show_col_types = F)
+
+#Setting variable names based on information from the homework
+names(yeast_data) <- c("Seq Name", "MCG", "GVH", "ALM", "MIT", "ERL",
+                       "POX", "VAC", "NUC", "Class")
+
+#Printing the tibble
+yeast_data
+```
+
+## Task 3: Combining Excel and Delimited Data
+### Reading in the white wine data
+
+```{r}
+#Reading in data from the first sheet
+white_data <- read_excel("white-wine.xlsx", sheet = excel_sheets("white-wine.xlsx")[1])
+
+#Printing the tibble
+white_data
+```
+
+Reading in the second sheet to get the variable names
+```{r}
+#Reading in the second sheet of the excel data
+white_names <- read_excel("white-wine.xlsx", sheet = excel_sheets("white-wine.xlsx")[2])
+
+#Setting the variable names to the values from the white_names tibble
+colnames(white_data) <- white_names[[1]]
+```
+
+Adding a column to the white wines dataset indicating that the wine is white
+
+```{r}
+white_data <- white_data %>% mutate(wine_type = "white")
+
+white_data
+```
+
+### Reading in the red wine data 
+```{r}
+#Using delim = ";" to tell R how to separate the values
+red_data <- read_delim("red-wine.csv", delim = ";", col_names = T,
+                     show_col_types = F)
+
+#Setting the variable names to the values from the white_names tibble
+colnames(red_data) <- white_names[[1]]
+
+#Creating a variable that indicates that the wine is red
+red_data$wine_type = "red"
+
+red_data
+```
+
+Now I am merging both datasets
+```{r}
+combined_wines <- bind_rows(white_data, red_data)
+
+combined_wines
+```
+
+## Task 4: Writing a Function
+
+Creating the `getIQR()` function that takes in a vector of numbers and returns the interquartile range.
+
+```{r}
+getIQR <- function(x){
+  iqr <- quantile(x, probs = .75) - quantile(x, probs = .25)
+  names(iqr) <- NULL
+  return (iqr)
+}
+```
+
+Using our `getIQR()` function to return the IQR of the `fixed_acidity` and `citric_acid` columns from the combined wines data set.
+
+```{r}
+getIQR(combined_wines$fixed_acidity)
+getIQR(combined_wines$citric_acid)
+```
+
+Creating the `getCoefVar()` function to return the sample coefficient of variation by dividing the sample standard deviation by the sample mean
+
+```{r}
+getCoefVar <- function(x){
+  CoefVar <- sd(x) / abs(mean(x))
+  names(CoefVar) <- NULL
+  return(CoefVar)
+}
+```
+
+Using our `getCoefVar()` function to return the sample variance of the `fixed_acidity` and `citric_acid` columns from the combined wines data set.
+
+```{r}
+getCoefVar(combined_wines$fixed_acidity)
+getCoefVar(combined_wines$citric_acid)
+```
+
+Creating the `getSummaries()` function to return the IQR and the sample coefficient of variation by calling our previous functions
+
+```{r}
+getSummaries <- function(x){
+  return(list(IQR = getIQR(x), CoefVar = getCoefVar(x)))
+}
+```
+
+Using our `getSumamries()` function to return the IQR and the sample variance of the `fixed_acidity` and `citric_acid` columns from the combined wines data set.
+
+```{r}
+getSummaries(combined_wines$fixed_acidity)
+getSummaries(combined_wines$citric_acid)
+```
+
+Creating our own infix function to replace the `cbind()` function
+
+```{r}
+`%new_bind%` <- function(...){
+  return(cbind(...))
+}
+```
+
+Reading in the data frames given to us in the homework and applying our infix function to check that it works
+
+```{r}
+df1 <- data.frame(unif = runif(10), norm = rnorm(10))
+df2 <- data.frame(gamma = rgamma(10, shape = 1), beta = rbeta(10, shape1 = 5, shape2 = 1))
+vec1 <- rnorm(10, mean = 10)
+
+#Checking the function works on the two data frames first
+df1 %new_bind% df2
+
+#Checking that the function works with all three
+df1 %new_bind% df2 %new_bind% vec1
+```

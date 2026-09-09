@@ -30,7 +30,7 @@ post_bp <- after_treatment
 diff_bp <- change
 df <- data.frame(patient, pre_bp, post_bp, diff_bp)
 # 2.2 
-subset(ds, diff_bp < 0)
+subset(df, diff_bp < 0)
 # 2.3 
 df$lessthan120 <- df$post_bp < 120 
 # 2.4 

@@ -1,0 +1,161 @@
+---
+title: "LoganHW3"
+format: html
+editor: visual
+---
+
+```{r}
+#| include: FALSE
+library(tidyverse)
+library(readxl)
+```
+
+
+## Task 1
+
+1)  We would use the path "../MyData.csv"
+
+2)  It makes things easy to share, gives better integration with version control and git, and makes pathing easier.
+
+3)  Github is a place where Git information is stored. Git is software that tracks changes in code.
+
+4)  Tibbles are a specialized DF that prints differently and doesn't coerce a column to a vector when using [ notation.
+
+## Task 2
+
+### Reading in glass data with read_csv (URL)
+
+```{r}
+glassData <- read_csv("https://www4.stat.ncsu.edu/online/datasets/glass.data",
+  col_names = FALSE,
+  show_col_types = FALSE) 
+
+names(glassData) <- c("Id", "RI", "Na", "Mg", "Al", "Si" , "K", "Ca", "Ba", "Fe", "Type of Glass")
+
+# Could change ID and Type into chr if needed
+glassData
+```
+
+### Reading in yeast data with read_table (URL)
+
+```{r}
+yeastData <- read_table("https://www4.stat.ncsu.edu/online/datasets/yeast.data",
+  col_names = FALSE,
+  show_col_types = FALSE) 
+
+names(yeastData) <- c("seq_nameA", "mcg", "gvh", "alm", "mit", "erl" , "pox", "vac", "nuc", "class")
+
+yeastData
+```
+
+## Task 3
+
+### Reading in white wine data with read_excel
+
+```{r}
+# Reading in the data
+wineWhiteData <- read_excel("white-wine.xlsx")
+
+# Reading in names for the data from sheet 2
+wineWhiteDataNames <- read_excel("white-wine.xlsx",
+  sheet = excel_sheets("white-wine.xlsx")[2]
+)
+
+# Renaming
+colnames(wineWhiteData) <- wineWhiteDataNames[[1]]
+
+# Adding col to indicate wine type
+wineWhiteData <- wineWhiteData %>% mutate(wine_type = "white")
+```
+
+### Reading in red wine data with read_delim
+
+```{r}
+# Reading in the data
+wineRedData <- read_delim("red-wine.csv",
+                          delim = ";",
+                          col_names = TRUE,
+                          show_col_types = FALSE)
+
+# Renaming, has same names as white
+colnames(wineRedData) <- wineWhiteDataNames[[1]]
+
+# Adding col to indicate wine type also making sure everything is double for later operations
+wineRedData <- wineRedData %>% mutate(across(wineWhiteDataNames[[1]], as.double)) %>% 
+  mutate(wine_type = "red") 
+```
+
+### Combining the wine data
+
+```{r}
+wineData <- bind_rows(wineWhiteData, wineRedData)
+```
+
+
+## Task 4
+
+### Creating function getIQR, uses quantile and does not have a name 
+
+```{r}
+getIQR <- function(x) {
+  iqr <- quantile(x,.75) - quantile(x,.25)
+  names(iqr) <- NULL
+  return (iqr)
+}
+```
+
+### getIQR output for columns fixed acidity and citric acid
+
+```{r}
+getIQR(wineData$fixed_acidity)
+getIQR(wineData$citric_acid)
+```
+
+### Creating function getCoefVar
+
+```{r}
+getCoefVar <- function(x) {
+  return (sd(x) / abs(mean(x)))
+}
+```
+
+### getCoefVar output for columns fixed acidity and citric acid
+
+```{r}
+getCoefVar(wineData$fixed_acidity)
+getCoefVar(wineData$citric_acid)
+```
+### Creating function getSummaries
+
+```{r}
+getSummaries <- function(x) {
+  return (list(IQR = getIQR(x), CoefVar = getCoefVar(x)))
+}
+```
+
+### getSummaries output for columns fixed acidity and citric acid
+
+```{r}
+getSummaries(wineData$fixed_acidity)
+getSummaries(wineData$citric_acid)
+```
+
+### Infix function for cbind
+
+```{r}
+`%cb%` <- function(...) {
+  return (cbind(...))
+}
+```
+
+### Running infix cbind function
+
+```{r}
+# Example frames
+df1 <- data.frame(unif = runif(10), norm = rnorm(10))
+df2 <- data.frame(gamma = rgamma(10, shape = 1), beta = rbeta(10, shape1 = 5, shape2 = 1))
+vec1 <- rnorm(10, mean = 10)
+
+df1 %cb% df2
+df1 %cb% df2 %cb% vec1
+```
