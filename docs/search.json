@@ -180,5 +180,12 @@
     "title": "St558hw2",
     "section": "Task 4",
     "text": "Task 4\n\nAdding status col, based on bp in post trt. Using conditional logic. Done for all df in list\n\nbpList[[1]]$status &lt;- character(20)\nbpList[[2]]$status &lt;- character(10)\n\n# Loop and logic for bp trt\nfor (i in seq_along(bpList[[1]]$post_bp)) {\n  pbpVal &lt;- bpList[[1]]$post_bp[i]\n  if (pbpVal &lt;= 120) { \n    bpList[[1]]$status[i] &lt;- \"optimal\"\n  } else if (pbpVal &gt; 130){\n    bpList[[1]]$status[i] &lt;- \"high\"\n  } else if ((pbpVal &gt; 120) & (pbpVal &lt;= 130)) {\n    bpList[[1]]$status[i] &lt;-  \"borderline\"\n  } else {\n    bpList[[1]]$status[i] &lt;- \"error\"\n  }\n}\n\n# Loop and logic for bp placebo\nfor (i in seq_along(bpList[[2]]$post_bp)) {\n  pbpVal &lt;- bpList[[2]]$post_bp[i]\n  if (pbpVal &lt;= 120) { \n    bpList[[2]]$status[i] &lt;- \"optimal\"\n  } else if (pbpVal &gt; 130){\n    bpList[[2]]$status[i] &lt;- \"high\"\n  } else if ((pbpVal &gt; 120) & (pbpVal &lt;= 130)) {\n    bpList[[2]]$status[i] &lt;-  \"borderline\"\n  } else {\n    bpList[[2]]$status[i] &lt;- \"error\"\n  }\n}"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Group 2 Links to HW",
+    "section": "",
+    "text": "Homework 2"
   }
 ]
