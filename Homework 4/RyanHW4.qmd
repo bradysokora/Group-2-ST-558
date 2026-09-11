@@ -1,0 +1,227 @@
+---
+title: "Ryan's HW4"
+format: html
+---
+
+## Task 1: Conceptual Questions
+
+1. 
+```{r}
+library(tidyverse)
+iris |>
+  as_tibble() |>
+  select(starts_with("Petal"), Species) |>
+  filter(Petal.Length < 1.55) |>
+  arrange(Species)
+```
+
+2. Long format data is when each row is a single observation and each column is a single variable. Wide format data is when a single row can contain multiple observations. We tend to prefer long format because most plotting, summarizing, and modeling functions expect long format.
+
+## Task 2:
+
+For this task we manipulate the data sets we read in for HW 3, starting with the glass data set.
+```{r}
+library(tidyverse)
+
+# Read in glass data
+glass_data <- read_csv(
+  "https://www4.stat.ncsu.edu/~online/datasets/glass.data",
+  col_names = c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca", "Ba", "Fe", "Type_of_glass")
+)
+
+# Piping several changes (Type as factor with appropriate labels, subsetting Type and Fe)
+glass_data <- glass_data |>
+  mutate(Type_of_glass = factor(Type_of_glass,
+                                levels = c(1, 2, 3, 4, 5, 6, 7),
+                                labels = c("building_windows_float_processed",
+                                           "building_windows_non_float_processed",
+                                           "vehicle_windows_float_processed",
+                                           "vehicle_windows_non_float_processed",
+                                           "containers",
+                                           "tableware",
+                                           "headlamps"))) |>
+  filter(Fe < 0.2, Type_of_glass == "tableware" | Type_of_glass == "headlamps")
+
+# Print tibble
+glass_data
+```
+
+Next we perform manipulations on the yeast data set.
+```{r}
+# Read in yeast data
+yeast_data <- read_fwf(
+  "https://www4.stat.ncsu.edu/~online/datasets/yeast.data",
+  fwf_widths(
+    widths = c(12, 6, 6, 6, 6, 6, 6, 6, 6, 3),               # Character widths for each column
+    col_names = c("seq_name", "mcg", "gvh", "alm", "mit",
+                  "erl", "pox", "vac", "nuc", "class")
+  )
+)
+
+# Piping several changes (remove seq_name and nuc, print mean and median for remaining cols)
+yeast_data <- yeast_data |>
+  select(mcg, gvh, alm, mit, erl, pox, vac, class) |>
+  group_by(class) |>
+  mutate(across(c(mcg, gvh, alm, mit, erl, pox, vac), 
+                list(mean=mean, median=median), 
+                .names= "{.col}_{.fn}"))
+
+# Print tibble
+yeast_data
+```
+
+Lastly, we manipulate the wine data set. However first we must recreate it from the white and red wine data.
+```{r}
+library(readxl)
+### WHITE WINE DATA ###
+# Read in white wine data
+white_wine <- read_excel("white-wine.xlsx")
+
+# Specifying the second sheet
+white_wine_names <- read_excel("white-wine.xlsx", sheet = 2)
+
+# Renaming columns
+colnames(white_wine) <- white_wine_names$Variables
+
+# Column add
+white_wine$type <- "white"
+
+### RED WINE DATA ###
+# Read in red wine data
+red_wine <- read_delim("red-wine.csv", delim = ";")
+
+# Renaming columns
+colnames(red_wine) <- white_wine_names$Variables
+
+# Column add
+red_wine$type <- "red"
+
+### WINE DATA ###
+# Combine data sets
+wine_data <- dplyr::bind_rows(white_wine, red_wine)
+
+# Print tibble
+wine_data
+```
+
+Now that we have the combined wine data set, we can manipulate it.
+```{r}
+# Piping several changes to the wine data set
+wine_data <- wine_data |>
+  filter(quality > 6.5, alcohol < 132) |>
+  arrange(desc(quality)) |>
+  select(fixed_acidity, volatile_acidity, citric_acid, alcohol, type, quality) |>
+  group_by(quality) |>
+  mutate(across(alcohol, 
+                list(mean = mean, sd = sd), 
+                .names = "{.col}_{.fn}"))
+
+# Print tibble
+wine_data
+```
+
+## Task 3: Database Practice
+
+Here we connect to the Lahman.db file.
+```{r}
+library(DBI)
+
+# Connecting to Lahman.db
+con <- dbConnect(RSQLite::SQLite(), "lahman.db")
+dbListTables(con)
+```
+
+With Lahman.db now loaded, we return all of the data from the Teams table for the year 2015. 
+```{r}
+library(dplyr)
+
+tbl(con, "Teams") |>
+  filter(yearID == 2015) |>
+  collect() # Returning without lazy evaluation
+```
+
+We do the same thing but now with SQL
+```{r}
+tbl(con, sql(
+"SELECT `Teams`.*
+FROM `Teams`
+WHERE (`yearID` = 2015.0)")
+)|>
+  collect() # Returning without lazy evaluation
+```
+
+Here we return specific players from the Hall of Fame.
+```{r}
+last_HOF <- tbl(con, "HallOfFame") |>
+  filter(category == "Player", inducted == "Y") |> # Inducted (not just nominated)
+  select(playerID, yearID, category) |>
+  collect() # Returning without lazy evaluation
+
+# Print tibble
+last_HOF
+```
+
+Next we merge our manipulated HallOfFame data with the People table.
+```{r}
+# Retrieving names and IDs from the People data
+first_HOF <- tbl(con, "People") |>
+  select(playerID, nameFirst, nameLast) |>
+  collect()
+
+# Print tibble
+first_HOF
+
+# Join data sets
+first_last_HOF <- inner_join(first_HOF, last_HOF, by = "playerID") |>
+  collect()
+
+# Print tibble
+first_last_HOF
+```
+
+Moving on, we examine the Managers table.
+```{r}
+tbl(con, "Managers") |>
+  select(playerID, G, W, L) |>
+  group_by(playerID) |> # Technically the Manager ID
+  summarize(G_managed = sum(G, na.rm = TRUE),
+            Total_W = sum(W, na.rm = TRUE),
+            Total_L = sum(L, na.rm = TRUE)) |>
+  collect() |>
+  mutate(Win_Pct = Total_W / G_managed) |>
+  arrange(desc(Win_Pct))
+```
+
+Lastly, we will build off of our work from the previous data sets to return info about the
+people that managed a team and were inducted into the hall of fame.
+```{r}
+# HOF table w/o restricting "Player" category
+HOF_info <- tbl(con, "HallOfFame") |>
+  filter(inducted == "Y") |>
+  select(playerID, yearID, category) |>
+  inner_join(tbl(con, "People") |> 
+               select(playerID, nameFirst, nameLast),
+             by = "playerID")
+
+
+# Managers table (same as Q16)
+managers_info <- tbl(con, "Managers") |>
+  select(playerID, G, W, L) |>
+  group_by(playerID) |>
+  summarize(G_managed = sum(G, na.rm = TRUE),
+            Total_W = sum(W, na.rm = TRUE),
+            Total_L = sum(L, na.rm = TRUE))
+
+
+# Combine data sets - people who are BOTH inducted AND are managers
+HOF_managers <- HOF_info |>
+  inner_join(managers_info, by = "playerID") |>
+  collect() |>                                    # Moving this part down from the managers code
+  mutate(Win_Pct = Total_W / G_managed) |>
+  arrange(desc(Win_Pct))
+
+HOF_managers
+
+dbDisconnect(con)
+```
+
