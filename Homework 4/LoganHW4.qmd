@@ -1,0 +1,181 @@
+---
+title: "LoganHW4"
+format: html
+---
+
+```{r}
+#| include = false
+library(tidyverse)
+library(readxl)
+library(DBI)
+library(RSQLite)
+```
+
+## Task 1
+
+### Chaining with Base R
+
+```{r}
+arrange(filter(select(as_tibble(iris), starts_with("Petal"), Species), Petal.Length < 1.55), Species)
+```
+
+```{r}
+iris |> as_tibble() |> select(starts_with("Petal"), Species) |> filter(Petal.Length < 1.55) |> arrange(Species)
+
+```
+
+### Question 2
+
+Long formatted data is when data is stored in rows, wide format data stores the data in columns. Long has a row per obs and wide has more than one obs in a row. We usually prefer long the make operations in code easier.
+
+## Task 2
+
+### Glass data
+
+```{r}
+glassData <- read_csv("https://www4.stat.ncsu.edu/online/datasets/glass.data", 
+                      col_names = c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca", "Ba", "Fe", "Type_of_glass"),
+                      show_col_types = FALSE)
+
+# Overwriting Type_of_Glass
+glassData %>% mutate(Type_of_glass = factor(Type_of_glass,
+                                levels = c(1, 2, 3, 4, 5, 6, 7),
+                                labels = c("building_windows_float_processed",
+                                           "building_windows_non_float_processed",
+                                           "vehicle_windows_float_processed",
+                                           "vehicle_windows_non_float_processed",
+                                           "containers",
+                                           "tableware",
+                                           "headlamps"))) %>% 
+              filter(Fe < 0.2, Type_of_glass == "tableware" | Type_of_glass == "headlamps")
+
+```
+
+### Yeast data
+
+```{r}
+yeastData <- read_table("https://www4.stat.ncsu.edu/online/datasets/yeast.data",
+                        col_names = c("seq_name", "mcg", "gvh", "alm", "mit", "erl" , "pox", "vac", "nuc", "class"),
+                        show_col_types = FALSE) 
+
+yeastData %>% select(-c("seq_name", "nuc")) %>%
+  group_by(class) %>%
+  mutate(across(c(mcg, gvh, alm, mit, erl, pox, vac), list(mean = mean, median = median),.names= "{.col}_{.fn}"))
+```
+
+### Wine data
+
+```{r}
+# Reading in the data for white
+wineWhiteData <- read_excel("white-wine.xlsx")
+
+# Reading in names for the data from sheet 2
+wineWhiteDataNames <- read_excel("white-wine.xlsx",
+  sheet = excel_sheets("white-wine.xlsx")[2])
+
+# Renaming
+colnames(wineWhiteData) <- wineWhiteDataNames[[1]]
+
+# Adding col to indicate wine type
+wineWhiteData <- wineWhiteData %>% mutate(type = "white")
+
+# Reading in the data for red
+wineRedData <- read_delim("red-wine.csv",
+                          delim = ";",
+                          col_names = TRUE,
+                          show_col_types = FALSE)
+
+# Renaming, has same names as white
+colnames(wineRedData) <- wineWhiteDataNames[[1]]
+
+# Adding col to indicate wine type also making sure everything is double for later operations
+wineRedData <- wineRedData %>% mutate(across(wineWhiteDataNames[[1]], as.double)) %>% 
+  mutate(type = "red")
+
+# Combining
+wineData <- bind_rows(wineWhiteData, wineRedData)
+
+# Look at high quality wines
+wineData <- wineData %>% filter(quality > 6.5, alcohol < 13.2) %>%
+  arrange(desc(quality)) %>% select(contains("acid"), alcohol, type, quality) %>%
+  group_by(quality) %>% mutate(mean_alcohol = mean(alcohol), sd_alcohol = sd(alcohol))
+
+```
+
+## Task 3
+
+### Connecting to the Lahman database
+
+```{r}
+con <- dbConnect(RSQLite::SQLite(), "lahman.db")
+
+# Look at all tables
+dbListTables(con)
+
+# Returning Teams table for 2015 using dplyr
+tbl(con, "Teams") %>%
+  filter(yearID == 2015) %>% collect()
+
+# Returning Teams table for 2015 using SQL
+tbl(con, sql(
+  "SELECT *
+  FROM `Teams`
+  WHERE (`yearID` = 2015.0)")
+) %>% collect()
+```
+
+### Queries
+
+#### Returning all players in hall of fame
+
+```{r}
+# Only want player, year, and category vars
+hofPlayers <- tbl(con, "HallOfFame") %>% 
+  filter(inducted == "Y", category == "Player") %>%
+  select(playerID, yearID, category) %>% collect()
+hofPlayers
+```
+
+#### Combining previous with People
+```{r}
+# Storing people db
+ppl <- tbl(con, "People") %>% select(playerID, nameFirst, nameLast) %>% collect()
+
+# Joining
+left_join(hofPlayers,ppl, by = "playerID")
+```
+
+#### Manager's wr
+
+```{r}
+managerWr <- tbl(con, "Managers") %>%
+  select(playerID, G, W, L) %>%
+  group_by(playerID) %>%
+  summarize(G_managed = sum(G, na.rm = TRUE),
+    Total_W = sum(W, na.rm = TRUE),
+    Total_L = sum(L, na.rm = TRUE)) %>%
+  collect() %>%
+  mutate(win_rate = (Total_W / G_managed)) %>%
+  arrange(desc(win_rate))
+
+managerWr
+```
+
+#### Information from people that managed a team inducted into hof
+
+```{r}
+# HOF table 
+hofAll <- tbl(con, "HallOfFame") %>%
+  filter(inducted == "Y") %>%
+  select(playerID, yearID, category) %>% collect() %>% left_join(ppl, by = "playerID")
+
+hofManagerWr <- hofAll %>%
+  inner_join(managerWr, by = "playerID")
+
+hofManagerWr
+
+# Disconnect
+dbDisconnect(con)
+```
+
+
