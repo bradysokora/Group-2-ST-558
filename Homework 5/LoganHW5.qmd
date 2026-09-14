@@ -1,0 +1,55 @@
+---
+title: "LoganHW5"
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(httr)
+library(jsonlite)
+```
+
+## Task 1
+
+### Querying API
+
+```{r}
+url <- "https://newsapi.org/v2/everything?q=tesla&from=2026-08-14&sortBy=publishedAt&apiKey=997fcc290a9745b4aa600c30b58e85bd"
+
+teslaReturn <- httr::GET(url)
+parsedTesla <- fromJSON(rawToChar(teslaReturn$content))
+teslaInfo <- as_tibble(parsedTesla)
+```
+
+### Function for querying
+
+```{r}
+# Queries newsapi.org and gives us information about news articles
+# @param topic a string of what topic you are interested in
+# @param period a string of the time period (that time to present).
+#   format is year-month-day
+# @param key the api key as a string
+# @return returns a tibble of article information
+queryNews <- function(topic, period, key){
+  url <- paste0("https://newsapi.org/v2/everything?q=", topic,"&from=", period, "&sortBy=publishedAt&apiKey=", key)
+  ret <- httr::GET(url) 
+  parsed <- fromJSON(rawToChar(ret$content)) 
+  return (as_tibble(parsed))
+}
+
+```
+
+### Testing the function
+
+```{r}
+news1 <- queryNews("Apple", "2026-09-10", "997fcc290a9745b4aa600c30b58e85bd")
+
+news2 <- queryNews("Iran", "2026-09-01", "997fcc290a9745b4aa600c30b58e85bd")
+
+```
+
+
+
+
+
