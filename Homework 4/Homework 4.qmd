@@ -16,10 +16,38 @@ library(RSQLite)
 ## Task 1: Conceptual Questions
 
 ### Question 1:
+
 ```{r}
 iris |>
   as_tibble() |>
   select(starts_with("Petal"), Species) |>
   filter(Petal.Length < 1.55) |>
   arrange(Species)
+```
+
+
+### Question 2:
+Long format data is when each row consists of one observation and each column one variable, whereas wide format data may have more than one observation per row. We prefer long format data as most of the functions we use expect long format data.
+
+## Task 2
+
+Reading in glass data using code from Homework 3
+```{r}
+#Reading in the data
+glass_data <- read_csv("https://www4.stat.ncsu.edu/online/datasets/glass.data", col_names = F, show_col_types = F)
+
+#Setting variable names based on information from the homework
+names(glass_data) <- c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca",
+                       "Ba", "Fe", "Type_of_Glass")
+
+#Printing tibble
+glass_data
+```
+
+Overwriting Type of glass variable using `mutate()`
+```{r}
+glass_data |>
+  mutate(Type_of_Glass = factor(Type_of_Glass, levels = 1:7,
+                                labels = c("building_windows_float_processed", "building_windows_non_float_processed", "vehicle_windows_float_processed", "vehicle_windows_non_float_processed", "containers", "tableware", "headlamps"))) |>
+  filter(Fe < .2, Type_of_Glass %in% c("tableware", "headlamps"))
 ```
