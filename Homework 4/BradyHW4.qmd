@@ -3,3 +3,196 @@ title: "BradyHW4"
 format: html
 editor: visual
 ---
+
+# Homework 4 ST 558 Group 2
+
+```{r}
+#| include: false
+library(tidyverse)
+library(readxl)
+library(DBI)
+library(RSQLite)
+```
+
+## Task 1: Conceptual Questions
+
+Rewriting the nested call with the pipe
+
+```{r}
+# Same call written left to right with the pipe
+iris |>
+  as_tibble() |>
+  select(starts_with("Petal"), Species) |>
+  filter(Petal.Length < 1.55) |>
+  arrange(Species)
+```
+
+Long format data has one observation per row and one variable per column. Wide format can pack more than one observation into a single row. We prefer long format since a lot of the functions need long format.
+
+## Task 2: dplyr Practice
+
+Reading in glass data and making the type a labeled factor
+
+```{r}
+# Reading in glass data (same as HW3)
+glass <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/glass.data",
+                    delim = ",",
+                    col_names = c("Id", "RI", "Na", "Mg", "Al", "Si",
+                                  "K", "Ca", "Ba", "Fe", "Type_of_glass"))
+
+# Make type a factor with real labels, then keep low iron tableware and headlamps
+glass |>
+  mutate(Type_of_glass = factor(Type_of_glass,
+                                levels = 1:7,
+                                labels = c("building_windows_float_processed",
+                                           "building_windows_non_float_processed",
+                                           "vehicle_windows_float_processed",
+                                           "vehicle_windows_non_float_processed",
+                                           "containers",
+                                           "tableware",
+                                           "headlamps"))) |>
+  filter(Fe < 0.2, Type_of_glass %in% c("tableware", "headlamps"))
+```
+
+Reading in yeast data, dropping the columns, and summarizing by class
+
+```{r}
+# Reading in yeast data (same as HW3)
+yeast <- read_table("https://www4.stat.ncsu.edu/~online/datasets/yeast.data",
+                    col_names = c("seq_name", "mcg", "gvh", "alm", "mit",
+                                  "erl", "pox", "vac", "nuc", "class"))
+
+# Drop seq_name and nuc, then add mean and median of each numeric column by class
+yeast |>
+  select(-seq_name, -nuc) |>
+  group_by(class) |>
+  mutate(across(c(mcg, gvh, alm, mit, erl, pox, vac),
+                list(mean = mean, median = median),
+                .names = "{.col}_{.fn}"))
+```
+
+Recreating the combined wine data from HW3
+
+```{r}
+# White wine from excel, renamed using sheet 2, with a type column
+white_wine <- read_excel("white-wine.xlsx")
+white_names <- read_excel("white-wine.xlsx", sheet = 2)
+colnames(white_wine) <- white_names$Variables
+white_wine$type <- "white"
+
+# Red wine from URL, renamed the same way, with a type column
+red_wine <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/red-wine.csv",
+                       delim = ";")
+colnames(red_wine) <- white_names$Variables
+red_wine$type <- "red"
+
+# Combine both into one data set
+wine <- bind_rows(white_wine, red_wine)
+```
+
+Chaining changes to look at high quality wines
+
+```{r}
+# Filter high quality wines, sort, select columns, add alcohol mean and sd by quality
+wine |>
+  filter(quality > 6.5, alcohol < 132) |>
+  arrange(desc(quality)) |>
+  select(contains("acid"), alcohol, type, quality) |>
+  group_by(quality) |>
+  mutate(alcohol_mean = mean(alcohol),
+         alcohol_sd = sd(alcohol))
+```
+
+## Task 3: Database Practice
+
+Connecting to the Lahman database and listing the tables
+
+```{r}
+# Connect to the Lahman.db file in this folder
+con <- dbConnect(RSQLite::SQLite(), "lahman.db")
+
+# List all the tables
+dbListTables(con)
+```
+
+Returning the Teams table for 2015 with dplyr
+
+```{r}
+# Teams table filtered to 2015
+tbl(con, "Teams") |>
+  filter(yearID == 2015) |>
+  collect()
+```
+
+Doing the same query in SQL
+
+```{r}
+# Same 2015 Teams query as raw SQL
+tbl(con, sql(
+  "SELECT *
+   FROM `Teams`
+   WHERE (`yearID` = 2015.0)")) |>
+  collect()
+```
+
+Returning all inducted hall of fame players
+
+```{r}
+# Keep inducted players and grab three columns
+hof_players <- tbl(con, "HallOfFame") |>
+  filter(inducted == "Y", category == "Player") |>
+  select(playerID, yearID, category) |>
+  collect()
+
+hof_players
+```
+
+Adding player names from the People table
+
+```{r}
+# Pull player names
+people_names <- tbl(con, "People") |>
+  select(playerID, nameFirst, nameLast) |>
+  collect()
+
+# Join names onto the hall of fame players
+hof_named <- inner_join(hof_players, people_names, by = "playerID")
+hof_named
+```
+
+Getting each manager's win/loss record
+
+```{r}
+# Total games, wins, losses per manager, then win percentage sorted high to low
+manager_record <- tbl(con, "Managers") |>
+  select(playerID, G, W, L) |>
+  group_by(playerID) |>
+  summarize(G_managed = sum(G, na.rm = TRUE),
+            Total_W = sum(W, na.rm = TRUE),
+            Total_L = sum(L, na.rm = TRUE)) |>
+  collect() |>
+  mutate(Win_Pct = Total_W / G_managed) |>
+  arrange(desc(Win_Pct))
+
+manager_record
+```
+
+Getting people who both managed and made the hall of fame
+
+```{r}
+# All inducted hall of famers with their names
+hof_all <- tbl(con, "HallOfFame") |>
+  filter(inducted == "Y") |>
+  select(playerID, yearID, category) |>
+  collect() |>
+  inner_join(people_names, by = "playerID")
+
+# Keep only the ones who also managed
+hof_managers <- hof_all |>
+  inner_join(manager_record, by = "playerID")
+
+hof_managers
+
+# Disconnect when done
+dbDisconnect(con)
+```
