@@ -8,6 +8,7 @@ library(tidyverse)
 library(ggplot2)
 library(httr)
 library(jsonlite)
+library(janitor)
 ```
 
 ## Task 1
@@ -49,7 +50,103 @@ news2 <- queryNews("Iran", "2026-09-01", "997fcc290a9745b4aa600c30b58e85bd")
 
 ```
 
+## Task 2
+
+### Roller Coaster Data
+
+```{r}
+coaster <- read_csv("635USrollercoasters.csv", show_col_types = FALSE) %>% clean_names() %>%
+  mutate(across(c("census_region", "scale", "type", "design", "inversions"), as.factor)) %>%
+  mutate(age_group = factor(age_group, c("1:Older", "2:Recent", "3:Newest"), c("Older", "Recent", "Newest")))
+```
+
+### Missing data
+
+```{r}
+sum_na <- function(column){
+  sum(is.na(column))
+}
+na_counts <- coaster |>
+  summarize(across(everything(), sum_na))
+
+names(coaster)[na_counts > 0]
+```
+
+There is some missing data in the top speed, max height, drop, length, duration, and make variables. These variables are mostly data about the specifications of the rides (how long it is, length of drops, speed). Make is missing from some of the rides.
+
+### Contingency tables
+
+#### 1 way
+
+```{r}
+table(coaster$design)
+```
+Most of the coasters are sit down types.
+
+#### 2 way
+
+```{r}
+table(coaster$age_group, coaster$scale)
+```
+Extreme coasters seem to be the most popular coaster scale in recent times, with family being the second most.
+
+#### 3 way
+
+```{r}
+table(coaster$age_group, coaster$scale, coaster$type)
+```
+There appears to be little growth in the demand for wooden coasters across all scales.
+
+### Conditional Table 
+
+#### Conditional 3 way 
+
+```{r}
+two_way <- coaster %>% filter(scale == "Thrill" | scale == "Extreme") 
+table(droplevels(two_way$scale), droplevels(two_way$census_region))
+```
+
+#### Conditional 3 way 
+
+```{r}
+three_way <- table(coaster$age_group, coaster$census_region, coaster$inversions)
+three_way[, , "Yes"]
+```
+
+#### Conditional 2 way dplyr
+
+```{r}
+coaster %>% group_by(design, census_region) %>%
+  summarize(count = n(), .groups = "drop_last") %>%
+  pivot_wider(names_from = census_region, values_from = count, values_fill = 0) 
+```
 
 
+#### Bar graphs
 
+```{r}
+# Stack
+ggplot(coaster, aes(x = age_group, fill = scale)) + geom_bar() + 
+  scale_fill_viridis_d(name = "Coaster's Scale", option = "plasma") +
+  labs(
+    title = "Age of Coaster by Coaster's Scale",
+    subtitle = "Kiddie coasters havent grown as fast as other scales",
+    x = "Age of Coaster",
+    y = "Number of Coasters"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Side by side
+ggplot(coaster, aes(x = scale, fill = census_region)) + geom_bar( position = "dodge") + 
+  scale_fill_viridis_d(name = "Census Region", option = "mako") +
+  labs(
+    title = "Coaster's Scale by Region",
+    subtitle = "Most Coasters are in the South",
+    x = "Coaster's Scale",
+    y = "Number of Coasters"
+  ) +
+  theme_minimal()
+```
 
