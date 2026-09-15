@@ -123,3 +123,53 @@ tbl(con, sql(
   ) |>
   collect()
 ```
+
+Returning all players in the hall of fame, the year they were voted in, and their category
+```{r}
+hof <- tbl(con, "HallOfFame") |>
+  filter(inducted == "Y", category == "Player") |>
+  select(playerID, yearID, category) |>
+  collect()
+
+hof
+```
+
+Combining table from above with the People table to add the nameFirst and nameLast values
+```{r}
+ppl <- tbl(con, "People") |>
+  select(playerID, nameFirst, nameLast) |>
+  collect()
+
+left_join(hof, ppl, by = "playerID")
+```
+
+Returning managerID, G, W, and L columns from the Managers table
+```{r}
+managers <- tbl(con, "Managers") |>
+  select(playerID, G, W, L) |>
+  group_by(playerID) |>
+  summarize(G_managed = sum(G, na.rm = T),
+            Total_W = sum(W, na.rm = T),
+            Total_L = sum(L, na.rm = T)) |>
+  collect() |>
+  mutate(win_rate = Total_W / G_managed) |>
+  arrange(desc(win_rate))
+
+managers
+```
+
+Information for people that managed a team and were inducted into the hall of fame
+```{r}
+hof_all <- tbl(con, "HallOfFame") |>
+  filter(inducted == "Y") |>
+  select(playerID, yearID, category) |>
+  collect() |>
+  inner_join(ppl, by = "playerID")
+
+hof_manager <- hof_all |>
+  inner_join(managers, by = "playerID")
+
+hof_manager
+
+dbDisconnect(con)
+```
