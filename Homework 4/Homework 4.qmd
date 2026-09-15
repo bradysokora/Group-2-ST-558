@@ -39,9 +39,6 @@ glass_data <- read_csv("https://www4.stat.ncsu.edu/online/datasets/glass.data", 
 #Setting variable names based on information from the homework
 names(glass_data) <- c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca",
                        "Ba", "Fe", "Type_of_Glass")
-
-#Printing tibble
-glass_data
 ```
 
 Overwriting Type of glass variable using `mutate()`
@@ -50,4 +47,79 @@ glass_data |>
   mutate(Type_of_Glass = factor(Type_of_Glass, levels = 1:7,
                                 labels = c("building_windows_float_processed", "building_windows_non_float_processed", "vehicle_windows_float_processed", "vehicle_windows_non_float_processed", "containers", "tableware", "headlamps"))) |>
   filter(Fe < .2, Type_of_Glass %in% c("tableware", "headlamps"))
+```
+
+Reading in yeast data using code from Homework 3
+```{r}
+#Reading in the data
+yeast_data <- read_table("https://www4.stat.ncsu.edu/online/datasets/yeast.data", col_names = F, show_col_types = F)
+
+#Setting variable names based on information from the homework
+names(yeast_data) <- c("Seq_name", "MCG", "GVH", "ALM", "MIT", "ERL",
+                       "POX", "VAC", "NUC", "Class")
+```
+
+Starting chain to remove seq_name and nuc columns and adding mean and median columns of each numeric variable at each class grouping
+```{r}
+yeast_data |>
+  select(-Seq_name, -NUC) |>
+  group_by(Class) |>
+  mutate(across(c(MCG, GVH, ALM, MIT, ERL, POX, VAC),
+         list(mean = mean, median = median),
+         .names = "{.col}_{.fn}"))
+```
+
+Reading in wine data using code from Homework 3
+```{r}
+white_data <- read_excel("white-wine.xlsx", sheet = excel_sheets("white-wine.xlsx")[1])
+
+white_names <- read_excel("white-wine.xlsx", sheet = excel_sheets("white-wine.xlsx")[2])
+
+colnames(white_data) <- white_names[[1]]
+
+white_data <- white_data %>% mutate(wine_type = "white")
+
+red_data <- read_delim("red-wine.csv", delim = ";", col_names = T,
+                     show_col_types = F)
+
+colnames(red_data) <- white_names[[1]]
+
+red_data$wine_type = "red"
+
+combined_wines <- bind_rows(white_data, red_data)
+```
+
+Starting chain to complete tasks given in homework
+```{r}
+combined_wines |>
+  filter(quality > 6.5, alcohol < 13.2) |>
+  arrange(desc(quality)) |>
+  select(contains("acid"), alcohol, wine_type, quality) |>
+  group_by(quality) |>
+  mutate(mean_alcohol = mean(alcohol), sd_alcohol = sd(alcohol))
+```
+
+## Task 3: Database Practice
+
+Downloading Lahman.db file
+```{r}
+con <- dbConnect(SQLite(), "lahman.db")
+dbListTables(con)
+```
+
+Reading in 2015 data using dplyr
+```{r}
+tbl(con, "Teams") |>
+  filter(yearID == 2015) |>
+  collect()
+```
+
+Reading in 2015 data using SQL
+```{r}
+tbl(con, sql(
+  "SELECT *
+    FROM `Teams`
+    WHERE (`yearID` = 2015.0)")
+  ) |>
+  collect()
 ```
