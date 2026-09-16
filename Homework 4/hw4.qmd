@@ -1,0 +1,159 @@
+---
+title: "hw4"
+format: html
+---
+
+## Task 1 
+```{r}
+# rewrite the codes 
+library(tidyverse)
+as_tibble(iris) |>
+select(starts_with("Petal"),Species) |>
+  filter(Petal.Length <
+           1.55) |>
+  arrange(Species)
+```
+What is meant by long format data and wide format data? Which do we generally prefer for statistical
+analysis?
+long format data refers to use one individual could have multiple observations with characteristics/features of each observation as a column, and the cell is the value of the feature. However, Wide format data combines different times of observations together as a row, so one individual only have one row with repeated observations. 
+Statistical analysis prefer long format data. 
+
+## Task 2 
+```{r}
+# reread that data that also names the columns. 
+library(tidyverse)
+glass_tbl <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/glass.data", delim = ",", col_names = c("Id","RI","Na","Mg","Al","Si","K","Ca","Ba","Fe","Type of Class"))
+
+#Start a chain on your data object that overwrites the Type_of_glass variable using mutate().
+# Create a factor version of the variable that replaces the numbers with string labels
+  
+  glass_tbl <- glass_tbl |>
+  mutate (factor_Type_of_class = case_when(
+`Type of Class` == 1  ~ "building_windows_float_processed",
+`Type of Class` == 2 ~ "building_windows_non_float_processed",
+`Type of Class` == 3 ~ "vehicle_windows_float_processed",
+`Type of Class` == 4 ~ "vehicle_windows_non_float_processed(none in this database)", 
+`Type of Class` == 5 ~ "containers", 
+`Type of Class` == 6 ~ "tableware", 
+`Type of Class` == 7 ~  "headlamps"
+  )) |>
+   mutate(factor(factor_Type_of_class))
+  
+  #Continue your chain and keep only observations where the Fe variable is less than 0.2 and the Type of Glass is either “tableware” or “headlamp”.
+  glass_tbl <- glass_tbl |>
+    filter(Fe < 0.2, `Type of Class` == "tableware"|`Type of Class` == "headlamp")
+  
+
+```
+
+YEARS data
+```{r}
+  #Start a chain that removes the seq_name and nuc columns.
+library(tidyverse)
+yeast_tbl <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/yeast.data", delim = " ", col_names = c("seq_name","mcg","gvh","alm","mit","erl","pox","vac","nuc","class"))
+yeast_tbl
+
+yeast_tbl <- yeast_tbl |>
+  select ("mcg","gvh","alm","mit","erl","pox","vac","class")
+
+ # Continue your chain to add columns corresponding to the mean and median of each numeric variable
+
+
+yeast_tbl <- yeast_tbl |>
+  group_by(class) |>
+  summarise (mean_mcg = mean(mcg),
+        mean_gvh = mean(gvh),
+        mean_alm = mean(alm),
+        mean_mit = mean(mit),
+        mean_erl = mean(erl),
+        mean_pox = mean(pox),
+        mean_vac = mean(vac),
+        median_mcg = median(mcg),
+        median_gvh = median(gvh),
+        median_alm = median(alm),
+        median_mit = median(mit),
+        median_erl = median(erl),
+        median_pox = median(pox),
+        median_vac = median(vac),
+        .groups = "drop")
+
+library(tidyverse)
+yeast_tbl <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/yeast.data", delim = " ", col_names = c("seq_name","mcg","gvh","alm","mit","erl","pox","vac","nuc","class"))
+yeast_tbl
+
+yeast_tbl <- yeast_tbl |>
+  select ("mcg","gvh","alm","mit","erl","pox","vac","class")
+
+yeast_tbl <- yeast_tbl |>
+  group_by(class) |>
+  summarise (
+    across(mcg:vac, 
+           list(mean = mean, median = median)))
+
+```
+
+Wine data
+```{r}
+# only look at high-quality wines (quality > 6.5) and wines that have a reasonable alcohol value (alcohol < 132).
+#  now sort the data from highest quality to lowest.
+# select only the variables that contain acid, the alcohol variable, the type variable, and the quality variable.
+# add the mean and standard deviation of the alcohol variable to the data set for each setting of the quality variable.
+
+# read data
+library(readxl)
+whitewine <- read_excel("white_wine.xlsx",
+                        sheet = excel_sheets("white_wine.xlsx")[1])
+whitewine
+
+# read 2st sheet
+whitewine_2 <- read_excel("white_wine.xlsx",
+                        sheet = excel_sheets("white_wine.xlsx")[2])
+colnames(whitewine) <- whitewine_2$Variables[1:13]
+whitewine
+
+# add type column and assign "white" as type 
+whitewine$type <- "white"
+
+# read another excel 
+library(readr)
+redwine <- read_delim("https://www4.stat.ncsu.edu/~online/datasets/red-wine.csv", delim = ";")
+colnames(redwine) <- whitewine_2$Variables[1:13]
+redwine$type <- "red"
+
+# combine two excels
+allwine <- dplyr::bind_rows(whitewine, redwine)
+
+
+#only look at high-quality wines (quality > 6.5) and wines that have a reasonable alcohol value (alcohol < 132).
+
+allwine <- allwine |>
+  filter (quality > 6.5, alcohol < 132)
+
+#  now sort the data from highest quality to lowest.
+allwine <- allwine |>
+  arrange(desc(quality))
+
+# select only the variables that contain acid, the alcohol variable, the type variable, and the quality variable.
+
+allwine <- allwine |>
+  select(contains("aciud"), alcohol, type, quality)
+
+# add the mean and standard deviation of the alcohol variable to the data set for each setting of the quality variable.
+
+allwine <- allwine |>
+  group_by(quality) |>
+  mutate(mean_alcohol = mean(alcohol), sd_alcohol = sd(alcohol)) |>
+  ungroup()
+# should we add na.rm?
+
+
+
+
+```
+
+
+
+## Task 3 
+```{r}
+
+
