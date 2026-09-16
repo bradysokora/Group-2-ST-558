@@ -1,5 +1,6 @@
 ---
-title: "hw4"
+title: "Zuohw4"
+Author: "Jingyi Zuo"
 format: html
 ---
 
@@ -156,4 +157,60 @@ allwine <- allwine |>
 ## Task 3 
 ```{r}
 
+# connect database
+library(DBI)
 
+lahman <- dbConnect(
+  RSQLite::SQLite(),
+  dbname = "lahman.db"
+)
+
+# back table names 
+dbListTables(lahman)
+
+#Use the tbl() function and dplyr to return all of the data from the Teams table for the year 2015. 
+
+dbteams <- tbl(lahman, "teams")
+
+# Repeat the above by using the sql() function within tbl() 
+tbl(
+  lahman,
+  sql("SELECT * FROM teams")
+)
+
+# Return all of the players in the hall of fame, the year they were voted into the hall of fame, and their cateogory
+dbListFields(lahman, "HallOfFame")
+hall0 <- tbl(
+  lahman,
+  sql("SELECT playerID, yearID,category FROM HallOfFame")
+)
+
+# Combine the table from the previous question with the People table
+people <- tbl(
+  lahman,
+  sql("SELECT s.playerID, s.yearID,s.category,c.nameFirst, c.nameLast FROM HallOfFame AS s 
+      LEFT JOIN People AS c
+      on s.playerID = c.playerID")
+) |>
+  collect()
+
+dbListFields(lahman, "Managers")
+managers <- tbl(lahman, "Managers") |>
+  select(playerID,G,W,L) |>
+    group_by(playerID) |>
+  summarize(G_managed = sum(G, na.rm = TRUE),
+  Total_W = sum(W, na.rm = TRUE),
+  Total_L = sum(L, na.rm = TRUE)) |>
+  collect()
+
+# Create a new variable that is the career win/loss percentage (Total_W/G_managed). 
+
+managers <- managers |>
+  mutate(wlper = Total_W/G_managed) |>
+  arrange(desc(wlper))
+
+# join managers and people 
+managers |>
+  inner_join(people, by = "playerID")
+
+```
