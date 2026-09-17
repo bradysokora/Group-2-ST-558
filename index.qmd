@@ -3,6 +3,6 @@ title: "Group 2 Links to HW"
 format: html
 ---
 
-- [Homework 2](Homeowork 2/St558hw2.qmd)
+- [Homework 2](/Homeowork 2/St558hw2.qmd)
 - [Homework 3](/Homework 3/Mason HW3.qmd)
 - [Homework 4](/Homework 4/ST558HW4.qmd)
