@@ -1,0 +1,197 @@
+---
+title: "Ryan's HW5"
+format: html
+---
+
+## Task 1: Querying an API and a Tidy-Style Function
+
+```{r}
+# Normally we would use gitignore to hide this
+#| echo: false
+myKeyGoesHere <- "26dc28fdf1374e47b762eb5b27036960"
+```
+
+We connect to newsapi.org for recent news.
+```{r}
+library(httr)
+
+# Establishing present date - avoiding 30-day limitations of free account with newsapi
+from_date <- Sys.Date() - 30
+
+# Grabbin recent news on the weather
+news_result <- GET(paste0(
+  "https://newsapi.org/v2/everything?",
+  "q=weather&",
+  "from=", from_date, "&",  # This checks 30 days in the past from present
+  "language=en&",
+  "pageSize=50&",
+  "apiKey=", myKeyGoesHere
+))
+```
+
+Using this result we parse it for the content.
+```{r}
+library(jsonlite)
+library(tidyverse)
+
+# Parse
+parsed <- fromJSON(rawToChar(news_result$content))
+
+# Storing as tibble
+articles <- as_tibble(parsed$articles)
+articles
+```
+
+Below is a function for a user to query these results
+```{r}
+query_news <- function(search_term, from_date, api_key) {
+    result <- GET(paste0(
+    "https://newsapi.org/v2/everything?",
+    "q=", search_term, "&",
+    "from=", from_date, "&",
+    "language=en&",
+    "pageSize=50&",
+    "apiKey=", api_key
+  ))
+  parsed <- fromJSON(rawToChar(result$content))  # Parsing as before
+  articles <- as_tibble(parsed$articles)  # Tibble as before
+  return(articles)
+}
+```
+
+We define two queries to test the function.
+```{r}
+query1 <- query_news("weather", as.character(Sys.Date() - 30), myKeyGoesHere)
+query2 <- query_news("sports", as.character(Sys.Date() - 30), myKeyGoesHere)
+```
+
+And here are the results of the queries. 
+```{r}
+# First query about weather
+query1
+
+# Second query about sports
+query2
+```
+
+## Task 2: Summarizing Roller Coaster Data
+
+We move on to examining roller coaster data.
+```{r}
+library(readr)
+
+# Read in roller coaster data
+rc_data <- read_csv("https://www4.stat.ncsu.edu/online/datasets/635USrollercoasters.csv")
+
+# Checking structure
+str(rc_data)
+```
+
+### Basic EDA
+
+From the above structure of the roller coaster data, we observe that many categorical variables (e.g $\texttt{Scale}$, $\texttt{Census Region}$, etc) are read in as strings. These would likely benefit from being converted to factors. Furthermore, multiple variables contain spaces (e.g. $\texttt{Census Region}$) or special characters (e.g $\texttt{Inversions?}$) that we shall want to deal with using backticks.
+
+```{r}
+# Convert AgeGroup to ordered factor
+rc_data$AgeGroup <- factor(rc_data$AgeGroup,
+                            levels = c("1:Older", "2:Recent", "3:Newest"),
+                            ordered = TRUE)
+
+# Convert other variables to factor and dealing with spaces and special chars
+rc_data$Scale <- factor(rc_data$Scale)
+rc_data$Type <- factor(rc_data$Type)
+rc_data$Design <- factor(rc_data$Design)
+rc_data$`Census Region` <- factor(rc_data$`Census Region`)
+rc_data$`Inversions?` <- factor(rc_data$`Inversions?`)
+
+# Re-check structure, check summary, and missing values
+str(rc_data)
+summary(rc_data)
+colSums(is.na(rc_data))
+```
+
+Here are some observations after these changes:
+- Unlike the what instructions indicate, $\texttt{Scale}$ appears to have 4 levels, not 3. The fourth factor being "Kiddie"
+- Six columns have missing values: $\texttt{TopSpeed}, \texttt{MaxHeight}, \texttt{Drop}, \texttt{Length}, \texttt{Duration}, \texttt{Make}$. None of these are the variables we converted to factor. 
+
+### Categorical variables
+
+Next we will start making tables from these data, beginning with a one-, two-, and three-way contingency table. We will build the first with the $\texttt{Type}$ variable.
+```{r}
+# One-way: Type
+one_way <- table(rc_data$Type)
+one_way
+```
+
+In the one-way table we observe 530 steel types from the total of 530 + 105 = 605 roller coasters. So a sizable majority of roller coasters are made from steel, as opposed to wood.
+
+Next we'll make a two-way table from $\texttt{Type}$ and $\texttt{Scale}$
+
+```{r}
+# Two-way: Type by Scale
+two_way <- table(rc_data$Type, rc_data$Scale)
+two_way
+```
+
+Let's inspect the `15` value. That means that 15 of the 105 wood roller coasters were classified as "Family" roller coasters. This the third most common type of ride for wood roller coasters, while the family steel coaster was the second most common within steel. 
+
+Next we'll make a three-way table from $\texttt{Type}$, $\texttt{Scale}$ and $\texttt{Census Region}$
+```{r}
+# Three-way: Type by Scale by Census Region
+three_way <- table(rc_data$Type, rc_data$Scale, rc_data$`Census Region`)
+three_way
+```
+
+Let's hone in on the West region, Wood coaster, classified as Family. This has 0 recorded observations, which means there are no wooden family coasters in the Western region. Contrast that with the respective wood-family coasters in other regions, we see that the other regions all have non-zero values. This makes the West unique on this particular coaster, suggesting that the West could be less family-oriented in terms of roller coaster attractions. This seems to hold when accounting for total numbers of family coasters (including steel), although steel coasters do exist for this purpose in the West.
+
+Now we will create a conditional two-way table in two different ways. We will condition on $\texttt{Census Region = South}$, then use variables $\texttt{Type}$ and $\texttt{Scale}$ for the two-way. The first method will subset at the beginning of the process.
+```{r}
+south_data <- filter(rc_data, `Census Region` == "South")
+south_two_way <- table(south_data$Type, south_data$Scale)
+south_two_way
+```
+
+The second method will create a three-way table first then subset.
+```{r}
+south_two_way2 <- three_way[, , "South"] # This calls the table from the prior question built from the same variables
+south_two_way2
+```
+
+Next we recreate the two-way contingency table of $\texttt{Type}$ and $\texttt{Scale}$ from earlier using dplyr functions. 
+```{r}
+type_scale_2way <- rc_data |>
+  group_by(Type, Scale) |>
+  summarize(count = n()) |>
+  pivot_wider(names_from = Scale, values_from = count) # Making output look more like a table() function
+
+type_scale_2way
+```
+
+Lastly, we shall plot a stacked and side-by-side bar graph. Since the tibble above is a bit harder to use than it's table() version from earlier, we will opt to use the `two_way` table we established.
+```{r}
+library(ggplot2)
+
+# Convert to df
+type_scale_df <- as.data.frame(two_way)
+
+# Stacked bar graph
+ggplot(data = type_scale_df, aes(x = Var1, y = Freq, fill = Var2)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(
+    x = "Coaster Type",
+    y = "Number of Coasters",
+    title = "Roller Coaster Scale by Type"
+  )+
+  scale_fill_discrete("Scale")
+
+# Side-by-side bar graph
+ggplot(data = type_scale_df, aes(x = Var1, y = Freq, fill = Var2)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    x = "Coaster Type",
+    y = "Number of Coasters",
+    title = "Roller Coaster Scale by Type"
+  )+
+  scale_fill_discrete("Scale")
+```
+
