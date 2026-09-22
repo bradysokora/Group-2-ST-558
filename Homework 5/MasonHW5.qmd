@@ -44,3 +44,17 @@ news_test_1 <- queryAPI("usa", "2026-08-25", "654641465c3f469891708ce3b77fb2a0")
 
 news_test_2 <- queryAPI("apple", "2026-08-25", "654641465c3f469891708ce3b77fb2a0")
 ```
+
+## Task 2 - Summarizing Roller Coaster Data
+
+Reading in roller coaster data and converting necessary variables to factors
+```{r}
+coasters <- read_csv("635USrollercoasters.csv", show_col_types = F) %>%
+  clean_names() %>%
+  mutate(across(c("census_region","scale","type","design","inversions"),
+                as.factor)) %>%
+  mutate(age_group = factor(age_group, 
+                            c("1:Older", "2:Recent", 
+                                         "3:Newest"), 
+                            c("Older", "Recent", "Newest")))
+```
