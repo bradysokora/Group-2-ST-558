@@ -86,3 +86,46 @@ threeway
 ```
 There are 8 roller coasters that are constructed with steel, considered extreme, and are older
 
+Creating conditional two-way table using three-way table from above
+
+```{r}
+threeway[, , "Steel"]
+```
+Creating conditional two-way table using `filter()`
+
+```{r}
+coasters %>%
+  filter(type == "Steel") %>%
+  tabyl(scale, age_group)
+```
+
+Creating two-way contingency table using `group_by()` and `summarize()`
+
+```{r}
+coasters %>%
+  group_by(scale, age_group) %>%
+  summarize(count = n()) %>%
+  pivot_wider(names_from = age_group, values_from = count)
+```
+
+Creating stacked bar chart
+```{r}
+ggplot(data = coasters |> drop_na(scale, age_group), 
+       aes(x = scale, fill = age_group)) +
+  geom_bar() +
+  labs(title = "Stacked Bar Chart of Coaster's Scale by \nAge of the Coaster", x = "Scale", 
+       y = "# of Coasters", fill = "Age Group") +
+  theme_minimal()
+```
+
+Creating side-by-side bar graph for roller coaster scale and age group
+
+```{r}
+ggplot(data = coasters |> drop_na(scale, age_group), 
+       aes(x = scale, fill = age_group)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Side-by-Side Graph of Coaster's Scale by \nAge of the Coaster", 
+       x = "Scale", 
+       y = "# of Coasters", fill = "Age Group") +
+  theme_minimal()
+```
