@@ -11,7 +11,7 @@ format: html
 library(httr)
 library(jsonlite)
 # Store the API as an environment variable and reference it when access data.
-  Sys.setenv(API_KEY = "9e08bf550c3649eda8f016634bafce69")
+  Sys.setenv(API_KEY = "aaa")
  news <- GET("https://newsapi.org/v2/everything?q=happy&from=2026-08-30&language=en&pageSize=50",
       query = list(apiKey=Sys.getenv("API_KEY")))
 txt <- content(news, as = "text", encoding = "UTF-8")
