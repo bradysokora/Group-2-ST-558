@@ -85,3 +85,4 @@ threeway <- table(coasters$scale, coasters$age_group, coasters$type)
 threeway
 ```
 There are 8 roller coasters that are constructed with steel, considered extreme, and are older
+
