@@ -58,3 +58,30 @@ coasters <- read_csv("635USrollercoasters.csv", show_col_types = F) %>%
                                          "3:Newest"), 
                             c("Older", "Recent", "Newest")))
 ```
+
+Checking for any missing values
+```{r}
+colSums(is.na(coasters))
+```
+We can see there are missing values for the following variables: top_speed, max_height, drop, length, duration, and make
+
+Creating one-way contingency table
+```{r}
+oneway <- table(coasters$scale)
+oneway
+```
+This one-way contingency table tells us that there are 269 roller coasters with an extreme scale
+
+Creating two-way contingency table
+```{r}
+twoway <- table(coasters$scale, coasters$age_group)
+twoway
+```
+This two-way contingency table tells us that out of the 269 extreme scale coasters, 17 are considered older
+
+Creating three-way contingency table
+```{r}
+threeway <- table(coasters$scale, coasters$age_group, coasters$type)
+threeway
+```
+There are 8 roller coasters that are constructed with steel, considered extreme, and are older
