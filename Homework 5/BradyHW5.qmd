@@ -1,0 +1,185 @@
+---
+title: "BradyHW5"
+format: html
+editor: visual
+---
+
+# Homework 5 ST 558 Group 2
+
+```{r}
+#| include: false
+library(tidyverse)
+library(httr)
+library(jsonlite)
+```
+
+## Task 1: Querying an API and a Function
+
+Storing my API key and connecting to newsapi.org for recent news
+
+```{r}
+# My newsapi key
+my_key <- "8d4baeba91e14e559c0393b7151d48d8"
+
+# Grab recent news about weather, going back 30 days (free account limit)
+from_date <- Sys.Date() - 30
+
+news_result <- GET(paste0(
+  "https://newsapi.org/v2/everything?",
+  "q=weather&",
+  "from=", from_date, "&",
+  "language=en&",
+  "pageSize=50&",
+  "apiKey=", my_key
+))
+```
+
+Parsing the result down to the article data frame
+
+```{r}
+# Parse the returned JSON and pull the articles into a tibble
+parsed <- fromJSON(rawToChar(news_result$content))
+articles <- as_tibble(parsed$articles)
+articles
+```
+
+Writing a function so a user can query the API easily
+
+```{r}
+# Function to query newsapi: takes a search term, a from date, and an api key
+query_news <- function(search_term, from_date, api_key) {
+  result <- GET(paste0(
+    "https://newsapi.org/v2/everything?",
+    "q=", search_term, "&",
+    "from=", from_date, "&",
+    "language=en&",
+    "pageSize=50&",
+    "apiKey=", api_key
+  ))
+  parsed <- fromJSON(rawToChar(result$content))
+  articles <- as_tibble(parsed$articles)
+  return(articles)
+}
+```
+
+Testing the function twice with different topics
+
+```{r}
+# Two test queries
+query1 <- query_news("sports", as.character(Sys.Date() - 30), my_key)
+query2 <- query_news("music", as.character(Sys.Date() - 30), my_key)
+
+query1
+query2
+```
+
+## Task 2: Summarizing Roller Coaster Data
+
+Reading in the roller coaster data and checking how it's stored
+
+```{r}
+# Read in the roller coaster data
+rc_data <- read_csv("https://www4.stat.ncsu.edu/~online/datasets/635USrollercoasters.csv")
+
+# Check the structure
+str(rc_data)
+```
+
+### Basic EDA
+
+Converting the categorical variables to factors, then checking missing values
+
+```{r}
+# AgeGroup as an ordered factor (Older < Recent < Newest)
+rc_data$AgeGroup <- factor(rc_data$AgeGroup,
+                           levels = c("1:Older", "2:Recent", "3:Newest"),
+                           ordered = TRUE)
+
+# Other categorical variables to factor (backticks for names with spaces or symbols)
+rc_data$Scale <- factor(rc_data$Scale)
+rc_data$Type <- factor(rc_data$Type)
+rc_data$Design <- factor(rc_data$Design)
+rc_data$`Census Region` <- factor(rc_data$`Census Region`)
+rc_data$`Inversions?` <- factor(rc_data$`Inversions?`)
+
+# Check missing values in each column
+colSums(is.na(rc_data))
+```
+
+A few columns have missing values: TopSpeed, MaxHeight, Drop, Length, Duration, and Make. These are mostly ride specification numbers, plus the make for some rides. None of the factor columns are missing.
+
+### Categorical Variables
+
+Making a one-way table on coaster Type
+
+```{r}
+# One-way table: Type
+one_way <- table(rc_data$Type)
+one_way
+```
+
+There are 530 steel coasters out of 605 total, so the large majority of coasters are steel rather than wood.
+
+Making a two-way table of Type by Scale
+
+```{r}
+# Two-way table: Type by Scale
+two_way <- table(rc_data$Type, rc_data$Scale)
+two_way
+```
+
+Looking at where Type is Wood and Scale is Family, that tells us how many wood coasters are classified as family rides. There is only 1 wood coaster that is a kiddie ride. Since most of the coasters are steel, it makes since that there are more steel coasters of all Scales compared to Wood coasters.
+
+Making a three-way table of Type by Scale by Census Region
+
+```{r}
+# Three-way table: Type by Scale by Census Region
+three_way <- table(rc_data$Type, rc_data$Scale, rc_data$`Census Region`)
+three_way
+```
+
+Picking the West region, Wood, Family a 0 there means there are no wooden family coasters in the West, unlike the other regions. Across all regions, there seems to be a close number of wooden thrill coasters of 5, 9, 11, and 11 as well as kiddie steel coasters with 8, 6, 6, and 7.
+
+Making a conditional two-way table two different ways, conditioning on the South region
+
+```{r}
+# Method 1: filter to South first, then make the two-way table
+south_data <- filter(rc_data, `Census Region` == "South")
+table(south_data$Type, south_data$Scale)
+```
+
+```{r}
+# Method 2: pull the South slice out of the three-way table
+three_way[, , "South"]
+```
+
+Recreating the Type by Scale two-way table using dplyr
+
+```{r}
+# Group and count, then pivot wider to look like table() output
+rc_data |>
+  group_by(Type, Scale) |>
+  summarize(count = n(), .groups = "drop") |>
+  pivot_wider(names_from = Scale, values_from = count)
+```
+
+### Bar Graphs
+
+Making a stacked and a side-by-side bar graph of Scale by Type
+
+```{r}
+# Turn the two-way table into a data frame for plotting
+type_scale_df <- as.data.frame(two_way)
+
+# Stacked bar graph
+ggplot(type_scale_df, aes(x = Var1, y = Freq, fill = Var2)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(x = "Coaster Type", y = "Number of Coasters",
+       title = "Roller Coaster Scale by Type", fill = "Scale")
+
+# Side-by-side bar graph
+ggplot(type_scale_df, aes(x = Var1, y = Freq, fill = Var2)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Coaster Type", y = "Number of Coasters",
+       title = "Roller Coaster Scale by Type", fill = "Scale")
+```
