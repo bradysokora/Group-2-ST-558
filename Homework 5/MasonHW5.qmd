@@ -15,10 +15,32 @@ library(janitor)
 ## Task 1 - Querying an API and a Tidy-Style Function
 
 Connecting to newsapi.org and grabbing news from the past 30 days about the NFL
+
 ```{r}
 url <- "https://newsapi.org/v2/everything?q=nfl&from=2026-08-25&apiKey=654641465c3f469891708ce3b77fb2a0"
 
 nflReturn <- GET(url)
 parsedNFL <- fromJSON(rawToChar(nflReturn$content))
 nflInfo <- as_tibble(parsedNFL)
+```
+
+Creating function to easily query this API
+
+```{r}
+#The function takes in 3 parameters from the user, the topic they are interested in, the time frame, and the users API key
+queryAPI <- function(topic, period, key){
+  url <- paste0("https://newsapi.org/v2/everything?q=", topic, "&from=",
+                period, "&apiKey=", key)
+  ret <- GET(url)
+  parsed <- fromJSON(rawToChar(ret$content))
+  return(as_tibble(parsed))
+}
+```
+
+Testing our function works
+
+```{r}
+news_test_1 <- queryAPI("usa", "2026-08-25", "654641465c3f469891708ce3b77fb2a0")
+
+news_test_2 <- queryAPI("apple", "2026-08-25", "654641465c3f469891708ce3b77fb2a0")
 ```
