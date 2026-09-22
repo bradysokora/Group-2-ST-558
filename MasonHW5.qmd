@@ -1,0 +1,24 @@
+---
+title: "Mason HW5"
+format: html
+editor: visual
+---
+
+```{r}
+library(httr)
+library(tidyverse)
+library(jsonlite)
+library(ggplot2)
+library(janitor)
+```
+
+## Task 1 - Querying an API and a Tidy-Style Function
+
+Connecting to newsapi.org and grabbing news from the past 30 days about the NFL
+```{r}
+url <- "https://newsapi.org/v2/everything?q=nfl&from=2026-08-25&apiKey=654641465c3f469891708ce3b77fb2a0"
+
+nflReturn <- GET(url)
+parsedNFL <- fromJSON(rawToChar(nflReturn$content))
+nflInfo <- as_tibble(parsedNFL)
+```
