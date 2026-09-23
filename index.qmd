@@ -6,4 +6,4 @@ format: html
 - [Homework 2](/Homework 2/St558hw2.qmd)
 - [Homework 3](/Homework 3/Mason HW3.qmd)
 - [Homework 4](/Homework 4/ST558HW4.qmd)
-- [Homework 5](/Homework 4/ZUOhw5.qmd)
+- [Homework 5](/Homework 4/Zuohw5.qmd)
