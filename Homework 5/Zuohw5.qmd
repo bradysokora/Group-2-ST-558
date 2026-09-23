@@ -18,8 +18,9 @@ library(jsonlite)
 ### parse the return
  txt <- content(news, as = "text", encoding = "UTF-8")
 
-result <- fromJSON(txt, flatten = TRUE)
-result 
+### return the article while keeping first column a list?
+result <- fromJSON(txt, flatten = FALSE)
+result$articles
 
 ```
 
@@ -33,8 +34,8 @@ reqnews <- function(title, period, apikey){
                                                                                   pageSize = 50,
                                                                                   apiKey=apikey))
   txt <- content(news, as = "text", encoding = "UTF-8")
-result <- fromJSON(txt, flatten = TRUE)
-result
+result <- fromJSON(txt, flatten = FALSE)
+result$articles
 }
 
 ## try this function for the first time
@@ -50,15 +51,13 @@ rocoaster <- read_csv("https://www4.stat.ncsu.edu/online/datasets/635USrollercoa
 
 # basic EDA
 library(tidyverse)
-dim(rocoaster)
-names(rocoaster)
+# compact structure 
 glimpse(rocoaster)
-head(rocoaster)
 summary(rocoaster)
-str(rocoaster)
-head(rocoaster,5)
+head(rocoaster)
 
-# 
+
+# convert type of variables into factor when needed 
 rocoaster <- rocoaster |>
   mutate (
     across(
@@ -67,6 +66,8 @@ rocoaster <- rocoaster |>
     )
   )
 
+glimpse(rocoaster)
+summary(rocoaster)
 
 ```
 
@@ -79,7 +80,7 @@ rocoaster |> summarize(across(everything(), ~mean(is.na(.x))))
 
 
 ```
-11.7% in Topseed missing (n = 74), 1.3% in MaxHight missing (n = 8), 20.16% in Drop missing (n = 128); 5.2% in Length missing (n = 33), 10.4% in Duration missing (n=66). 
+Missing values were found in six variables below: 11.7% values of Topseed missing (n = 74), 1.3% values of MaxHight missing (n = 8), 20.16% values of Drop missing (n = 128); 5.2% values in Length missing (n = 33), 10.4% values in Duration missing (n=66), 5.7% values in Make missing (n = 36). Other variables don't have missing values.  
 
 ## Task 3 Categorical analysis 
 
@@ -93,7 +94,7 @@ table(rocoaster$AgeGroup, rocoaster$Scale, rocoaster$Type)
 69 in one-way table means There are 69 roller coasters are older; "90" in two-way table means there are 90 thriller-type roller coasters are newest. "37" in three ways table means there are 37 family-type roller coaster made of stell are recently built. 
 
 
-conditional two-way table
+Conditional two-way table
 ```{r}
 
 
@@ -110,7 +111,7 @@ tab2
 
 ```
 
-two-way contingency table and use pivot_wider 
+Two-way contingency table and use pivot_wider 
 
 ```{r pivot_wider}
 library(dplyr)
@@ -127,26 +128,26 @@ table2 <- rocoaster |>
 table2 
 
 ```
-stacked bar graph and side-by-side bae gragh 
+Stacked bar graph and side-by-side bae gragh 
 ```{r}
 library(ggplot2)
 # Stacked bar plot
 ggplot(rocoaster, aes(x=Scale, fill = AgeGroup) ) + 
   geom_bar() +
   labs(
-    title = "the relationship between rollercoaster's type and age",
-    x = "age",
+    title = "Stacked bar graph the relationship between rollercoaster's Scale and age",
+    x = "Scale",
     y = "count",
-    fill = "age"
+    fill = "Age Group"
   )
 
 # Side-by-side 
 ggplot(rocoaster, aes(x=Scale, fill = AgeGroup) ) +
   geom_bar(position = "dodge") + 
 labs(
-    title = "the relationship between rollercoaster's type and age",
-    x = "age",
+    title = "Side by side bar graph of the relationship between rollercoaster's Scale and age",
+    x = "Scale",
     y = "count",
-    fill = "age"
+    fill = "Age Group"
   )
 ```
