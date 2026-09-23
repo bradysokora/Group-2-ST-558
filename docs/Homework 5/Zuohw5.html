@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>ZUOHW5</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ZUOHW5</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="task1" class="level2">
+<h2 class="anchored" data-anchor-id="task1">Task1</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use API to request data from NEWS API, no more than 50 news after 08/30 about happy in English.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'httr' was built under R version 4.5.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Store the API as an environment variable and reference it when access data.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.setenv</span>(<span class="at">API_KEY =</span> <span class="st">"9e08bf550c3649eda8f016634bafce69"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> news <span class="ot">&lt;-</span> <span class="fu">GET</span>(<span class="st">"https://newsapi.org/v2/everything?q=happy&amp;from=2026-08-30&amp;language=en&amp;pageSize=50"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">query =</span> <span class="fu">list</span>(<span class="at">apiKey=</span><span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>)))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="do">### parse the return</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a> txt <span class="ot">&lt;-</span> <span class="fu">content</span>(news, <span class="at">as =</span> <span class="st">"text"</span>, <span class="at">encoding =</span> <span class="st">"UTF-8"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="do">### return the article while keeping first column a list?</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(txt, <span class="at">flatten =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>articles</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          source.id        source.name
+1          bbc-news           BBC News
+2          bbc-news           BBC News
+3         the-verge          The Verge
+4              &lt;NA&gt;               CNET
+5              &lt;NA&gt;             Kotaku
+6  business-insider   Business Insider
+7              &lt;NA&gt;     Slate Magazine
+8              &lt;NA&gt;     Slate Magazine
+9          bbc-news           BBC News
+10             &lt;NA&gt;         Seths.blog
+11            wired              Wired
+12            wired              Wired
+13             &lt;NA&gt;        Gizmodo.com
+14             &lt;NA&gt;        Gizmodo.com
+15         bbc-news           BBC News
+16         bbc-news           BBC News
+17             &lt;NA&gt;        Gizmodo.com
+18         bbc-news           BBC News
+19         bbc-news           BBC News
+20        the-verge          The Verge
+21     the-next-web       The Next Web
+22             &lt;NA&gt;             Kotaku
+23             &lt;NA&gt;             Kotaku
+24             &lt;NA&gt;             Kotaku
+25         buzzfeed           Buzzfeed
+26            wired              Wired
+27            wired              Wired
+28        the-verge          The Verge
+29             &lt;NA&gt;        Gizmodo.com
+30             &lt;NA&gt;       The Atlantic
+31             &lt;NA&gt; Themarginalian.org
+32         bbc-news           BBC News
+33             &lt;NA&gt;        Gizmodo.com
+34         bbc-news           BBC News
+35         bbc-news           BBC News
+36             &lt;NA&gt;              X.com
+37        the-verge          The Verge
+38 business-insider   Business Insider
+39             &lt;NA&gt;        Gizmodo.com
+40             &lt;NA&gt;        Gizmodo.com
+41             &lt;NA&gt;        Gizmodo.com
+                                               author
+1                    https://www.facebook.com/bbcnews
+2                    https://www.facebook.com/bbcnews
+3                                      Gaby Del Valle
+4                                        Tyler Lacoma
+5                                         Ash Parrish
+6                                         Kelly Burch
+7                                       Rebecca Onion
+8                                         Ilyce Glink
+9                                       Paul Battison
+10                                         Seth Godin
+11                                  Boutayna Chokrane
+12                                    Caroline Reilly
+13                                         Mike Pearl
+14                                         Matt Novak
+15                   https://www.facebook.com/bbcnews
+16                   https://www.facebook.com/bbcnews
+17                                         James Pero
+18                                   Jonathan Jurejko
+19                                     Emma Middleton
+20                                   Terrence O’Brien
+21                                         Will Jones
+22                                       Lewis Parker
+23                                       Zack Zwiezen
+24                                       Zack Zwiezen
+25                                    Caroline Cahill
+26                                       Maddy Varner
+27           Brian Barrett, Zoë Schiffer, Leah Feiger
+28                                   Stevie Bonifield
+29                                     Gordon Jackson
+30                                      Hillary Kelly
+31                                       Maria Popova
+32                                        Mike Henson
+33                                      Justin Carter
+34                   https://www.facebook.com/bbcnews
+35                                        Sami Mokbel
+36                                        John Gruber
+37                                      Lauren Feiner
+38 hchandonnet@businessinsider.com (Henry Chandonnet)
+39                                     Isaiah Colbert
+40                                        Tom Hawking
+41                                         Jen Lennon
+                                                                                                                                                         title
+1                                                                                                            Queen's joy at 'happy ending to a terrible story'
+2                                                                                                            The 'selfless decision' that saved our boy's life
+3                                                                                                                The White House is making arcade games racist
+4                                                                                              Finally, IFA Showed Me a Smart Answer for Home Radiator Heating
+5                                                                                  Metroid Ravenous Looks Like Nintendo Is Finally Letting Samus Off The Leash
+6                                                                                  I'm a UFC fighter and dad of twins. Having a family makes my career harder.
+7                                  The Daily Wire Decided to Make a Die Hard–esque Movie About Campus Protest. It Is Every Bit As Deranged As You Might Think.
+8                                                                          My Wife and I Were Discussing How to Spend Our Retirement. Then She Dropped a Bomb.
+9                                                                                                   Hunt 'not afraid of anyone' after 100m second-place finish
+10                                                                                                                               When does it become a speech?
+11                                                                                             Samsung Galaxy Watch9 Review: I Don’t Need Another Health Score
+12                                                                                             How a Secret Orangutan Breeding Program Is Creating a Baby Boom
+13                                                                                         Apple Could Pay Tim Cook More Than John Ternus in 2027, Report Says
+14                                                                      Elon Musk Is Helping Promote Alex Gibney’s New Documentary, Whether He Knows It or Not
+15                                                                                  Head teacher evacuated 900 children minutes before Nepal floods hit school
+16                                                                                        Kelsey Parker welcomes baby after 'devastating' stillbirth last year
+17                                                                             Meta Faces a Class Action Lawsuit Over Planned Smart Glasses Facial Recognition
+18                                                                                           'Red rag to a bull' - Sabalenka's extra motivation to win US Open
+19                                                                                                 How the race they said women couldn't run took centre stage
+20                                                                                                 Sylvan Esso think you should splurge on good-quality yogurt
+21                                                                                                                  When software starts shaping family memory
+22 Hideki Kamiya Wonders If He Should ‘Sue’ People Online For Implying He ‘Stole’ Money From Xbox During Scalebound’s Development (Which He’s Happy To Revive)
+23               Wardogs Boss Says Studio Checks Social Accounts For Anti-Crunch Posts: ‘You’re Not Going To Be Happy Here, So We’re Not Going To Go With You’
+24                                    Rockstar Is Finally Ditching ‘Tap X To Sprint’ In GTA 6, But Not Everyone Is Happy: ‘I’m Honestly A Little Disappointed’
+25                                "It Took Me Until I Was An Adult To Understand It": 25 Jokes That Are So Clever, It Might Take You A Few Seconds To Get Them
+26                                                                                                         You Can Now Destroy Flock Cameras for Cash in GTA V
+27                                                                                             Prediction Market Betting Is Getting People Banned and Arrested
+28                                                                                                        Debian won’t ban AI code from its Linux distribution
+29                                                                                                                   Netflix Cuts Ties With Skydance Animation
+30                                                                                                                       The Novel That Looks Death in the Eye
+31                                I Long to Read More in the Book of You: Moomins Creator Tove Jansson’s Tender and Passionate Letters to the Love of Her Life
+32                                                                                             Why England wing Caluori played on with detached wrist ligament
+33                                                                                            The ‘V/H/S: SCP’ Movie Doesn’t Involve the Actual SCP Foundation
+34                                                                               Strictly returns with new hosting trio as celebrities find out dance pairings
+35                                                                                                               Man City agree £65m deal for Everton's Ndiaye
+36                                                                     Is That a Duo in Ternus’s Pocket or Was He Just Happy That Apple TV Shows Won 28 Emmys?
+37                                                                                                                    What if social media isn’t hurting kids?
+38                                                                               The first teaser for the Elon Musk documentary that Musk is mad about is here
+39                                                                                              How ‘Looney Tunes’ Icon Mel Blanc Influenced ‘Coyote vs. Acme’
+40                                                                                               Rockstar Games Does Not Want You to Mod ‘Grand Theft Auto VI’
+41                                                               See the New ‘Mystery Science Theater 3000’ Intro With a Theme by Jonathan Coulton [Exclusive]
+                                                                                                                                                                                                                                                            description
+1                                                                                                                                                               The Queen was one of a number of high-profile figures who donated books a library that was burned down.
+2                                                                                                                                                                Ollie is still thriving and happy 10 years after receiving a liver transplant from 17-year-old Miriam.
+3  The PR masterminds at the White House just released a series of vaguely policy-themed "arcade" games, some of which are racist - and modeled on real games whose copyright holders may not be too happy to be associated with the MAGA agenda. The Tetris Company h…
+4                                                                                                                                                                             Sonoff arrived at IFA with a much-needed smart solution for radiators and I’m very happy.
+5                                                                                                                                                                                                               I'm happy Samus is done being cool, calm, and collected
+6                                                                                                                        UFC fighter Paddy Pimblett says raising twin girls makes training harder. But having a happy family matters more to him than any championship.
+7                                                                                                                                                                                                                                      Protesters! They’re never happy!
+8                                                                                                                                                                                                                                                What's a happy medium?
+9                                                                                                                               Amy Hunt says she is "on the up" and "not afraid of anyone" after finishing second in the 100m at the Diamond League final in Brussels.
+10 One person isn’t a lecture, it’s lunch. Three people is office hours. Six people is a seminar. At some point, we shift from interaction to performance–but the people are the same people, the very ones that were happy to simply sit and have lunch with us. Brin…
+11                                                                                                                                   Samsung’s latest smartwatch adds even more health metrics to its suite. I spent two weeks testing whether they’re actually useful.
+12                                                                                         The success of a program linking zoos across the US has created social media stars and generated a wave of interest in how to protect the endangered great apes in the wild.
+13                                                                                                                                                                                              Apple's executive pay packages could favor the ex-CEO over the new CEO.
+14                                                                                                                                                                                                                'Musk' is coming, and Elon's happy to build the hype.
+15                                                                                                                                                                   Rajendra Dawadi leapt into action after receiving warnings over waters heading towards his school.
+16                                                                                                                                     The widow of The Wanted singer Tom Parker has given birth after last year announcing the "devastating" loss of a stillborn baby.
+17                                                                                                                                                        Plaintiffs in Illinois and California aren't happy with Meta dabbling in facial recognition on smart glasses.
+18                                                                                                                                   Aryna Sabalenka has lost the world number one ranking to Elena Rybakina - but has the chance to take revenge in the US Open final.
+19                                                                    After making its debut at the 1928 Olympics, the women's 800m was cut from the programme. Now, it's often billed as the must-see event of major athletics championships. So, how did we get here?
+20 Amelia Meath and Nick Sanborn, better known as Sylvan Esso, have been bringing their low-key electro-pop to the masses since 2014, bursting onto the scene with their self-titled debut album and the single "Hey Mami." Over the years, they've put out a number o…
+21 There is a particular kind of question that families postpone for years. It is difficult not because the answer is secret, but because the question is too large: Tell me about your life. Faced with it, even a willing storyteller may retreat into generalities.…
+22                                                                                                                                     Kamiya has pushed back at claims he used Scalebound's development funds to bankroll other projects threatening to sue users on X
+23                                                                                                                                                                         The studio behind Steam super-hit Wardogs won't hire people who publicly criticize crunching
+24                                                                                                                                                                                              For some players, this is good news; for others, it's the end of an era
+25                                                                                                                                                                                                          "I got mugged by six dwarves. Not happy."View Entire Post ›
+26                                                                                                                                                      A new GTA mod lets you smash and shoot Flock’s automatic license plate readers around the fictional Los Santos.
+27                                                                                This week on “Uncanny Valley,” we dig into the latest prediction market buzz, Flock’s AI-powered police search tool, and how tech bros don’t know how to talk about “rouge” AI agents
+28 Debian voted to allow developers to use AI tools in their contributions to the Linux distribution's "development, maintenance, [and] documentation." The new policy on AI acknowledges that "responsible" use of AI can improve developers' productivity, and goes …
+29                                                                                                                                                                                                  Plus, Harry Manfredini has written a theme song for 'Crystal Lake.'
+30                                                                                                                                                        Emma Cline’s “Switzy” might not make readers happy, but it could strike them with moments of sublime clarity.
+31                                                                                               "I’m so unused to being happy that I haven’t really come to terms with what it involves... I feel like a garden that’s finally been watered, so my flowers can bloom."
+32                                                                                                                            Wing sensation Noah Caluori says he played through the pain of a torn wrist ligament during his break-out season for Saracens and England
+33                                                                                                                                    A24 thought 'V/H/S: SCP' could tap into another internet community, but that same community isn't happy about the studio's plans.
+34                                                                                                                                         Emma Willis, Josh Widdicombe and Johannes Radebe take over from long-running presenting duo Tess Daly and Claudia Winkleman.
+35                                                                                                                                                                                Manchester City agree a deal worth a minimum £60m to sign Iliman Ndiaye from Everton.
+36                                                                                                                                                                                                              Apple CEO John Ternus shows the new iPhone Duo | #Emmys
+37 Two years ago, social psychologist Jonathan Haidt released his New York Times bestseller The Anxious Generation. The book posits that the rise of social media and smartphone use is largely to blame for the prominent decline in teen mental health since 2010. I…
+38                                                                                                                                         The teaser for Alex Gibney's Elon Musk documentary is here. It promises an "unflinching look at earth's most unchecked man."
+39                                                                                                                               Director Dave Green and 'Looney Tunes' voice actor Eric Bauza dive into how Mel Blanc influenced the hybrid live-action animated film.
+40                                                                                                                                                                                                                   For better and/or worse, Rockstar is not Bethesda.
+41                                                                                                                                                                                     'Mystery Science Theater 3000: The RiffTrax Experiments' premieres on October 9.
+                                                                                                                                                                                 url
+1                                                                                                                                   https://www.bbc.co.uk/news/articles/crerq0ddn95o
+2                                                                                                                                  https://www.bbc.co.uk/news/articles/cmp3kp9l1j94o
+3                                                                                                           https://www.theverge.com/policy/990520/trump-arcade-games-maga-copyright
+4                                                                               https://www.cnet.com/home/smart-home/finally-ifa-showed-me-a-smart-answer-for-home-radiator-heating/
+5                                                                                                     https://kotaku.com/metroid-ravenous-samus-personality-feminine-rage-2000732816
+6                                                                                      https://www.businessinsider.com/paddy-pimblett-ufc-fighter-father-twins-family-2026-9#article
+7                                                                                          https://slate.com/culture/2026/09/run-hide-fight-infidels-jonathan-majors-daily-wire.html
+8                                                                                                             https://slate.com/advice/2026/09/money-advice-leaving-legacy-kids.html
+9                                                                                                                        https://www.bbc.co.uk/sport/athletics/articles/cgk5drzm54xo
+10                                                                                                                         https://seths.blog/2026/09/when-does-it-become-a-lecture/
+11                                                                                                                               https://www.wired.com/review/samsung-galaxy-watch9/
+12                                                                                                 https://www.wired.com/story/secret-orangutan-breeding-program-creating-baby-boom/
+13                                                                                 https://gizmodo.com/apple-could-pay-tim-cook-more-than-john-ternus-in-2027-report-says-2000808024
+14                                                               https://gizmodo.com/elon-musk-is-helping-promote-alex-gibneys-new-documentary-whether-he-knows-it-or-not-2000809185
+15                                                                                                                                  https://www.bbc.co.uk/news/articles/c5ymvdm5520o
+16                                                                                                                                 https://www.bbc.co.uk/news/articles/cmzxz260020qo
+17                                                                    https://gizmodo.com/meta-faces-a-class-action-lawsuit-over-planned-smart-glasses-facial-recognition-2000811258
+18                                                                                                                          https://www.bbc.co.uk/sport/tennis/articles/cly59yjl5d5o
+19                                                                                                                        https://www.bbc.co.uk/sport/olympics/articles/clyk12vrv21o
+20                                                                                             https://www.theverge.com/entertainment/994340/sylvan-esso-ow-infinity-interview-music
+21                                                                                                                  https://thenextweb.com/news/storyworth-voice-tools-family-memory
+22 https://kotaku.com/hideki-kamiya-wonders-if-he-should-sue-people-online-for-implying-he-stole-money-from-xbox-during-scalebounds-development-which-hes-happy-to-revive-2000731529
+23             https://kotaku.com/wardogs-boss-says-studio-checks-social-accounts-for-anti-crunch-posts-youre-not-going-to-be-happy-here-so-were-not-going-to-go-with-you-2000734726
+24                                   https://kotaku.com/rockstar-is-finally-ditching-tap-x-to-sprint-in-gta-6-but-not-everyone-is-happy-im-honestly-a-little-disappointed-2000730560
+25                                                                                                                                  https://www.buzzfeed.com/cmc33/best-clever-jokes
+26                                                                                                  https://www.wired.com/story/you-can-now-destroy-flock-cameras-for-cash-in-gta-v/
+27                                                                                      https://www.wired.com/story/prediction-market-betting-is-getting-people-banned-and-arrested/
+28                                                                                                            https://www.theverge.com/tech/986789/linux-debian-generative-ai-policy
+29                                                                                                          https://gizmodo.com/netflix-cuts-ties-with-skydance-animation-2000811557
+30                                                                              https://www.theatlantic.com/books/2026/09/emma-clines-anti-escapist-novel-switzy-book-review/688538/
+31                                                                                                  https://www.themarginalian.org/2026/09/06/tove-jansson-letters-tuulikki-pietila/
+32                                                                                                                     https://www.bbc.co.uk/sport/rugby-union/articles/c750d3z07p6o
+33                                                                                       https://gizmodo.com/the-v-h-s-scp-movie-doesnt-involve-the-actual-scp-foundation-2000810864
+34                                                                                                                                 https://www.bbc.co.uk/news/articles/c6m2rkx2evxmo
+35                                                                                                                        https://www.bbc.co.uk/sport/football/articles/c80453nj9gno
+36                                                                                                                                 https://x.com/DEADLINE/status/2099645816361332775
+37                                                                                              https://www.theverge.com/policy/995704/peter-gray-restoring-childhood-jonathan-haidt
+38                                                                                   https://www.businessinsider.com/elon-musk-documentary-alex-gibney-teaser-trailer-2026-9#article
+39                                                                                                              https://gizmodo.com/coyote-vs-acme-looney-tunes-mel-blanc-2000806308
+40                                                                                        https://gizmodo.com/rockstar-games-does-not-want-you-to-mod-grand-theft-auto-vi-2000814807
+41                                                          https://gizmodo.com/see-the-new-mystery-science-theater-3000-intro-with-a-theme-by-jonathan-coulton-exclusive-2000807730
+                                                                                                                                                                                      urlToImage
+1                                                                                    https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/f2d2/live/c63e9e90-a862-11f1-ae45-e9984fc27c77.png
+2                                                                                    https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/b6e0/live/31197e30-b671-11f1-b1d1-571ed4d7ff2c.jpg
+3          https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/Screenshot-2026-09-04-at-3.23.13-PM.png?quality=90&amp;strip=all&amp;crop=0%2C16.030389447569%2C100%2C67.939221104862&amp;w=1200
+4                                                                                                                      https://www.cnet.com/wp-content/uploads/sites/2/Sonoff-Smart-Radiator.jpg
+5                                                                                                                         https://kotaku.com/app/uploads/2026/09/NS2_MetroidRavenous_scrn_06.jpg
+6                                                                                                                          https://i.insider.com/6a98789fbe454c9d2c7ed32c?width=1200&amp;format=jpeg
+7                                                                               https://compote.slate.com/images/a0ae7b26-384f-432e-b22b-8d50fc9e54ab.jpeg?crop=1560%2C1040%2Cx0%2Cy0&amp;width=1560
+8                                                                               https://compote.slate.com/images/48f50cf5-ead9-4df0-b1a7-2627f5727018.jpeg?crop=1560%2C1040%2Cx0%2Cy0&amp;width=1560
+9                                                                                   https://ichef.bbci.co.uk/ace/branded_sport/1200/cpsprodpb/70f3/live/e6afe270-a96a-11f1-b850-096ea2f533db.jpg
+10                                                                                                            https://seths.blog/wp-content/uploads/2018/06/seth_godin_ogimages_v02_18061318.jpg
+11                                                                              https://media.wired.com/photos/6aadfb978ffbfab4b483f09a/191:100/w_1280,c_limit/Review--Samsung-Galaxy-Watch9.jpg
+12                                                                                             https://media.wired.com/photos/6a98081e0e1a07689023de20/191:100/w_1280,c_limit/Ru_Orangutan-7.jpg
+13                                                                                                                              https://gizmodo.com/app/uploads/2026/09/ternus-cook-1200x675.jpg
+14                                                                                               https://gizmodo.com/app/uploads/2026/09/ashley-st.-clair-musk-documentary-premiere-1200x675.jpg
+15                                                                                   https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/2da6/live/8518ba10-a482-11f1-bed8-470734b5b662.png
+16                                                                                   https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/432f/live/366ad790-b50d-11f1-91cc-c5691e33b858.jpg
+17                                                                                                                    https://gizmodo.com/app/uploads/2025/09/ray-ban-meta-gen-2-10-1200x675.jpg
+18                                                                                  https://ichef.bbci.co.uk/ace/branded_sport/1200/cpsprodpb/7043/live/d4f24ec0-ae37-11f1-b1d1-571ed4d7ff2c.jpg
+19                                                                                  https://ichef.bbci.co.uk/ace/branded_sport/1200/cpsprodpb/9791/live/6dd8ea40-a848-11f1-b3a7-d5de760fef6e.jpg
+20 https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/Sylvan_Esso_-_Ow__-_Photo_By_Tonje_Thilesen.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.956690481872%2C100%2C78.086619036256&amp;w=1200
+21                                                                                                                https://media.thenextweb.com/2026/09/storyworth-family-reading-memoir-book.jpg
+22                                                                                                                               https://kotaku.com/app/uploads/2019/11/nbindg2if0ja1n63msuy.jpg
+23                                                                                                                      https://kotaku.com/app/uploads/2026/09/WardogsMainWallpaper-1200x675.jpg
+24                                                                                                                            https://kotaku.com/app/uploads/2026/09/Jason_and_Lucia_03.15z-.jpg
+25                                                                        https://img.buzzfeed.com/buzzfeed-static/static/2026-08/16/19/thumb/-wddbTk6m.jpg?crop=2999:1570;0,2%26downsize=1250:*
+26                                 https://media.wired.com/photos/6aa06d6d9c9e744f723e31eb/191:100/w_1280,c_limit/Security_This%20Mod%20Puts%20LA's%20Real%20Flock%20Cameras%20Into%20GTA_v1.jpg
+27                                                           https://media.wired.com/photos/6a98be202f048bd98be06316/191:100/w_1280,c_limit/Uncanny-Valley-George-Santos-Politics-2211292507.jpg
+28               https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/STK414_AI_CVIRGINIA_I__0009_7.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+29                                                                                                                          https://gizmodo.com/app/uploads/2026/09/MS-September-15-1200x675.jpg
+30                                                            https://cdn.theatlantic.com/thumbor/ntiM_rtmyZhOhs0Sq37IVb3lPtk=/0x43:2000x1085/1200x625/media/img/mt/2026/09/a_003-1/original.jpg
+31                                                                                                https://www.themarginalian.org/wp-content/uploads/2020/06/ToveJansson.jpg?fit=1000%2C525&amp;ssl=1
+32                                                                                  https://ichef.bbci.co.uk/ace/branded_sport/1200/cpsprodpb/559b/live/714105d0-a7d7-11f1-809e-25fc74c1ec7d.jpg
+33                                                                                                                              https://gizmodo.com/app/uploads/2026/09/vhs-scp-hed-1200x675.jpg
+34                                                                                   https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/96d4/live/31ff20a0-b46b-11f1-9dd6-3102a0e415e4.jpg
+35                                                                                  https://ichef.bbci.co.uk/ace/branded_sport/1200/cpsprodpb/ba19/live/ebb61b20-a56b-11f1-8f30-e94f64328ff4.jpg
+36                                                                                     https://pbs.twimg.com/amplify_video_thumb/2099645721201029121/img/G0J2Q6sTX5aDv34H?format=webp&amp;name=large
+37      https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/STKS526_SOCIAL_MEDIA_TRIAL_CVIRGINIA_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+38                                                                                                                         https://i.insider.com/6aa00ffb4f6138b37ff33758?width=1200&amp;format=jpeg
+39                                                                                                                         https://gizmodo.com/app/uploads/2026/09/Coyote-Vs-Acme-3-1200x675.jpg
+40                                                                                                           https://gizmodo.com/app/uploads/2026/08/HQwZNIJWkAAM9VA-e1790000666451-1200x675.jpg
+41                                                                                       https://gizmodo.com/app/uploads/2026/09/mystery-science-theater-3000-mike-nelson-exclusive-1200x675.jpg
+            publishedAt
+1  2026-09-04T15:18:29Z
+2  2026-09-22T10:42:28Z
+3  2026-09-04T19:42:54Z
+4  2026-09-03T23:22:41Z
+5  2026-09-09T18:20:01Z
+6  2026-09-05T14:26:01Z
+7  2026-09-16T17:14:38Z
+8  2026-09-21T10:00:00Z
+9  2026-09-05T21:03:10Z
+10 2026-09-13T09:03:00Z
+11 2026-09-19T10:08:00Z
+12 2026-09-04T11:00:00Z
+13 2026-09-07T09:00:10Z
+14 2026-09-09T18:55:15Z
+15 2026-08-30T16:48:13Z
+16 2026-09-20T17:04:51Z
+17 2026-09-14T14:45:27Z
+18 2026-09-12T09:04:13Z
+19 2026-09-18T06:02:52Z
+20 2026-09-12T16:34:24Z
+21 2026-09-15T23:16:58Z
+22 2026-09-05T14:29:13Z
+23 2026-09-15T19:31:01Z
+24 2026-09-02T18:00:39Z
+25 2026-09-13T12:16:01Z
+26 2026-09-09T16:30:00Z
+27 2026-09-03T21:48:24Z
+28 2026-08-31T15:38:13Z
+29 2026-09-15T14:13:01Z
+30 2026-09-08T13:00:00Z
+31 2026-09-07T01:39:00Z
+32 2026-09-04T09:00:39Z
+33 2026-09-12T14:30:54Z
+34 2026-09-19T21:27:06Z
+35 2026-08-31T19:12:15Z
+36 2026-09-16T22:21:30Z
+37 2026-09-15T20:13:30Z
+38 2026-09-08T14:40:15Z
+39 2026-09-02T18:30:56Z
+40 2026-09-21T14:30:33Z
+41 2026-09-07T17:00:17Z
+                                                                                                                                                                                                                            content
+1           The Queen visited a library rebuilt after being destroyed in a riot, telling the children she met that "you can never have too many books". \r\nHer Majesty had donated a box of books to Spellow Library… [+853 chars]
+2         Miriam's parents said their daughter's death had come "completely out of the blue" but they knew they had to honour her wishes of being an organ donor.\r\n"She was a very caring person," Nicola said.\r\n… [+667 chars]
+3  &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nTetris isnt happy about it.\r\nTetris isnt happy about it.\r\nby\r\nGaby Del ValleClose\r\nPosts from this author will be added to your daily email digest and your homep… [+4389 chars]
+4            I’ve covered the many ways smart thermostats can convert your home to a well-heated haven and how quickly they can pay for themselves through energy savings, but there’s one glaring issue. Almost all… [+4165 chars]
+5            In Metorid Ravenous, Samus looks&nbsp;pissed. The trailer doesn’t reveal her face, giving us only glimpses of her eyes, sometimes glowing with a malevolent rage, and everything about herthe way she talks,… [+1528 chars]
+6          Paddy Pimblett is a dad of twins.Cooper Neill/Zuffa LLC\r\n&lt;ul&gt;&lt;li&gt;Paddy Pimblett is a UFC fighter and the dad of 2-year-old identical twins.&lt;/li&gt;&lt;li&gt;He tries to have breakfast with his daughters even … [+3184 chars]
+7          Sign up for the Slatest to get the most insightful analysis, criticism, and advice out there, delivered to your inbox daily.\r\nThe right-wing media company the Daily Wire has a new movie, its 12th, a … [+8492 chars]
+8        Pay Dirt is Slates money advice column.Have a question? Send it to Kristin and Ilyce here. (Its anonymous!)\r\nDear Pay Dirt,\r\nMy wife and I (late 50s) recently visited a financial advisor at the recom… [+8060 chars]
+9          Fellow Briton Georgia Hunter Bell came fourth in the 1500m despite being among the pre-race favourites.\r\nHunter Bell has won three international titles this year, including the world indoor 1500m, Co… [+1436 chars]
+10      One person isn’t a lecture, it’s lunch.\r\nThree people is office hours.\r\nSix people is a seminar.\r\nAt some point, we shift from interaction to performance–but the people are the same people, the very … [+257 chars]
+11         This past summer,Samsung launched the Galaxy Watch9 alongside the Galaxy Watch Ultra2, its more rugged, shock-resistant smartwatch for outdoor adventures.\r\nThe Watch9 is the everyday option, and its … [+2030 chars]
+12         Its a girl! Melissa Peterson exclaims.\r\nJust outside the operating room, the hallway erupts in cheers. Joseph Dewane, an ob-gyn, has just delivered a healthy baby via C-section; Autumn Joi Goodwin-Sa… [+2233 chars]
+13           Bloomberg’s Apple scoop machine, Mark Gurman, is not a very spicy writer, and that’s undoubtedly part of his secret recipe for prying news nuggets out of the world’s second largest company. In his la… [+2706 chars]
+14           Ashley St. Clair, the mother of one of Elon Musk’s 14 publicly known children, claimed Tuesday that she turned down $40 million offered by the Tesla CEO to sign a non-disclosure agreement about their… [+6891 chars]
+15         For nearly an hour, he had no idea whether she was alive and kept calling her without success. Then the phone finally connected and Yunisha answered.\r\n"Finally, my daughter received my call and I cou… [+1082 chars]
+16         Kelsey Parker, the widow of The Wanted singer Tom Parker, has welcomed a baby after last year announcing a "devastating" stillbirth.\r\nThe podcaster and author, 35, had two children with British boy b… [+1145 chars]
+17           Meta hasn’t even released facial recognition on its smart glasses, but it’s already getting sued for it. Parents and their children in both Illinois and California filed a proposed class action lawsu… [+2274 chars]
+18         Aryna Sabalenka was fully aware she would have to win the US Open to stand any chance of stopping Elena Rybakina overtaking her as world number one.\r\nEven that would not necessarily be enough. And as… [+1654 chars]
+19         It was the 1964 Tokyo Olympics, and Ann Brightwell (nee Packer) had just crossed the finish line of the women's 800m to take gold - and set a new world record.\r\nIn doing so, Brightwell became the fir… [+1313 chars]
+20 &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nSylvan Esso think you should splurge on good-quality yogurt\r\nThe bands new, organic-sounding record Ow is out now\r\nby\r\nTerrence O'BrienClose\r\nPosts from this aut… [+6929 chars]
+21         There is a particular kind of question that families postpone for years. It is difficult not because the answer is secret, but because the question is too large: Tell me about your life.\r\nFaced with … [+7823 chars]
+22           Hideki Kamiya, the legendary director behind the likes of Resident Evil 2, kami, and Bayonetta, has been debating whether he should sue users on X who have accused him of stealing money from Xbox dur… [+2648 chars]
+23           Bulkhead CEO and Wardogs executive producer Joe Brammer says that while his studio “always” tries to avoid crunch during game development, it can’t always be avoided and will inevitably “happen at so… [+2927 chars]
+24           Grand Theft Auto 6 is making a lot of changes to the franchise, like making players fill up cars with gas and adding a relationship system between Jason and Lucia. But a tiny change to how sprinting … [+4021 chars]
+25             by Caroline CahillBuzzFeed ContributorAs a freelance contributor for BuzzFeed, I create fun personality quizzes and list-based articles covering topics including mental health, relationships, pop cul… [+23 chars]
+26           People are not happy about Flock Safetys automated license plate readers and the cops that allegedly misuse them. If youre one of those ALPR-haters, you can now take out your rage in the video game G… [+3297 chars]
+27       Leah Feiger: All right. Do you guys remember George Santos?\r\nBrian Barrett: How could I forget?\r\nZoë Schiffer: Absolutely do, but wow, did not expect we would be talking about him again this soon, I … [+2617 chars]
+28       &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nThe distros new AI policy says it neither endorses nor prohibits the use of generative AI tools.\r\nThe distros new AI policy says it neither endorses nor prohibit… [+2809 chars]
+29           Guillermo del Toro talks adapting H.P. Lovecraft for television. AMC+ releases first look at its Baba Yaga mystery series. Crystal Lake confirms revised timeline for Jason Voorhees. Some folks sure g… [+4577 chars]
+30           The human brain has a method for dealing with the intrinsic fear of death. Terror-management theory, which builds on the work of the cultural anthropologist Ernest Becker, explains that the psyche ha… [+7622 chars]
+31           “All things are so very uncertain, and thats exactly what makes me feel reassured,” says Too-ticky, trying to comfort the lost and frightened Moomintroll under the otherworldly light of the aurora bo… [+8711 chars]
+32           Teenage wing sensation Noah Caluori has revealed that he spent the majority of his breakthrough season - featuring 18 tries in 13 Prem games and an England debut - playing with a detached ligament in… [+1233 chars]
+33         Earlier this summer, we learned the V/H/S movies were expanding with a movie focused on the SCP Foundation. As it turns out, things are more complicated than that initial announcement.\r\nOn Friday, De… [+2183 chars]
+34     Here is a list of the pairings in full: \r\n&lt;ul&gt;&lt;li&gt;Actress Lacey Turner and Vito Coppola\r\n&lt;/li&gt;&lt;li&gt;Reality TV star Dani Dyer and Nikita Kuzmin\r\n&lt;/li&gt;&lt;li&gt;Hair stylist to the stars Chris Appleton and Am… [+2059 chars]
+35         Manchester City have agreed a deal worth up to £65m to sign Iliman Ndiaye from Everton.\r\nThe clubs reached an agreement on a deal worth a guaranteed £60m plus a further £5m in add-ons for the Senegal… [+1842 chars]
+36                                                                                                                                                                            Note the reaction from the Deadline reporter.\n\n\n&nbsp;★
+37       &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nA new book says modern schooling, not phones, are behind youth mental health declines. Will anyone listen?\r\nA new book says modern schooling, not phones, are beh… [+8590 chars]
+38          The teaser for the new Elon Musk documentary is here &nbsp;and it ends on an explosive note.\r\nAlex Gibney's documentary about Musk premiered this week at the Venice International Film Festival. Around the… [+771 chars]
+39           Saying the once-shelved Coyote vs. Acme got the last laugh during its opening weekend at the box office would be an understatement. Much has been written about the film’s underdog journey from a tax … [+2865 chars]
+40           Some game publishers are only too happy for modders to dig into the inner workings of their games. For such publishers, modders are an invaluableif sometimes frustratedresource. They discover and fix… [+3864 chars]
+41         In the not too distant future, somewhere in time and space, Mike Nelson and his robot pals are back in that same old place.\r\nFor the first time in nearly three decades, Nelson is once again stepping … [+2426 chars]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## create a function</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>reqnews <span class="ot">&lt;-</span> <span class="cf">function</span>(title, period, apikey){</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  news <span class="ot">&lt;-</span> <span class="fu">GET</span>(<span class="st">"https://newsapi.org/v2/everything"</span>,            <span class="at">query =</span> <span class="fu">list</span>(<span class="at">q=</span> title, </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                                                                  <span class="st">`</span><span class="at">from</span><span class="st">`</span> <span class="ot">=</span> period, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                                                                  <span class="at">language =</span><span class="st">"en"</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                                                                                  <span class="at">pageSize =</span> <span class="dv">50</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                                                                                  <span class="at">apiKey=</span>apikey))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  txt <span class="ot">&lt;-</span> <span class="fu">content</span>(news, <span class="at">as =</span> <span class="st">"text"</span>, <span class="at">encoding =</span> <span class="st">"UTF-8"</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(txt, <span class="at">flatten =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>articles</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="do">## try this function for the first time</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">reqnews</span>(<span class="st">"apple"</span>, <span class="st">"2026-09-03"</span>, <span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   source.id source.name                          author
+1  the-verge   The Verge                Stevie Bonifield
+2      wired       Wired               Boutayna Chokrane
+3      wired       Wired                           WIRED
+4  the-verge   The Verge                    John.Higgins
+5  the-verge   The Verge Victoria Song, Stevie Bonifield
+6  the-verge   The Verge                    Brad Bourque
+7  the-verge   The Verge                     Nilay Patel
+8  the-verge   The Verge         Jennifer Pattison Tuohy
+9  the-verge   The Verge                    Brad Bourque
+10      &lt;NA&gt; Gizmodo.com                       Bruce Gil
+11 the-verge   The Verge                    Brad Bourque
+12 the-verge   The Verge                Terrence O’Brien
+13 the-verge   The Verge                      Tom Warren
+14 the-verge   The Verge               Andrew J. Hawkins
+15     wired       Wired                Julian Chokkattu
+16 the-verge   The Verge                      Jay Peters
+17 the-verge   The Verge         Jennifer Pattison Tuohy
+18 the-verge   The Verge                Stevie Bonifield
+19 the-verge   The Verge                   Victoria Song
+20      &lt;NA&gt; Gizmodo.com                    Raymond Wong
+                                                                                      title
+1                                                      Apple launches Apple Watch Series 12
+2                 Apple Watch Series 12 and Apple Watch Ultra 4: Price, Specs, Release Date
+3           Apple Event Live Blog: Folding iPhone, Apple Watch Series 12, AirPods, and More
+4                                                             Apple announces the AirPods 5
+5                       Hands on with the new Apple Watch Series 12 and Apple Watch Ultra 4
+6                                                     Where to preorder the Apple AirPods 5
+7                                              Can John Ternus find Apple’s next big thing?
+8                          Apple Home’s new security camera features cost up to $60 a month
+9                                  How the new Apple Watches compare to the last-gen models
+10                                                                    Tim Apple Rides Again
+11                                            Save $30 or more on a refurbished Apple TV 4K
+12                                   Apple is reportedly working on iPhone game controllers
+13                                              Apple releases iOS 27 with Siri AI overhaul
+14                                GM can’t ‘bring back’ Apple CarPlay because it never left
+15             Got an Android Phone? Google Thinks You’ll Probably Want a Googlebook Laptop
+16                                                             The black iPhone Pro returns
+17                                   Why Apple’s next computer should be for the smart home
+18 Read the Apple document explaining how new listening features still protect your privacy
+19                             The Apple Watch Series 12 is the start of a new wearable era
+20                                                What Will Apple Call Its Foldable iPhone?
+                                                                                                                                                                                                                                                            description
+1  Apple announced the Apple Watch Series 12 at its September 9th product launch event, coming one year after the Series 11, Ultra 3, and SE 3. Last year's Series 11, which launched at $399 with 42mm and 46mm sizes, added 5G, hypertension monitoring, a Sleep Sco…
+2                                                                                          Apple’s latest smartwatches—the Apple Watch Series 12 and Ultra 4, get a faster chip, expanded health tracking, and new capabilities made possible by a newly enhanced Siri.
+3                                                                                                                       Get all the news when it happens, as our reporters bring you live updates from Apple Park, the company’s headquarters in Cupertino, California.
+4  Today, Apple announced the AirPods 5, updates to the AirPods 4 series that was first released in 2024. The AirPods 4 series was the first time Apple's open-ear wireless earbuds came in a version with active noise cancellation (ANC) and one without. Both versi…
+5  After Apple wrapped up its "Surprise and shine" event today, we were able to get a look at the new Apple Watch Series 12 and Ultra 4. Both of the new watches launch September 18th, with preorders available starting today. The Apple Watch Series 12 once again …
+6  The Apple AirPods 5 are bringing active noise cancellation to the masses, and they're now available for preorder at a variety of retailers. They'll officially launch on September 18th, the same day as the Apple Watch Series 12 and Ultra 4, as well as the iPho…
+7  Today, I’m talking with Mark Gurman, who is the world’s best-sourced Apple reporter — both as Bloomberg’s chief Apple correspondent and the host of the upcoming podcast Power On.&nbsp; Earlier this month, Apple hosted its annual iPhone hardware event, virtually ev…
+8  With the public release of iOS 27 and tvOS 27, Apple Home is getting an injection of Apple Intelligence - but you'll have to pay more for it. Apple Intelligence for Home brings AI-powered video summaries to HomeKit Secure Video, so you can get short text desc…
+9  Apple rolled out the Apple Watch Series 12 and Apple Watch Ultra 4 at the "Surprise and shine" event. The new watches feature sizable improvements to the health sensors and tracking, plus the ability to recite audio transcriptions and summaries, plus a cerami…
+10                                                                                                                                                                                 Former Apple CEO Tim Cook's relationships with Trump and Xi still have some utility.
+11 Most hardware prices have soared in 2026, and that includes a variety of Apple laptops, tablets, and smart devices. Thankfully, you can offset some of the increased costs on an Apple TV 4K by buying one refurbished through the company. The 64GB model is selli…
+12 Bloomberg's Mark Gurman says Apple is developing two game controllers for the iPhone and will likely sell them under the Beats brand. Rumors that Apple might enter the game controller business have circulated for some time. But last week, MacRumors reported f…
+13 Apple is now rolling out its iOS 27 update to compatible devices today, alongside the watchOS 27, iPadOS 27, and visionOS 27 updates. Siri AI is the headline feature across all four updates, the delayed AI-powered overhaul of the Siri assistant. Siri AI is av…
+14 Last week, GM announced a new software experience for its upcoming Chevy Silverado and GMC Sierra trucks, including a new look for Apple CarPlay and Android Auto, the popular phone mirroring systems that the automaker made a big deal about removing from its e…
+15                                                                                                                              Apple lovers have long enjoyed seamless connectivity between their iPhones and Macs. Now, Google’s bringing that experience to Android.
+16 Apple has seen reason: It has a black model in the iPhone Pro lineup again. Last year, Apple went bold with its colors for the iPhone 17 Pro, offering a flashy orange, a shiny silver, and a dark blue. Don't get me wrong, they looked nice. But there was no bla…
+17 John Ternus didn't mention Apple Home once during his first keynote as Apple CEO. But he did open by describing an "intelligent personal hub" that prioritizes local processing, protects your privacy, and integrates with all your other devices, apps, and servi…
+18 At Wednesday's iPhone Duo launch event, Apple announced a handful of new Siri AI Audio Intelligence features, including Siri Recap, Live Rewind, Sound Recognition, and Music Recognition. Alongside its announcement, Apple released a document laying out how it …
+19 You wouldn't know that the Apple Watch Series 12 is a big deal just by looking at it. It has the same design, buttons, sizes, and sensor types as generations of Apple Watches before it. But under the hood, the Series 12 builds in major changes that lay the gr…
+20                                                                                                                                                                                                                                     iPhone Ultra is too predictable.
+                                                                                                    url
+1                               https://www.theverge.com/tech/991812/apple-watch-series-12-announcement
+2                                https://www.wired.com/story/apple-watch-series-12-apple-watch-ultra-4/
+3                        https://www.wired.com/live/apple-event-live-blog-september-2026-iphone-launch/
+4                https://www.theverge.com/tech/988479/apple-airpods-5-announcement-september-2026-event
+5                           https://www.theverge.com/tech/992568/apple-watch-hands-on-series-12-ultra-4
+6            https://www.theverge.com/gadgets/993637/apple-airpods-5-anc-wireless-charging-preorder-buy
+7  https://www.theverge.com/podcast/996874/apple-john-ternus-tim-cook-mark-gurman-future-ai-siri-iphone
+8      https://www.theverge.com/tech/994949/apple-intelligence-apple-home-icloud-plus-cost-subscription
+9                 https://www.theverge.com/gadgets/990508/apple-watch-series-12-ultra-4-spec-comparison
+10                                                 https://gizmodo.com/tim-apple-rides-again-2000813272
+11              https://www.theverge.com/gadgets/997009/refurbished-apple-tv-4k-ring-doorbell-deal-sale
+12                                   https://www.theverge.com/tech/994426/apple-iphone-game-controllers
+13                       https://www.theverge.com/news/994756/apple-ios-27-launch-iphone-siri-ai-update
+14     https://www.theverge.com/transportation/998259/gm-apple-carplay-android-auto-phone-mirror-google
+15                                      https://www.wired.com/story/google-launches-googlebook-laptops/
+16                                       https://www.theverge.com/tech/993048/iphone-18-pro-black-color
+17              https://www.theverge.com/tech/993892/apples-next-computer-smart-home-hub-airport-router
+18                        https://www.theverge.com/tech/992919/apple-siri-ai-audio-intelligence-privacy
+19               https://www.theverge.com/tech/996715/apple-watch-series-12-review-wearables-smartwatch
+20                                                  https://gizmodo.com/foldable-iphone-name-2000808877
+                                                                                                                                                                                                             urlToImage
+1                              https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/apple-event-september-2026-275-10-37-01.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.159993948987%2C100%2C93.680012102026&amp;w=1200
+2                                                                                 https://media.wired.com/photos/6aa19981e7b3b4c6b868b8e4/191:100/w_1280,c_limit/Screenshot%202026-09-09%20at%2010.37.46%E2%80%AFAM.png
+3                                                                                                    https://media.wired.com/photos/6a9725dc72949d665b63352f/191:100/w_1280,c_limit/Apple-Live-Blog-Gear-1178079028.jpg
+4                              https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/apple-event-september-2026-245-10-31-51.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.159993948987%2C100%2C93.680012102026&amp;w=1200
+5                                                            https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/IMG_2485.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+6                  https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/268734_iPhone_2026_event_handson_ADiBenedetto_0046.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+7                                                  https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/JohnTernus_Decoder.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+8                        https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/268594_iOS_27_home_app_first_look_CVirginia2.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+9                  https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/268734_iPhone_2026_event_handson_ADiBenedetto_0034.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+10                                                                                                                               https://gizmodo.com/app/uploads/2026/01/tim-cook-donald-trump-oct-28-2025-1200x675.jpg
+11                                                https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/Apple-TV-4K-roundup.png?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+12     https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24522825/4._Ultimate_2.4_Whit___iPhone.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.76363770124%2C100%2C78.472724597521&amp;w=1200
+13                                                           https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/DSC04248.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.628272251309%2C100%2C78.743455497382&amp;w=1200
+14 https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/Apple_CarPlay_Split_Home_View_Screen_Projections_Trailering_dd9a21.png?quality=90&amp;strip=all&amp;crop=8.4377612633535%2C0%2C83.124477473293%2C100&amp;w=1200
+15                                                                                                                          https://media.wired.com/photos/6ab1289a5263c12dd1677528/191:100/w_1280,c_limit/DSC_9551.jpg
+16                                   https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/268735_iPhone_18_Pro_NPatel_0006.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+17   https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24732441/236707_Mac_Studio_AKrales_0064.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+18                               https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/apple-audio-intelligence-recap-wide.jpeg?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200
+19                          https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/268738_Apple_Watch_Series_12_AKrales_0059.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200
+20                                                                                                                                               https://gizmodo.com/app/uploads/2026/03/foldable-iphone-1-1200x675.jpg
+            publishedAt
+1  2026-09-09T17:37:55Z
+2  2026-09-09T17:43:38Z
+3  2026-09-09T11:00:00Z
+4  2026-09-09T17:33:31Z
+5  2026-09-09T18:53:48Z
+6  2026-09-11T15:32:03Z
+7  2026-09-21T14:04:22Z
+8  2026-09-14T22:28:52Z
+9  2026-09-09T20:42:51Z
+10 2026-09-17T15:50:57Z
+11 2026-09-17T17:14:07Z
+12 2026-09-13T18:30:16Z
+13 2026-09-14T17:08:49Z
+14 2026-09-21T17:47:54Z
+15 2026-09-21T13:00:00Z
+16 2026-09-09T22:37:51Z
+17 2026-09-11T14:03:48Z
+18 2026-09-09T20:44:43Z
+19 2026-09-17T01:49:34Z
+20 2026-09-08T22:30:18Z
+                                                                                                                                                                                                                            content
+1        &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nThe latest Apple Watch is one of the first product launches under Apples new CEO, John Ternus.\r\nThe latest Apple Watch is one of the first product launches under… [+2334 chars]
+2            Apple has unveiled the Apple Watch Series 12 and Ultra 4 today during its September hardware event. The new models retain the signature designs of their predecessors but add a faster chip, new health… [+1198 chars]
+3          Good morning everyone! Welcome to our live coverage of today's Apple media showcase.\r\nWe will have two reporters on the scene at Apple Park in Cupertino, California, to bring you live coverage. You'l… [+3432 chars]
+4            Today, Apple announced the AirPods 5, updates to the AirPods 4 series that was first released in 2024.\nThe AirPods 4 series was the first time Apple's open-ear wireless earbuds came in a version with… [+482 chars]
+5        &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nApples latest watches come with some new Siri AI features and the return of ceramic cases.\r\nApples latest watches come with some new Siri AI features and the ret… [+4622 chars]
+6        &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nThe Apple AirPods 5 will hit shelves on September 18th, but you can line up your purchase ahead of time.\r\nThe Apple AirPods 5 will hit shelves on September 18th,… [+2375 chars]
+7   &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nBloombergs chief Apple correspondent Mark Gurman on Siri, Tim Cooks legacy, and what to expect from new CEO John Ternus.\r\nby\r\nNilay PatelClose\r\nPosts from this a… [+60476 chars]
+8    &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nApple Intelligence upgrades to HomeKit Secure Video come with a steep cost.\r\nApple Intelligence upgrades to HomeKit Secure Video come with a steep cost.\r\nby\r\nJen… [+3972 chars]
+9        &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nApples newest watches sport new features like audio intelligence, but how do they stack up against the older models?\r\nApples newest watches sport new features li… [+9086 chars]
+10         President Donald Trump is rounding up his tech buddies for next weeks state dinner with Chinese President Xi Jinping. The guest list reportedly includes former Apple CEO Tim Cook.\r\nBloomberg reports,… [+2469 chars]
+11       The refurbished Apple TV 4K with its voice remote. | Image: The Verge\r\n\n\nMost hardware prices have soared in 2026, and that includes a variety of Apple laptops, tablets, and smart devices. Thankfully… [+3641 chars]
+12 &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nThe accessories would likely be sold under the Beats brand.\r\nThe accessories would likely be sold under the Beats brand.\r\nby\r\nTerrence O'BrienClose\r\nPosts from t… [+2486 chars]
+13 &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nwatchOS 27, iPadOS 27, and visionOS 27 also debut today.\r\nwatchOS 27, iPadOS 27, and visionOS 27 also debut today.\r\nby\r\nTom WarrenClose\r\nPosts from this author w… [+2977 chars]
+14       &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nThe recent reveal of GMs new software interface in its trucks has left some people confused about the automakers stance on phone mirroring.\r\nThe recent reveal of… [+6839 chars]
+15           iPhones and Macs are like two peas in a pod. Apples hardware synergy means you can launch iPhone apps right from the macOS desktop, respond to texts without picking up your iPhone, and even copy text… [+2229 chars]
+16       &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nThe iPhone 18 Pro comes in four good colors, but theres only one I care about: black.\r\nThe iPhone 18 Pro comes in four good colors, but theres only one I care ab… [+2582 chars]
+17       &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nAfter the intelligent personal hub, Apple needs to build the intelligent home hub.\r\nAfter the intelligent personal hub, Apple needs to build the intelligent home… [+8025 chars]
+18       &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nApple says it cant access users raw audio from its new Audio Intelligence features.\r\nApple says it cant access users raw audio from its new Audio Intelligence fe… [+3164 chars]
+19      &lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;\r\nA surprisingly consequential update for the worlds most popular smartwatch.\r\nIf you buy something from a Verge link, Vox Media may earn a commission. See our eth… [+16725 chars]
+20         Nobody knows what Apple will call its first foldable iPhone. We’ll get the official name at the company’s “Surprise and Shine” event tomorrow. But since I’m in an antsy mood, let’s debate about it.\r\n… [+3646 chars]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## try this function for the second time </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">reqnews</span>(<span class="st">"gender"</span>, <span class="st">"2026-09-21"</span>, <span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            source.id            source.name                           author
+1                &lt;NA&gt;                 Kotaku                   Amelia Zollner
+2                &lt;NA&gt;                 Reason                    Eugene Volokh
+3                &lt;NA&gt;         Boredpanda.com                Danielė Šidiškytė
+4                &lt;NA&gt;             Nature.com                     Manasi Kumar
+5                &lt;NA&gt;             Just Jared                         AJ Pitts
+6                &lt;NA&gt;           Daily Signal                       Fred Lucas
+7                &lt;NA&gt;                 Dezeen                  Ellen Eberhardt
+8                &lt;NA&gt;          Dailymail.com                     Gethin Hicks
+9                &lt;NA&gt;       The Daily Caller                       Mark Tanos
+10               &lt;NA&gt;          Djnavarro.net                 Danielle Navarro
+11               &lt;NA&gt;              IndieWire                    David Ehrlich
+12               &lt;NA&gt;           Ms. Magazine                    Emma Anderson
+13               &lt;NA&gt;              The Punch                 Punch Newspapers
+14               &lt;NA&gt;  Legalinsurrection.com                    Mike LaChance
+15               &lt;NA&gt;          Dailymail.com                        Maisy Rae
+16               &lt;NA&gt;     Christiantoday.com                     Staff writer
+17               &lt;NA&gt;             Nature.com                  Sarah de Rijcke
+18               &lt;NA&gt;    Yahoo Entertainment                Chabeli Carrazana
+19           cbs-news               CBS News                             &lt;NA&gt;
+20               &lt;NA&gt;       The Local Sweden                  TT/Mandy Pipher
+21               &lt;NA&gt;       The New Republic        Ellie Quinlan Houghtaling
+22               &lt;NA&gt;               TheBlaze                    Owen Anderson
+23               &lt;NA&gt;               Mediaite               Kathianne Boniello
+24               &lt;NA&gt;          Dailymail.com                      Burney Wong
+25               &lt;NA&gt;          Dailymail.com                   Will Hallowell
+26               &lt;NA&gt;           Ms. Magazine                  Brittany Vining
+27               &lt;NA&gt;                    CNA                             &lt;NA&gt;
+28               &lt;NA&gt; Israelnationalnews.com             Israel National News
+29               &lt;NA&gt;     Human Rights Watch               Human Rights Watch
+30               &lt;NA&gt;           Daily Signal                  Pedro Rodriguez
+31               &lt;NA&gt;                  Salon                    Grace Panetta
+32               &lt;NA&gt;  Lifesciencesworld.com                     Ava Reynolds
+33               &lt;NA&gt;     Thedailymash.co.uk                   The Daily Mash
+34               &lt;NA&gt;  Lifesciencesworld.com                     Ava Reynolds
+35               &lt;NA&gt;             Biztoc.com                    zerohedge.com
+36        abc-news-au          ABC News (AU)                   Mawunyo Gbogbo
+37               &lt;NA&gt;       Nofilmschool.com                         Jo Light
+38               &lt;NA&gt;       The Daily Caller                  Nicole Silverio
+39               &lt;NA&gt;                    Vox                     Rachel Cohen
+40               &lt;NA&gt;              The Punch                 Punch Newspapers
+41               &lt;NA&gt;     Christiantoday.com                     Staff writer
+42               &lt;NA&gt;            Abcnews.com GEOFF MULVIHILL Associated Press
+43 the-times-of-india     The Times of India                   Vijender Kumar
+44               &lt;NA&gt;           DW (English)                      Kathy Short
+45               &lt;NA&gt;               Mubi.com                    Daniel Kasman
+46               &lt;NA&gt;     Globalsecurity.org                        John Pike
+47               &lt;NA&gt;     Globalsecurity.org                        John Pike
+48               &lt;NA&gt;          TheJournal.ie                    Jane Matthews
+49               &lt;NA&gt;         The Federalist                   Ashley Bateman
+                                                                                                                                                      title
+1                                                            Persona 4 Revival Won’t Make Significant Changes To The Original’s Most Problematic Storylines
+2                                                                                              Just a 10% Gender Gap in Attitudes on Lindsay Clancy Verdict
+3                                                                             Creepy Coworker Won’t Take A Hint, Takes It Way Too Far In The Office Kitchen
+4                                                                       Losing your way of life to climate change matters — and we need a way to measure it
+5                                                                DWTS’ Witney Carson &amp; Husband Carson McAllister Reveal Gender of Baby No 3 with Cute Video
+6                                                            Vermont Teachers Union Pushes Gender Identity in Sports, Raises Alarms About ‘White Privilege’
+7                                                                                         Inside the design of New York City's upcoming borough-based jails
+8  Cambridge college sparks row after replacing genders on toilets with 'cubicles' and 'cubicles/urinals' despite Supreme Court ruling on single-sex spaces
+9                                                         Elite University Used AI To Make Students Hotter, More Diverse In Ad, Student Publication Alleges
+10                                                                                                                               The Trouble with 'Ntile()'
+11                                                      ‘Phoolan’ Review: A Biopic About a Rebellious Indian Feminist Is Undone by its Ramshackle Structure
+12                                                                 As World Leaders Gather at the U.N., the Push to Recognize Gender Apartheid Gains Ground
+13                                                                                                     Group unveils strategy to tackle online gender abuse
+14                                                                 Education Dept. Investigating Massachusetts School Over Alleged Secret Gender Transition
+15               Trans row erupts at Australian school after transgender Year 8 student transitioning from male to female is placed in girls' cabin on camp
+16                                                                                         Teenagers in Britain come bottom of survey for life satisfaction
+17                                                                                           Six principles for supporting academic freedom in universities
+18                                                                               You'll do anything for your baby. The algorithm knows how to exploit that.
+19                                                                                    After 9 women murdered, police link 1 death to possible love triangle
+20                                                                                                  Today in Sweden: A roundup of the latest news on Monday
+21                                                                                         Lauren Boebert Snaps Over Claim She Had Affairs With Three Aides
+22                                                                                                               The lion, the witch, and the worldview war
+23                                                             AOC Discusses Her ‘Very Unique Political Window’ With NYT Ahead of Potential White House Run
+24                                                                   How much super should you really have saved? See how you compare with Aussies your age
+25                            Musician who identified as non-binary 'raped his date as they celebrated New Year's Eve after meeting on Bumble', court hears
+26                                                                                        Decades of Male-Focused Medical Research Could Bias Healthcare AI
+27                                                                                         South Africa makes arrests over one of nine women found murdered
+28                                                                                          Watch: Thousands gather for Ne’ila prayers in heart of Tel Aviv
+29                                                                                                        South African Women Need Protection, Not Warnings
+30                                                                                         Conservative Lawmakers Demand the WNBA to Define What a Woman Is
+31                                                                                                            The Epstein reckoning hits the campaign trail
+32                                                                                                              Is 180 pounds overweight for a 13 year old?
+33                                                                                            Six people who annoy all the right people but are still dicks
+34                                                                                                                         What is the rarest puppy to get?
+35                                                                       Massachusetts School District Investigated Over Alleged Secret 'Gender Transition'
+36                                                                                       Film studios shun women but men make them less money, report shows
+37                                                                                               How to Sell a Screenplay While You're Still in Film School
+38                                                                                Tucker Carlson Clarifies He Hasn’t Endorsed Anyone In Abdul El-Sayed Race
+39                                                                                     Susan Collins is the abortion rights movement’s biggest test of 2026
+40                                                                                                     Abia to tackle malaria from mosquito breeding source
+41                                                                                                  Northern Ireland conversion therapy bill is 'dangerous'
+42                                                                      What to know about hospital deals with Trump to limit care for transgender children
+43                                                       Daughter born, stereotypes torn: Drums, flowers and cheers welcome girl child’s birth after 45 yrs
+44                                                                                                    Why gender-based violence persists in Southern Africa
+45                                                                                                                Toronto Filmmaker Survey: Just One Moment
+46                                                                      Minister Anand meets with Haiti's Minister of Foreign Affairs and Religious Affairs
+47                                                                                Guterres: 'Cracks have become canyons' as world faces four tests of power
+48                                                          Malala Yousafzai urges world not to turn back on women in Afghanistan during event with McEntee
+49                                                                                    Meet The Lawyer Helping The Education Dept. Fight For Parental Rights
+                                                                                                                                                                                                                                                                                description
+1                                                                                                                                                                       The arcs of Kanji and Naoto have long been lightning rods for discourse around queer identity in the Persona series
+2                                                              From a YouGov Sept. 4-8 survey: Thus, there's a 10-point gender gap, with women being less likely to vote guilty;…\nThe post Just a 10% Gender Gap in Attitudes on Lindsay Clancy Verdict appeared first on Reason Magazine.
+3                      Most companies have thick employee handbooks and hour-long videos full of harassment policies and anti-retaliation rules. Yet harassment, bullying, and other harmful behavior continues inside several workplaces. That’s the spot a 22-year-old accountant found …
+4                                                                                                                                            Climate losses extend beyond property and income. Policymakers need ways to assess what people value, experience and ultimately stand to lose.
+5                     Witney Carson is expecting her third child with her husband, Carson McAllister. The 32-year-old Dancing with the Stars pro dancer […]\nThe post DWTS’ Witney Carson &amp; Husband Carson McAllister Reveal Gender of Baby No 3 with Cute Video appeared first on Just Ja…
+6                      The Vermont teachers union formally recognizes students’ right to play sports based on “gender identity,” rather than biological sex. The National Education Association Vermont chapter also asserts that the state’s public school teachers must acknowledge the …
+7                      New York City plans to relocate inmates from Rikers Island into four jails built from the ground up in Queens, Brooklyn, Manhattan and the Bronx. Here, Dezeen looks at the architecture of each project. Begun in 2017, the NYC Borough-Based Jail Program (BBJ) i…
+8                                                                                  The Equality and Human Rights Commission's code of practice, reinforcing last year's Supreme Court ruling that sex in equality law means biological sex not gender identity, came into effect in August.
+9                                                                                                                                      A conservative campus paper alleges Stanford used AI to change a student’s race and gender in an ad, replacing him with an AI-generated Black woman.
+10                                    Please, please, please do not use ‘dplyr::ntile()’ in an analysis that will be submitted to a regulatory agency. It’s secretly an ill-conceived SQL tool that doesn’t do what you probably want it to, and it does not belong in statistical analysis
+11                                                                                                                                                                                             India’s "Bandit Queen" gets a welcome cinematic update, albeit one that can’t sustain itself
+12                     Nearly 130 heads of state and government are expected to attend the United Nations General Assembly’s high-level week in New York. From Sept. 22 to 28, world leaders will gather for the General Debate of the 81st session under the theme, “Restoring trust, man…
+13                     Journalists for Christ International Outreach, Nigeria, has unveiled a youth-focused factsheet designed to help young people recognise and safely respond to misogyny and technology-facilitated gender-based violence in campus and digital spaces. The organisati…
+14                    “Parents have a right to know what is happening with their children at school, particularly when it concerns deeply personal matters involving their health and well-being”\nThe post Education Dept. Investigating Massachusetts School Over Alleged Secret Gender …
+15                                                                                                                                        The Year 8 student, who is believed to be transitioning from male to female, was placed for two nights in the cabin with a small number of girls.
+16                                                                                                                                                                                                                             Wealth, more than gender, affects teenage life satisfaction.
+17                                                                                                                     Many academics are concerned about threats to independent enquiry in higher education. Here’s how it can be protected while taking legitimate concerns into account.
+18                     Bringing home a bundle of joy in America today unleashes a digital onslaught of advertisements pushing products, services and apps that target mothers most fiercely, with a clear promise: The gadget that will solve all your parenting puzzles is just a click a…
+19                                                                                                                                              The discovery of the nine bodies has fueled fear and anger, as authorities investigate whether a serial killer or killers were responsible.
+20                                                                                                                                           Gender balance in Swedish parliament improves slightly after final vote count, Volvo Cars gets a new CEO, and more news from Sweden on Monday.
+21                     Representative Lauren Boebert’s various affairs are apparently just a bunch of fake news, according to the MAGA lawmaker and her allies.The House Ethics Committee received a sworn complaint last week that accused Boebert of having sexual affairs with three of…
+22                     The internet already knows what to do with the news that Meryl Streep will voice Aslan in Greta Gerwig’s forthcoming “Narnia: The Magician’s Nephew”: Get angry. It fits the logic of rage-bait: All publicity is good publicity.There has already been plenty of f…
+23                    “It’s funny because it’s kind of like, everyone else is allowed to talk about it, but I’m not?” Ocasio-Cortez said of discussing her race or gender.\nThe post AOC Discusses Her ‘Very Unique Political Window’ With NYT Ahead of Potential White House Run first ap…
+24                                                                                                                                                                                Having enough superannuation can make a significant difference to a retiree's quality of life after work.
+25                                                                                                                                                    Sab Cox, a biological male, allegedly attacked the woman, a biological female as they celebrated New Year's Eve on December 31, 2022.
+26                    Many people will learn CPR using a flat-chested manikin. A 2024 study of 20 models of CPR manikins sold worldwide found that three-quarters were described as male or had no sex specified. Of the 20, only one offered a breast overlay.\nThe manikins reflect a wi…
+27                                                                                                                                                                       President Cyril Ramaphosa echoed a police pledge that those responsible for the killings would be brought to book.
+28                                                                                                                                                            Rosh Yehudi draws thousands to Meir Park for the closing prayers of Yom Kippur, with worshipers gathering throughout the day.
+29 Click to expand Image\n \n\n\n\n \n \n \n\n \n \n \n \n A student during a vigil for victims of gender-based violence and femicide at the University of Cape Town, South Africa, September 18, 2026.\n © 2026 Esa Alexander/Reuters \n \n \n\n\n \nThe discovery of several women’s bod…
+30                     A group of House Republican lawmakers sent a letter to the Women’s National Basketball Association on Friday, demanding that the league define what a woman is. The letter, drafted by Rep. Marlin Stutzman, R-Ind., and signed on by Reps. Erin Houchin, R-Ind., J…
+31                                                                                                                                                                        In key races from Arizona to North Carolina, Democrats are hammering Republicans for their votes on Epstein files
+32                     Is 180 Pounds Overweight for a 13-Year-Old? Understanding Healthy Weight in Adolescence Whether 180 pounds is overweight for a 13-year-old depends significantly on their height, gender, and overall body composition. Generally, it’s crucial to assess a child’s…
+33                                                                                                       THROW a rock at your television and you’ll almost certainly hit someone wrong, but it takes a special set of skills to be right and still invite masonry-pitchers. Like these six.
+34                     What is the Rarest Puppy to Get? The rarest puppy to get is generally considered one of a rare breed with a very low birth rate, especially when combined with specific desired traits such as color, gender, or pedigree. Several factors contribute to rarity, ma…
+35                  Massachusetts School District Investigated Over Alleged Secret 'Gender Transition'\n \nAuthored by Naveen Athrappully via The Epoch Times,\nThe Department of Education has announced that it is investigating a Massachusetts school district over allegedly enabling…
+36                                                                                             A new report reveals movies by female screenwriters are often overlooked for financial opportunities even though they make studios more money than those written by their male counterparts.
+37                 Can a student sell a screenplay?Heck yes!We've covered Ron Mita before for his screenwriting advice, like how often you should "feed" the audience\r\n and what ideas writers should really be concerned about protecting\r\n. He's had four produced features (Robots,…
+38                                                                                                                                      Daily Caller News Foundation co-founder Tucker Carlson disputed rumors Monday that he endorsed Democratic Michigan Senate candidate Abdul El-Sayed.
+39                     Nationally, abortion has faded as a campaign issue. Four years after it helped Democrats stave off a red wave, candidates in battleground races are focusing their attention on cost-of-living issues, immigration, and policing. As of mid-August, abortion was me…
+40                                           The Abia State Government, in collaboration with the National Malaria Elimination Programme, will commence larvae source management to tackle malaria.\n\nRead More: https://punchng.com/abia-to-tackle-malaria-from-mosquito-breeding-source/
+41                                                                                                                                                            Conversion therapy bills are being considered in all parts of the United Kingdom. In Northern Ireland, MLAs are speaking out.
+42                                                                                                                           At least six hospitals have reached agreements with President Donald Trump's administration to stop offering gender-affirming treatment for transgender minors
+43                                                                                                               Jind’s Shadipur village celebrates birth of baby girl Saanvi after 45 years in the family, with drums and flowers, highlighting support for daughters and gender equality.
+44                     A series of killings in South Africa has renewed scrutiny of efforts to combat violence against women. Activists say laws alone are not enough without effective implementation. On Thursday, police in South Africa found the body of Dineo M. stabbed, beaten and…
+45                                                                                                                                                    From emerging voices to lauded auteurs, filmmakers at the Toronto International Film Festival share key moments from their new films.
+46                                                                  The Honourable Anita Anand, Minister of Foreign Affairs, met with Raina Forbin, Haiti's Minister of Foreign Affairs and Religious Affairs, during the United Nations General Assembly High-Level Week in New York City.
+47                           Humanity faces four defining "tests of power" - around war or peace, inequality, climate change and AI - that will determine whether the world moves towards a new era of cooperation or deeper division, the UN chief warned the General Assembly on Tuesday.
+48                                                                                                                                                              Meanwhile, the UN High Commissioner for Human Rights warned of the “slippery slope” that is the rollback of women’s rights.
+49                                                                                                                                                             Trakas has an ability to skillfully navigate Title IX funding and education law and successfully litigate in hostile courts.
+                                                                                                                                                                            url
+1                                                    https://kotaku.com/persona-4-revival-wont-make-significant-changes-to-the-originals-most-problematic-storylines-2000736238
+2                                                                             https://reason.com/volokh/2026/09/21/just-a-10-gender-gap-in-attitudes-on-lindsay-clancy-verdict/
+3                                                                                                   https://www.boredpanda.com/employee-sets-boundaries-inappropriate-coworker/
+4                                                                                                                            https://www.nature.com/articles/d41586-026-02928-0
+5                                                 https://www.justjared.com/2026/09/21/dwts-witney-carson-husband-carson-mcallister-reveal-gender-of-baby-no-3-with-cute-video/
+6                                           https://www.dailysignal.com/2026/09/21/vermont-teachers-union-pushes-gender-identity-in-sports-raises-alarms-about-white-privilege/
+7                                                                                            https://www.dezeen.com/2026/09/21/design-new-york-city-borough-based-jail-program/
+8                                                                           https://www.dailymail.com/news/article-16150633/Cambridge-college-removes-genders-toilet-signs.html
+9                                                                                                https://dailycaller.com/2026/09/21/stanford-ai-race-swap-student-advertisement
+10                                                                                                          https://blog.djnavarro.net/posts/2026-09-20_the-trouble-with-ntile/
+11                                                                                                  https://www.indiewire.com/criticism/movies/phoolan-movie-review-1235217971/
+12                                                                                         https://msmagazine.com/2026/09/21/un-general-assembly-gender-apartheid-afghan-women/
+13                                                                                                    https://punchng.com/group-unveils-strategy-to-tackle-online-gender-abuse/
+14                                               https://legalinsurrection.com/2026/09/education-dept-investigating-massachusetts-school-over-alleged-secret-gender-transition/
+15                                                                                                https://www.dailymail.com/news/article-16149539/geelong-trans-school-row.html
+16                                                                         https://www.christiantoday.com/news/teenagers-in-britain-come-bottom-of-survey-for-life-satisfaction
+17                                                                                                                           https://www.nature.com/articles/d41586-026-02932-4
+18                                                                                       https://www.yahoo.com/news/us/articles/ll-anything-baby-algorithm-knows-100000387.html
+19                                                                                         https://www.cbsnews.com/news/south-africa-women-murders-investigation-love-triangle/
+20                                                                                  https://www.thelocal.se/20260921/today-in-sweden-a-roundup-of-the-latest-news-on-monday-262
+21                                                                                                 https://newrepublic.com/post/215655/lauren-boebert-claim-affairs-three-aides
+22                                                                                            https://www.theblaze.com/columns/opinion/the-lion-the-witch-and-the-worldview-war
+23                                              https://www.mediaite.com/media/news/aoc-discusses-her-very-unique-political-window-with-nyt-ahead-of-potential-white-house-run/
+24                                                     https://www.dailymail.com/news/article-16149715/australia-superannuation-average-balance-age-comfortable-retirement.html
+25                                                                              https://www.dailymail.com/news/article-16148865/Musician-raped-non-binary-date-laughed-bus.html
+26                                                                                   https://msmagazine.com/2026/09/21/male-focused-medical-research-gender-bias-healthcare-ai/
+27                                                                         https://www.channelnewsasia.com/world/south-africa-johannesburg-serial-murders-women-arrests-6399746
+28                                                                                                                               https://www.israelnationalnews.com/news/433451
+29                                                                                         https://www.hrw.org/news/2026/09/22/south-african-women-need-protection-not-warnings
+30                                                                                                       https://www.dailysignal.com/2026/09/21/lawmakers-wnba-define-woman-is/
+31                                                                                      https://www.salon.com/2026/09/21/the-epstein-reckoning-hits-the-campaign-trail-partner/
+32                                                                                                https://www.lifesciencesworld.com/is-180-pounds-overweight-for-a-13-year-old/
+33                                                   https://www.thedailymash.co.uk/news/celebrity/six-people-who-annoy-all-the-right-people-but-are-still-dicks-20260921269478
+34                                                                                                           https://www.lifesciencesworld.com/what-is-the-rarest-puppy-to-get/
+35                                                                                                                                        https://biztoc.com/x/408d7cedfe5903b1
+36                                                                 https://www.abc.net.au/news/2026-09-22/film-studios-shun-women-but-men-make-them-less-money-report/107182132
+37                                                                                                                    https://nofilmschool.com/ron-mita-screenplay-film-student
+38                                                                                     https://dailycaller.com/2026/09/21/tucker-carlson-abdul-el-sayed-mike-rogers-endorsement
+39                                                              https://www.vox.com/policy/503317/susan-collins-abortion-maine-midterms-politics-reproductive-rights-roe-v-wade
+40                                                                                                    https://punchng.com/abia-to-tackle-malaria-from-mosquito-breeding-source/
+41                                                                                    https://www.christiantoday.com/news/northern-ireland-conversion-therapy-bill-is-dangerous
+42                                                         https://abcnews.com/Health/wireStory/hospital-deals-trump-administration-avoid-treating-transgender-minors-136643490
+43 https://timesofindia.indiatimes.com/city/chandigarh/daughter-born-stereotypes-torn-drums-flowers-and-cheers-welcome-girl-childs-birth-after-45-yrs/articleshow/134397272.cms
+44                                                                                       https://www.dw.com/en/why-gender-based-violence-persists-in-southern-africa/a-79356560
+45                                                                                                  https://mubi.com/en/notebook/posts/toronto-filmmaker-survey-just-one-moment
+46                                                                                         https://www.globalsecurity.org/military/library/news/2026/09/mil-260922-canada01.htm
+47                                                                                                    https://www.globalsecurity.org/wmd/library/news/un/un-260922-unnews01.htm
+48                                                                                              https://www.thejournal.ie/malala-yousafzai-afghanistan-taliban-7169055-Sep2026/
+49                                                                   https://thefederalist.com/2026/09/22/meet-the-lawyer-helping-the-education-dept-fight-for-parental-rights/
+                                                                                                                                                                                                                                                                            urlToImage
+1                                                                                                                                                                                                                                     https://kotaku.com/app/uploads/2026/09/kanji.jpg
+2                                                                                                                                                                                                     https://d2eehagpk5cl65.cloudfront.net/img/q60/uploads/2026/09/YouGovClancy-1.jpg
+3                                                                                                                                                                 https://static.boredpanda.com/blog/wp-content/uploads/2026/09/employee-sets-boundaries-inappropriate-coworker-fb.jpg
+4                                                                                                                                                                                   https://media.nature.com/lw1200/magazine-assets/d41586-026-02928-0/d41586-026-02928-0_53713402.jpg
+5                                                                                                                                                                                                        https://www.justjared.com/wp-content/uploads/2026/09/witney-gender-reveal.jpg
+6                                                                                                                                                                                                                  https://static.dailysignalmedia.org/2026/09/VermontNEA-1024x576.jpg
+7                                                                                                                                                                               https://static.dezeen.com/uploads/2026/09/new-york-city-borough-based-jail-system_dezeen_2364_sq-1.jpg
+8                                                                                                                                                                                                    https://i.dailymail.com/1s/2026/09/22/11/111394585-0-image-a-19_1790072978068.jpg
+9                                                                                                        https://images.dailycaller.com/image/width=1280,height=549,fit=cover,format=webp,f=auto/https://cdn01.dailycaller.com/wp-content/uploads/2026/09/GettyImages-1344976555_2.jpg
+10                                                                                                                                                                                                https://blog.djnavarro.net/posts/2026-09-20_the-trouble-with-ntile/tiling_splash.png
+11                                                                                                                                                                                                          https://www.indiewire.com/wp-content/uploads/2026/09/Phoolan_02.webp?w=650
+12                                                                                                                                                                                                      https://msmagazine.com/wp-content/uploads/2026/09/GettyImages-2290094228-1.jpg
+13                                                                                                                                                                                     https://cdn.punchng.com/wp-content/uploads/2026/09/21133809/IMG-20260921-WA0049_1789994289.webp
+14                                                                                                                                                                                                          https://legalinsurrection.com/wp-content/uploads/2018/10/Legal-Studies.jpg
+15                                                                                                                                                                                                    https://i.dailymail.com/1s/2026/09/21/22/111386073-0-image-a-5_1790027558401.jpg
+16                                                                                                                                                                                                            https://www.christiantoday.com/media/original/thumbnail/14/55/145567.jpg
+17                                                                                                                                                                                  https://media.nature.com/lw1200/magazine-assets/d41586-026-02932-4/d41586-026-02932-4_53727788.jpg
+18                       https://s.yimg.com/lo/mysterio/api/207f27a89ea344030c80ed036ea0b1c44491f9b0650df75c61ec654d6081eed8/lightyear_networkapi/resizefill_w1200%3Bquality_80%3Bformat_jpg/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fthe_19th_news_416%2Fb801a9d502a7320073fc77709f2b22cf
+19                                                                                                            https://assets2.cbsnewsstatic.com/hub/i/r/2026/09/21/08f5ace5-81b5-4395-8b5d-6ef5bdfff44d/thumbnail/1200x630/6e16b8bcd980f03f0099815313c3ee01/gettyimages-2295100869.jpg
+20                                                                                                              https://assets.thelocal.com/cdn-cgi/rs:fit:1200/quality:75/plain/https://apiwp.thelocal.com/wp-content/uploads/2026/09/watermarks-logo-a001_NormalPreviewsrik.jpg@webp
+21                                                                                                                                                                https://images.newrepublic.com/dd6f003f914eb05828eb856896065de48ad09789.jpeg?w=1200&amp;h=630&amp;crop=faces&amp;fit=crop&amp;fm=jpg
+22                                                                                                                                   https://www.theblaze.com/media-library/the-lion-the-witch-and-the-worldview-war.jpg?id=67806520&amp;width=1200&amp;height=600&amp;coordinates=0%2C85%2C0%2C86
+23                                                                                                                                                                                                     https://www.mediaite.com/wp-content/uploads/2026/07/aoc-on-mcconnell-scaled.jpg
+24                                                                                                                                                                                                   https://i.dailymail.com/1s/2026/09/22/03/111390195-0-image-a-14_1790045055712.jpg
+25                                                                                                                                                                                                    https://i.dailymail.com/1s/2026/09/21/17/111381037-0-image-a-7_1790008627206.jpg
+26                                                                                                                                                                                                        https://msmagazine.com/wp-content/uploads/2026/09/GettyImages-2295552604.jpg
+27 https://dam.mediacorp.sg/image/upload/s--hbfK026G--/c_crop,h_1125,w_2000,x_0,y_208/c_fill,g_auto,h_676,w_1200/fl_relative,g_south_east,l_mediacorp:cna:watermark:2023-11:afp_watermark_14112023,w_0.1/f_auto,q_auto/v1/mediacorp/cna/image/2026/09/21/000_c8jv9zj.jpg?itok=nx5OQBUh
+28                                                                                                                                                                                                                                     https://2.a7.org/files/pictures/000/1226328.jpg
+29                                                                                                                     https://www.hrw.org/sites/default/files/styles/opengraph/public/media_2026/09/202609wrd_south%20africa_gender_based_violence_vigil.JPG?h=9b42fc6e&amp;itok=_AwkqTw1
+30                                                                                                                                                                                                      https://static.dailysignalmedia.org/2026/09/260921-Caitlin_Clark_Opponent3.jpg
+31                                                                                                                                                                                   https://www.salon.com/app/uploads/2026/09/james-talarico-epstein-files-GettyImages-2294555313.jpg
+32                                                                                                                                                                                                                                                                                &lt;NA&gt;
+33                                                                                                                                                                                      https://cdn.thedailymash.co.uk/wp-content/uploads/20260921084927/greta-thunberg-667x375-1.jpeg
+34                                                                                                                                                                                                                                                                                &lt;NA&gt;
+35                                                                                                                                                                                                                                      https://biztoc.com/cdn/408d7cedfe5903b1_s.webp
+36                                                                                               https://live-production.wcms.abc-cdn.net.au/3a1b1ea24d97d60cd58423d6f4219bc9?impolicy=wcms_watermark_news&amp;cropH=2092&amp;cropW=3719&amp;xPos=295&amp;yPos=0&amp;width=862&amp;height=485&amp;imformat=generic
+37                                                                                                                                                                      https://nofilmschool.com/media-library/image.jpg?id=67794582&amp;width=1200&amp;height=600&amp;coordinates=0%2C62%2C0%2C63
+38                                                                              https://images.dailycaller.com/image/width=1280,height=549,fit=cover,format=webp,f=auto/https://cdn01.dailycaller.com/wp-content/uploads/2026/09/Screenshot%202026-09-21%20at%205.03.16%E2%80%AFPM.png
+39                                                                                                                 https://platform.vox.com/wp-content/uploads/sites/2/2026/09/gettyimages-2295029377.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.767312894411%2C100%2C78.465374211178&amp;w=1200
+40                                                                                                                                                                                                  https://punchng.com/wp-content/uploads/2026/07/1000249300_1783629614-1080x630.webp
+41                                                                                                                                                                                                            https://www.christiantoday.com/media/original/thumbnail/14/55/145553.jpg
+42                                                                                                                                                           https://i.abcnewsfe.com/a/fe9bec1b-5e9e-462e-9d58-826978b85400/wirestory_34faeeab4575b81160ae6531254584cb_16x9.jpg?w=1600
+43                                                                                                                                                          https://static.toiimg.com/thumb/msid-134397270,width-1280,height-720,resizemode-6,overlay-toi_sw,pt-32,y_pad-600/photo.jpg
+44                                                                                                                                                                                                                                          https://static.dw.com/image/79359741_6.jpg
+45                                                                                                                                                                      https://images.mubicdn.net/images/notebook/post_spotlight_images/11650/cache-11650-1790040775/images-w1280.jpg
+46                                                                                                                                                                                                                                                                                &lt;NA&gt;
+47                                                                                                                                                                                                                                                                                &lt;NA&gt;
+48                                                                                                                                                                                                        https://img2.thejournal.ie/article/7169055/river/?height=400&amp;version=7169067
+49                                                                                                                                                                                                       https://thefederalist.com/wp-content/uploads/2026/09/Ernie-e1789914210557.jpg
+            publishedAt
+1  2026-09-21T22:30:25Z
+2  2026-09-21T13:03:06Z
+3  2026-09-22T12:30:12Z
+4  2026-09-21T00:00:00Z
+5  2026-09-22T01:41:11Z
+6  2026-09-21T10:00:00Z
+7  2026-09-21T16:57:00Z
+8  2026-09-22T12:34:27Z
+9  2026-09-22T01:56:44Z
+10 2026-09-21T03:23:26Z
+11 2026-09-21T15:15:30Z
+12 2026-09-21T19:58:11Z
+13 2026-09-21T11:34:45Z
+14 2026-09-21T12:00:32Z
+15 2026-09-21T22:59:45Z
+16 2026-09-22T07:18:00Z
+17 2026-09-21T00:00:00Z
+18 2026-09-22T10:00:00Z
+19 2026-09-21T16:16:29Z
+20 2026-09-21T06:12:05Z
+21 2026-09-21T15:51:16Z
+22 2026-09-22T12:00:00Z
+23 2026-09-22T13:07:07Z
+24 2026-09-22T02:45:24Z
+25 2026-09-21T18:47:37Z
+26 2026-09-21T21:28:20Z
+27 2026-09-21T12:37:00Z
+28 2026-09-21T19:07:34Z
+29 2026-09-22T04:00:00Z
+30 2026-09-21T15:00:20Z
+31 2026-09-21T10:00:31Z
+32 2026-09-22T01:27:07Z
+33 2026-09-21T08:00:43Z
+34 2026-09-21T01:45:18Z
+35 2026-09-21T23:29:59Z
+36 2026-09-22T07:11:35Z
+37 2026-09-21T16:15:06Z
+38 2026-09-21T21:18:14Z
+39 2026-09-22T09:44:39Z
+40 2026-09-22T07:00:55Z
+41 2026-09-21T08:25:40Z
+42 2026-09-22T11:04:17Z
+43 2026-09-21T19:29:25Z
+44 2026-09-21T13:42:00Z
+45 2026-09-22T08:00:00Z
+46 2026-09-22T12:00:00Z
+47 2026-09-22T12:00:00Z
+48 2026-09-21T21:04:00Z
+49 2026-09-22T11:38:55Z
+                                                                                                                                                                                                                        content
+1        Persona games have always had awkward relationships with queerness, with quite a few games in the series awkwardly touching on it (or flat-out making fun of it) without ever fully committing to it as… [+5062 chars]
+2        From a YouGov Sept. 4-8 survey: Thus, there's &lt;ul&gt; &lt;li&gt;a 10-point gender gap, with women being less likely to vote guilty;&lt;/li&gt; &lt;li&gt;a 4-point gap between Hispanics and whites, with whites being less … [+1798 chars]
+3        Workplace harassment doesn’t usually show up all guns blazing. It creeps in through weird “compliments,” inappropriate jokes, and tiny tests of your boundaries — until you’re sitting at your desk won… [+6323 chars]
+4      Salt harvesters in Gujarat, India, often have to work through extreme heatwaves.\r\nThe first time I began to understand climate loss as a mental-health issue was not while reading a report or attendin… [+3441 chars]
+5    Credit: Getty\r\nWitney Carson is expecting her third child with her husband, Carson McAllister. \r\nThe 32-year-old Dancing with the Stars pro dancer revealed back in August that she was pregnant and co… [+1633 chars]
+6      The Vermont teachers union formally recognizes students’ right to play sports based on gender identity, rather than biological sex.\r\nThe National Education Association Vermont chapter also asserts th… [+3862 chars]
+7        New York City plans to relocate inmates from Rikers Island into four jails built from the ground up in Queens, Brooklyn, Manhattan and the Bronx. Here, Dezeen looks at the architecture of each projec… [+7344 chars]
+8      A Cambridge college has sparked a row after replacing gender symbols on one of its toilets with signs reading 'cubicles' and 'cubicles/ urinals'.\r\nThe Equality and Human Rights Commission's new code … [+4774 chars]
+9      Stanford used artificial intelligence to swap a students race and gender and make other students appear more attractive in a promotional banner, according to a conservative campus newspaper.\r\nThe all… [+2513 chars]
+10    You keep using that function. I do not think it does what you think it does\r\nAs longtime readers of this blog will no doubt be aware, I am a tidyverse girl. As deeply as I adore the R programming lan… [+37367 chars]
+11       One of India’s most famous insurgents, Phoolan Devi has a fascinating story, one slice of which forms the basis of Richie Mehta’s “Phoolan.” Based partially on Devi’s autobiography “I, Phoolan,” Meht… [+4318 chars]
+12       A demonstration in Amsterdam on Aug. 15, 2026, the fifth anniversary of the Taliban’s capture of Kabul to demand the Netherlands and the European Union stop legitimizing the Taliban and prioritize th… [+5298 chars]
+13       Journalists for Christ International Outreach, Nigeria, has unveiled a youth-focused factsheet designed to help young people recognise and safely respond to misogyny and technology-facilitated gender… [+2574 chars]
+14       I think when anything like this is done to a student at school without the parents’ knowledge, people need to be prosecuted.Trump Administration Investigates Massachusetts School District for Alleged… [+2729 chars]
+15     The mother of a teenage girl has lodged a formal complaint with authorities after a transgender student was placed in a girls' cabin during a school camp in Victoria.\r\nThe transgender student, who is… [+2709 chars]
+16   (Photo: Getty/iStock)\r\nTeenagers in Britain have been ranked the lowest for life satisfaction in a survey of 29 European countries for the second time in a row.\r\nThe survey showed that girls and thos… [+1893 chars]
+17      The university I lead is more than four centuries old and has seen political orders rise and fall. I have not, but I work each day in an institution that remembers those changes in its archives, stat… [+11343 chars]
+18    This piece was published in coordination with The Washington Post.\r\nThe madness unfolded in a familiar pattern: Ellen FitzGerald would wake in the dead of night to nurse her baby for about a half hou… [+25318 chars]
+19       South African police said Monday they had arrested three people over the killing of one of nine women found dead in a neighborhood east of Johannesburg in a series of murders that have alarmed the na… [+4050 chars]
+20   Gender balance in Swedish parliament improves slightly after final vote count, Volvo Cars gets a new CEO, and more news from Sweden on Monday.\r\n Final vote count complete \r\nThe final vote count for t… [+6508 chars]
+21      During the meeting, Trump had repeatedly complained that the NIH hadnt done more to crack down on Harvard University and other Ivy League schools, The New York Times reported Sunday. \r\nThe meeting re… [+840 chars]
+22       The internet already knows what to do with the news that Meryl Streep will voice Aslan in Greta Gerwigs forthcoming Narnia: The Magicians Nephew: Get angry. It fits the logic of rage-bait: All public… [+6450 chars]
+23     The 36-year-old Congresswoman said she’s not basing her decisions on “deference.” Screenshot\r\nRep. Alexandria Ocasio-Cortez (D-NY) says any decisions she makes about her political future won’t be dec… [+3830 chars]
+24     Millions of Aussies are hoping their superannuation savings will be enough to fund a comfortable retirement, but many may be falling short of the mark.\r\nHaving enough superannuation can make a signif… [+3353 chars]
+25     A musician who identified as non-binary raped his date after they met on Bumble, a court has heard.&nbsp;\r\nSab Cox, a biological male, allegedly attacked the woman, a biological female, as they celebrated… [+3410 chars]
+26   Placards belonging to PauseAI activists on the ground near Downing Street on Sept. 16, 2026, in London. (Dan Kitwood / Getty Images)\r\nOriginally published by The Conversation.\r\nMany people will learn… [+5982 chars]
+27       JOHANNESBURG: South African police said on Monday (Sep 21) they had arrested three people over the killing of one of nine women found dead in a neighbourhood east of Johannesburg in a series of murde… [+1272 chars]
+28        Thousands attended a "Ne'ila" prayer service organized by the Rosh Yehudi organization in Tel Aviv's "Meir Park," and many others participated in the prayer services throughout Yom Kippur (the Day of… [+745 chars]
+29       The discovery of several womens bodies on the outskirts of South Africas commercial capital, Johannesburg, has caused fear, anxiety and outrage across the country. All the women were found naked or p… [+2072 chars]
+30     A group of House Republican lawmakers sent a letter to the Women’s National Basketball Association on Friday, demanding that the league define what a woman is.\r\nThe letter, drafted by Rep. Marlin Stu… [+2136 chars]
+31     This story was originally reported by Grace Panetta of The 19th. Meet Grace and read more of their reporting on gender, politics and policy.\r\nAs Republicans gathered in Dallas, Texas for their pre-mi… [+9840 chars]
+32     Is 180 Pounds Overweight for a 13-Year-Old? Understanding Healthy Weight in Adolescence\r\nWhether 180 pounds is overweight for a 13-year-old depends significantly on their height, gender, and overall … [+9532 chars]
+33   EVERY woman is watching for the classic red flags: controlling, rude to waiters, below 5ft 9ins. But if he owns vinyl of any of these, drop him immediately:&nbsp;\r\nIron Maiden\r\nImmaturity doesnt always me… [+2055 chars]
+34       The rarest puppy to get is generally considered one of a rare breed with a very low birth rate, especially when combined with specific desired traits such as color, gender, or pedigree. Several facto… [+9710 chars]
+35      Massachusetts School District Investigated Over Alleged Secret 'Gender Transition'\r\nAuthored by Naveen Athrappully via The Epoch Times,The Department of Education has announced that it is investigati… [+140 chars]
+36     Barbie was an undeniable hit, raking in $US1.45 billion ($2.03 billion) at the worldwide box office.\r\nAvatar: The Way of Water grossed more than $US2.3 billion ($2.85 billion) globally and is the thi… [+3771 chars]
+37 Can a student sell a screenplay?\r\nHeck yes!\r\nWe've covered Ron Mita before for his screenwriting advice, like how often you should "feed" the audience\r\n and what ideas writers should really be concer… [+5641 chars]
+38     Daily Caller News Foundation co-founder Tucker Carlson disputed reports Monday that he endorsed Democratic Michigan Senate candidate Abdul El-Sayed. \r\nCorporate media claimed that Carlson endorsed El… [+2473 chars]
+39  Sen. Susan Collins during a Senate Health, Education, Labor, and Pensions Committee confirmation hearing in Washington, DC, on September 16, 2026. | Daniel Heuer/Bloomberg via Getty Images\r\n\n\nNationa… [+17196 chars]
+40       Following documented mosquito larvae infestation in Abia State, the state Ministry of Health, in collaboration with the National Malaria Elimination Programme, will commence larvae source management … [+3595 chars]
+41   (Photo: Getty/iStock)\r\nElected representatives in Northern Ireland have warned that a proposed ban on conversion therapy has many flaws and is potentially dangerous.\r\nBans on supposedly abusive conve… [+2135 chars]
+42       At least six major hospitals have agreed to refuse gender-affirming hormones and surgery for transgender young people and agreed instead to make payments to the federal government for patients who wa… [+4740 chars]
+43     Follow Us On Social Media\r\nUS Completes Iraq Base Handover After 23 Years; Troops Relocate To Jordan | ReportNot Banning: JD Vances Big Admission After Media Outlets Sue Trump; MS NOW, Politico &amp;amp;… [+2752 chars]
+44     On Thursday, police in South Africa found the body of Dineo M. stabbed, beaten and partially naked in Ekurhuleni, a municipality on the outskirts of Johannesburg, South Africa's largest city.\r\nThe 38… [+4469 chars]
+45    Tender Loving Care (Mike Leigh, 2026). Courtesy of Joseph Lynn.\r\nMidway through the Toronto International Film Festival (TIFF), Canadian prime minister Mark Carney hosted the Canadian Investment Summ… [+25845 chars]
+46   Global Affairs Canada\r\nSeptember 22, 2026 - New York City, New York - Global Affairs Canada\r\nThe Honourable Anita Anand, Minister of Foreign Affairs, met with Raina Forbin, Haiti's Minister of Foreig… [+1368 chars]
+47     General Assembly coverage\r\n22 September 2026 - Humanity faces four defining "tests of power" - around war or peace, inequality, climate change and AI - that will determine whether the world moves tow… [+5959 chars]
+48     MINISTER FOR FOREIGN Affairs Helen McEntee has hit out at the EU for its decision to welcome a Taliban delegation to Brussels earlier this year, saying it should not have happened.\r\nSpeaking alongsid… [+3749 chars]
+49       For decades, the Education Department has perpetrated massive wrongs within the education system, while costing trillions of dollars. The strategic appointment of Ernie Trakas as the departments seni… [+6566 chars]</code></pre>
+</div>
+</div>
+<section id="task2-eda" class="level3">
+<h3 class="anchored" data-anchor-id="task2-eda">Task2 EDA</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read data from csv </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.1     ✔ stringr   1.5.2
+✔ ggplot2   4.0.0     ✔ tibble    3.3.0
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.1.0     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter()  masks stats::filter()
+✖ purrr::flatten() masks jsonlite::flatten()
+✖ dplyr::lag()     masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rocoaster <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://www4.stat.ncsu.edu/online/datasets/635USrollercoasters.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 635 Columns: 21
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (12): Coaster, Park, City, State, Census Region, AgeGroup, Scale, Type, ...
+dbl  (9): Year Opened, TopSpeed, MaxHeight, Drop, Length, Duration, # of Inv...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># basic EDA</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># compact structure </span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(rocoaster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 635
+Columns: 21
+$ Coaster           &lt;chr&gt; "Adrenaline Peak", "Adventure Express", "Afterburn",…
+$ Park              &lt;chr&gt; "Oaks Amusement Park", "Kings Island", "Carowinds", …
+$ City              &lt;chr&gt; "Portland", "Mason", "Charlotte", "Athol", "Tampa", …
+$ State             &lt;chr&gt; "Oregon", "Ohio", "North Carolina", "Idaho", "Florid…
+$ `Census Region`   &lt;chr&gt; "West", "Midwest", "South", "West", "South", "South"…
+$ `Year Opened`     &lt;dbl&gt; 2018, 1991, 1999, 2008, 2010, 1997, 1998, 1981, 2008…
+$ AgeGroup          &lt;chr&gt; "3:Newest", "2:Recent", "2:Recent", "3:Newest", "3:N…
+$ TopSpeed          &lt;dbl&gt; 45.0, 35.0, 62.0, 65.6, 22.0, 67.0, 35.0, 66.0, 48.0…
+$ MaxHeight         &lt;dbl&gt; 72.0, 63.0, 113.0, 191.6, 25.0, 195.0, 64.0, 127.0, …
+$ Scale             &lt;chr&gt; "Extreme", "Thrill", "Extreme", "Extreme", "Family",…
+$ Type              &lt;chr&gt; "Steel", "Steel", "Steel", "Steel", "Steel", "Steel"…
+$ Design            &lt;chr&gt; "Sit Down", "Sit Down", "Inverted", "Inverted", "Sit…
+$ Drop              &lt;dbl&gt; 70.0, 47.0, 110.0, 177.0, 22.5, 170.0, 20.0, 147.0, …
+$ Length            &lt;dbl&gt; 1050.0, 2963.0, 2956.0, 1204.0, 628.0, 3828.0, 1490.…
+$ Duration          &lt;dbl&gt; 66, 140, 167, 92, 47, 190, 100, 143, 110, 110, 180, …
+$ `Inversions?`     &lt;chr&gt; "Yes", "No", "Yes", "Yes", "No", "Yes", "No", "No", …
+$ `# of Inversions` &lt;dbl&gt; 3, 0, 6, 3, 0, 6, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 7…
+$ Make              &lt;chr&gt; "Gerstlauer Amusement Rides GmbH", "Arrow Dynamics",…
+$ Latitude          &lt;dbl&gt; 45.5079, 39.3601, 35.2600, 47.9224, 27.9961, 37.3105…
+$ Longitude         &lt;dbl&gt; -122.6908, -84.3099, -80.8042, -116.6860, -82.5820, …
+$ Boundary          &lt;chr&gt; "{\"type\":\"Feature\",\"properties\":{\"CENSUSAREA\…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(rocoaster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Coaster              Park               City              State          
+ Length:635         Length:635         Length:635         Length:635        
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+ Census Region       Year Opened     AgeGroup            TopSpeed     
+ Length:635         Min.   :1920   Length:635         Min.   :  6.00  
+ Class :character   1st Qu.:1995   Class :character   1st Qu.: 28.50  
+ Mode  :character   Median :2002   Mode  :character   Median : 45.00  
+                    Mean   :1999                      Mean   : 42.24  
+                    3rd Qu.:2013                      3rd Qu.: 55.00  
+                    Max.   :2020                      Max.   :128.00  
+                                                      NA's   :74      
+   MaxHeight        Scale               Type              Design         
+ Min.   :  5.0   Length:635         Length:635         Length:635        
+ 1st Qu.: 28.0   Class :character   Class :character   Class :character  
+ Median : 64.3   Mode  :character   Mode  :character   Mode  :character  
+ Mean   : 76.8                                                           
+ 3rd Qu.:109.0                                                           
+ Max.   :456.0                                                           
+ NA's   :8                                                               
+      Drop            Length        Duration   Inversions?       
+ Min.   :  0.00   Min.   :  48   Min.   : 20   Length:635        
+ 1st Qu.: 25.00   1st Qu.: 900   1st Qu.: 70   Class :character  
+ Median : 70.00   Median :1490   Median :101   Mode  :character  
+ Mean   : 77.18   Mean   :1938   Mean   :106                     
+ 3rd Qu.:108.50   3rd Qu.:2800   3rd Qu.:130                     
+ Max.   :418.00   Max.   :7359   Max.   :540                     
+ NA's   :128      NA's   :33     NA's   :66                      
+ # of Inversions      Make              Latitude       Longitude      
+ Min.   :0.0000   Length:635         Min.   :26.55   Min.   :-122.94  
+ 1st Qu.:0.0000   Class :character   1st Qu.:34.47   1st Qu.: -97.15  
+ Median :0.0000   Mode  :character   Median :38.51   Median : -84.31  
+ Mean   :0.9213                      Mean   :37.69   Mean   : -89.46  
+ 3rd Qu.:1.0000                      3rd Qu.:40.97   3rd Qu.: -77.46  
+ Max.   :8.0000                      Max.   :47.92   Max.   : -70.39  
+                                                                      
+   Boundary        
+ Length:635        
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+                   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(rocoaster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 21
+  Coaster      Park  City  State `Census Region` `Year Opened` AgeGroup TopSpeed
+  &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+1 Adrenaline … Oaks… Port… Oreg… West                     2018 3:Newest     45  
+2 Adventure E… King… Mason Ohio  Midwest                  1991 2:Recent     35  
+3 Afterburn    Caro… Char… Nort… South                    1999 2:Recent     62  
+4 Aftershock   Silv… Athol Idaho West                     2008 3:Newest     65.6
+5 Air Grover   Busc… Tampa Flor… South                    2010 3:Newest     22  
+6 Alpengeist   Busc… Will… Virg… South                    1997 2:Recent     67  
+# ℹ 13 more variables: MaxHeight &lt;dbl&gt;, Scale &lt;chr&gt;, Type &lt;chr&gt;, Design &lt;chr&gt;,
+#   Drop &lt;dbl&gt;, Length &lt;dbl&gt;, Duration &lt;dbl&gt;, `Inversions?` &lt;chr&gt;,
+#   `# of Inversions` &lt;dbl&gt;, Make &lt;chr&gt;, Latitude &lt;dbl&gt;, Longitude &lt;dbl&gt;,
+#   Boundary &lt;chr&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert type of variables into factor when needed </span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>rocoaster <span class="ot">&lt;-</span> rocoaster <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span> (</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(State, <span class="st">`</span><span class="at">Census Region</span><span class="st">`</span>, AgeGroup, Scale, Type, Design, <span class="st">`</span><span class="at">Inversions?</span><span class="st">`</span> ),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>      as.factor</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(rocoaster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 635
+Columns: 21
+$ Coaster           &lt;chr&gt; "Adrenaline Peak", "Adventure Express", "Afterburn",…
+$ Park              &lt;chr&gt; "Oaks Amusement Park", "Kings Island", "Carowinds", …
+$ City              &lt;chr&gt; "Portland", "Mason", "Charlotte", "Athol", "Tampa", …
+$ State             &lt;fct&gt; Oregon, Ohio, North Carolina, Idaho, Florida, Virgin…
+$ `Census Region`   &lt;fct&gt; West, Midwest, South, West, South, South, Northeast,…
+$ `Year Opened`     &lt;dbl&gt; 2018, 1991, 1999, 2008, 2010, 1997, 1998, 1981, 2008…
+$ AgeGroup          &lt;fct&gt; 3:Newest, 2:Recent, 2:Recent, 3:Newest, 3:Newest, 2:…
+$ TopSpeed          &lt;dbl&gt; 45.0, 35.0, 62.0, 65.6, 22.0, 67.0, 35.0, 66.0, 48.0…
+$ MaxHeight         &lt;dbl&gt; 72.0, 63.0, 113.0, 191.6, 25.0, 195.0, 64.0, 127.0, …
+$ Scale             &lt;fct&gt; Extreme, Thrill, Extreme, Extreme, Family, Extreme, …
+$ Type              &lt;fct&gt; Steel, Steel, Steel, Steel, Steel, Steel, Steel, Woo…
+$ Design            &lt;fct&gt; Sit Down, Sit Down, Inverted, Inverted, Sit Down, In…
+$ Drop              &lt;dbl&gt; 70.0, 47.0, 110.0, 177.0, 22.5, 170.0, 20.0, 147.0, …
+$ Length            &lt;dbl&gt; 1050.0, 2963.0, 2956.0, 1204.0, 628.0, 3828.0, 1490.…
+$ Duration          &lt;dbl&gt; 66, 140, 167, 92, 47, 190, 100, 143, 110, 110, 180, …
+$ `Inversions?`     &lt;fct&gt; Yes, No, Yes, Yes, No, Yes, No, No, No, Yes, No, No,…
+$ `# of Inversions` &lt;dbl&gt; 3, 0, 6, 3, 0, 6, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 7…
+$ Make              &lt;chr&gt; "Gerstlauer Amusement Rides GmbH", "Arrow Dynamics",…
+$ Latitude          &lt;dbl&gt; 45.5079, 39.3601, 35.2600, 47.9224, 27.9961, 37.3105…
+$ Longitude         &lt;dbl&gt; -122.6908, -84.3099, -80.8042, -116.6860, -82.5820, …
+$ Boundary          &lt;chr&gt; "{\"type\":\"Feature\",\"properties\":{\"CENSUSAREA\…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(rocoaster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Coaster              Park               City                    State    
+ Length:635         Length:635         Length:635         California  : 75  
+ Class :character   Class :character   Class :character   Pennsylvania: 51  
+ Mode  :character   Mode  :character   Mode  :character   Florida     : 48  
+                                                          New York    : 38  
+                                                          Texas       : 38  
+                                                          New Jersey  : 37  
+                                                          (Other)     :348  
+   Census Region  Year Opened       AgeGroup      TopSpeed        MaxHeight    
+ Midwest  :134   Min.   :1920   1:Older : 69   Min.   :  6.00   Min.   :  5.0  
+ Northeast:156   1st Qu.:1995   2:Recent:190   1st Qu.: 28.50   1st Qu.: 28.0  
+ South    :223   Median :2002   3:Newest:376   Median : 45.00   Median : 64.3  
+ West     :122   Mean   :1999                  Mean   : 42.24   Mean   : 76.8  
+                 3rd Qu.:2013                  3rd Qu.: 55.00   3rd Qu.:109.0  
+                 Max.   :2020                  Max.   :128.00   Max.   :456.0  
+                                               NA's   :74       NA's   :8      
+     Scale        Type           Design         Drop            Length    
+ Extreme:269   Steel:530   Bobsled  :  4   Min.   :  0.00   Min.   :  48  
+ Family :178   Wood :105   Flying   :  9   1st Qu.: 25.00   1st Qu.: 900  
+ Kiddie : 28               Inverted : 42   Median : 70.00   Median :1490  
+ Thrill :160               Sit Down :560   Mean   : 77.18   Mean   :1938  
+                           Stand Up :  4   3rd Qu.:108.50   3rd Qu.:2800  
+                           Suspended:  7   Max.   :418.00   Max.   :7359  
+                           Wing     :  9   NA's   :128      NA's   :33    
+    Duration   Inversions? # of Inversions      Make              Latitude    
+ Min.   : 20   No :465     Min.   :0.0000   Length:635         Min.   :26.55  
+ 1st Qu.: 70   Yes:170     1st Qu.:0.0000   Class :character   1st Qu.:34.47  
+ Median :101               Median :0.0000   Mode  :character   Median :38.51  
+ Mean   :106               Mean   :0.9213                      Mean   :37.69  
+ 3rd Qu.:130               3rd Qu.:1.0000                      3rd Qu.:40.97  
+ Max.   :540               Max.   :8.0000                      Max.   :47.92  
+ NA's   :66                                                                   
+   Longitude         Boundary        
+ Min.   :-122.94   Length:635        
+ 1st Qu.: -97.15   Class :character  
+ Median : -84.31   Mode  :character  
+ Mean   : -89.46                     
+ 3rd Qu.: -77.46                     
+ Max.   : -70.39                     
+                                     </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#missing values examination</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(rocoaster))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Coaster            Park            City           State   Census Region 
+              0               0               0               0               0 
+    Year Opened        AgeGroup        TopSpeed       MaxHeight           Scale 
+              0               0              74               8               0 
+           Type          Design            Drop          Length        Duration 
+              0               0             128              33              66 
+    Inversions? # of Inversions            Make        Latitude       Longitude 
+              0               0              36               0               0 
+       Boundary 
+              0 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>rocoaster <span class="sc">|&gt;</span> <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">mean</span>(<span class="fu">is.na</span>(.x))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 21
+  Coaster  Park  City State `Census Region` `Year Opened` AgeGroup TopSpeed
+    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1       0     0     0     0               0             0        0    0.117
+# ℹ 13 more variables: MaxHeight &lt;dbl&gt;, Scale &lt;dbl&gt;, Type &lt;dbl&gt;, Design &lt;dbl&gt;,
+#   Drop &lt;dbl&gt;, Length &lt;dbl&gt;, Duration &lt;dbl&gt;, `Inversions?` &lt;dbl&gt;,
+#   `# of Inversions` &lt;dbl&gt;, Make &lt;dbl&gt;, Latitude &lt;dbl&gt;, Longitude &lt;dbl&gt;,
+#   Boundary &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Missing values were found in six variables below: 11.7% values of Topseed missing (n = 74), 1.3% values of MaxHight missing (n = 8), 20.16% values of Drop missing (n = 128); 5.2% values in Length missing (n = 33), 10.4% values in Duration missing (n=66), 5.7% values in Make missing (n = 36). Other variables don’t have missing values.</p>
+</section>
+</section>
+<section id="task-3-categorical-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="task-3-categorical-analysis">Task 3 Categorical analysis</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(rocoaster<span class="sc">$</span>AgeGroup)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ 1:Older 2:Recent 3:Newest 
+      69      190      376 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(rocoaster<span class="sc">$</span>AgeGroup, rocoaster<span class="sc">$</span>Scale)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          
+           Extreme Family Kiddie Thrill
+  1:Older       17     13      5     34
+  2:Recent     105     40      9     36
+  3:Newest     147    125     14     90</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(rocoaster<span class="sc">$</span>AgeGroup, rocoaster<span class="sc">$</span>Scale, rocoaster<span class="sc">$</span>Type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>, ,  = Steel
+
+          
+           Extreme Family Kiddie Thrill
+  1:Older        8      6      4     18
+  2:Recent      82     37      9     27
+  3:Newest     126    120     14     79
+
+, ,  = Wood
+
+          
+           Extreme Family Kiddie Thrill
+  1:Older        9      7      1     16
+  2:Recent      23      3      0      9
+  3:Newest      21      5      0     11</code></pre>
+</div>
+</div>
+<p>69 in one-way table means There are 69 roller coasters are older; “90” in two-way table means there are 90 thriller-type roller coasters are newest. “37” in three ways table means there are 37 family-type roller coaster made of stell are recently built.</p>
+<p>Conditional two-way table</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ro2 <span class="ot">&lt;-</span> rocoaster <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Steel"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ro2<span class="sc">$</span>AgeGroup, ro2<span class="sc">$</span>Scale)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          
+           Extreme Family Kiddie Thrill
+  1:Older        8      6      4     18
+  2:Recent      82     37      9     27
+  3:Newest     126    120     14     79</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>tab1 <span class="ot">&lt;-</span> <span class="fu">table</span>(rocoaster<span class="sc">$</span>AgeGroup, rocoaster<span class="sc">$</span>Scale, rocoaster<span class="sc">$</span>Type)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>tab2 <span class="ot">&lt;-</span> tab1[,,<span class="st">"Steel"</span>]</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>tab2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          
+           Extreme Family Kiddie Thrill
+  1:Older        8      6      4     18
+  2:Recent      82     37      9     27
+  3:Newest     126    120     14     79</code></pre>
+</div>
+</div>
+<p>Two-way contingency table and use pivot_wider</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>table2 <span class="ot">&lt;-</span> rocoaster <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span> (AgeGroup,Scale) <span class="sc">|&gt;</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span> (<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> AgeGroup,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> n,</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="dv">0</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>table2 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 4
+  Scale   `1:Older` `2:Recent` `3:Newest`
+  &lt;fct&gt;       &lt;int&gt;      &lt;int&gt;      &lt;int&gt;
+1 Extreme        17        105        147
+2 Family         13         40        125
+3 Kiddie          5          9         14
+4 Thrill         34         36         90</code></pre>
+</div>
+</div>
+<p>Stacked bar graph and side-by-side bae gragh</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Stacked bar plot</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rocoaster, <span class="fu">aes</span>(<span class="at">x=</span>Scale, <span class="at">fill =</span> AgeGroup) ) <span class="sc">+</span> </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Stacked bar graph the relationship between rollercoaster's Scale and age"</span>,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Scale"</span>,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"count"</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Age Group"</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Zuohw5_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Side-by-side </span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(rocoaster, <span class="fu">aes</span>(<span class="at">x=</span>Scale, <span class="at">fill =</span> AgeGroup) ) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span> </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Side by side bar graph of the relationship between rollercoaster's Scale and age"</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Scale"</span>,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"count"</span>,</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Age Group"</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Zuohw5_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
