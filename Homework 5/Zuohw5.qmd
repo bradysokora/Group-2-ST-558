@@ -1,5 +1,5 @@
 ---
-title: "ZUOHW4"
+title: "ZUOHW5"
 format: html
 ---
 
@@ -11,18 +11,42 @@ format: html
 library(httr)
 library(jsonlite)
 # Store the API as an environment variable and reference it when access data.
-  Sys.setenv(API_KEY = "aaa")
+  Sys.setenv(API_KEY = "9e08bf550c3649eda8f016634bafce69")
  news <- GET("https://newsapi.org/v2/everything?q=happy&from=2026-08-30&language=en&pageSize=50",
       query = list(apiKey=Sys.getenv("API_KEY")))
-txt <- content(news, as = "text", encoding = "UTF-8")
+ 
+### parse the return
+ txt <- content(news, as = "text", encoding = "UTF-8")
+
 result <- fromJSON(txt, flatten = TRUE)
 result 
 
 ```
+
+```{r}
+## create a function
+
+reqnews <- function(title, period, apikey){
+  news <- GET("https://newsapi.org/v2/everything",            query = list(q= title, 
+                                                                                  `from` = period, 
+                                                                                  language ="en", 
+                                                                                  pageSize = 50,
+                                                                                  apiKey=apikey))
+  txt <- content(news, as = "text", encoding = "UTF-8")
+result <- fromJSON(txt, flatten = TRUE)
+result
+}
+
+## try this function for the first time
+reqnews("apple", "2026-09-03", Sys.getenv("API_KEY"))
+## try this function for the second time 
+reqnews("gender", "2026-09-21", Sys.getenv("API_KEY"))
+```
 ### Task2 EDA
 ```{r}
 # read data from csv 
-rocoaster <- read_delim("https://www4.stat.ncsu.edu/online/datasets/635USrollercoasters.csv", delim = ",")
+library(tidyverse)
+rocoaster <- read_csv("https://www4.stat.ncsu.edu/online/datasets/635USrollercoasters.csv")
 
 # basic EDA
 library(tidyverse)
@@ -66,10 +90,13 @@ table(rocoaster$AgeGroup, rocoaster$Scale, rocoaster$Type)
 
 
 ```
-69 in one-way table means There are 69 rollercoaster are older; 90 in two-way table means there are 90 roller coaster are Newest but belong to thrill type. 37 in three ways table means there are 37 roller coaster made of stell are Recent built and belong to family type. 
+69 in one-way table means There are 69 roller coasters are older; "90" in two-way table means there are 90 thriller-type roller coasters are newest. "37" in three ways table means there are 37 family-type roller coaster made of stell are recently built. 
 
 
+conditional two-way table
 ```{r}
+
+
 ro2 <- rocoaster |>
   filter(Type == "Steel")
 
@@ -83,8 +110,24 @@ tab2
 
 ```
 
+two-way contingency table and use pivot_wider 
+
+```{r pivot_wider}
+library(dplyr)
+
+table2 <- rocoaster |>
+  group_by (AgeGroup,Scale) |>
+  summarize (n = n(), .groups = "drop") |>
+  pivot_wider(
+    names_from = AgeGroup,
+    values_from = n,
+    values_fill = 0)
 
 
+table2 
+
+```
+stacked bar graph and side-by-side bae gragh 
 ```{r}
 library(ggplot2)
 # Stacked bar plot
