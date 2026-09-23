@@ -1,0 +1,131 @@
+---
+title: "Mason HW5"
+format: html
+editor: visual
+---
+
+```{r}
+library(httr)
+library(tidyverse)
+library(jsonlite)
+library(ggplot2)
+library(janitor)
+```
+
+## Task 1 - Querying an API and a Tidy-Style Function
+
+Connecting to newsapi.org and grabbing news from the past 30 days about the NFL
+
+```{r}
+url <- "https://newsapi.org/v2/everything?q=nfl&from=2026-08-25&apiKey=654641465c3f469891708ce3b77fb2a0"
+
+nflReturn <- GET(url)
+parsedNFL <- fromJSON(rawToChar(nflReturn$content))
+nflInfo <- as_tibble(parsedNFL)
+```
+
+Creating function to easily query this API
+
+```{r}
+#The function takes in 3 parameters from the user, the topic they are interested in, the time frame, and the users API key
+queryAPI <- function(topic, period, key){
+  url <- paste0("https://newsapi.org/v2/everything?q=", topic, "&from=",
+                period, "&apiKey=", key)
+  ret <- GET(url)
+  parsed <- fromJSON(rawToChar(ret$content))
+  return(as_tibble(parsed))
+}
+```
+
+Testing our function works
+
+```{r}
+news_test_1 <- queryAPI("usa", "2026-08-25", "654641465c3f469891708ce3b77fb2a0")
+
+news_test_2 <- queryAPI("apple", "2026-08-25", "654641465c3f469891708ce3b77fb2a0")
+```
+
+## Task 2 - Summarizing Roller Coaster Data
+
+Reading in roller coaster data and converting necessary variables to factors
+```{r}
+coasters <- read_csv("635USrollercoasters.csv", show_col_types = F) %>%
+  clean_names() %>%
+  mutate(across(c("census_region","scale","type","design","inversions"),
+                as.factor)) %>%
+  mutate(age_group = factor(age_group, 
+                            c("1:Older", "2:Recent", 
+                                         "3:Newest"), 
+                            c("Older", "Recent", "Newest")))
+```
+
+Checking for any missing values
+```{r}
+colSums(is.na(coasters))
+```
+We can see there are missing values for the following variables: top_speed, max_height, drop, length, duration, and make
+
+Creating one-way contingency table
+```{r}
+oneway <- table(coasters$scale)
+oneway
+```
+This one-way contingency table tells us that there are 269 roller coasters with an extreme scale
+
+Creating two-way contingency table
+```{r}
+twoway <- table(coasters$scale, coasters$age_group)
+twoway
+```
+This two-way contingency table tells us that out of the 269 extreme scale coasters, 17 are considered older
+
+Creating three-way contingency table
+```{r}
+threeway <- table(coasters$scale, coasters$age_group, coasters$type)
+threeway
+```
+There are 8 roller coasters that are constructed with steel, considered extreme, and are older
+
+Creating conditional two-way table using three-way table from above
+
+```{r}
+threeway[, , "Steel"]
+```
+Creating conditional two-way table using `filter()`
+
+```{r}
+coasters %>%
+  filter(type == "Steel") %>%
+  tabyl(scale, age_group)
+```
+
+Creating two-way contingency table using `group_by()` and `summarize()`
+
+```{r}
+coasters %>%
+  group_by(scale, age_group) %>%
+  summarize(count = n()) %>%
+  pivot_wider(names_from = age_group, values_from = count)
+```
+
+Creating stacked bar chart
+```{r}
+ggplot(data = coasters |> drop_na(scale, age_group), 
+       aes(x = scale, fill = age_group)) +
+  geom_bar() +
+  labs(title = "Stacked Bar Chart of Coaster's Scale by \nAge of the Coaster", x = "Scale", 
+       y = "# of Coasters", fill = "Age Group") +
+  theme_minimal()
+```
+
+Creating side-by-side bar graph for roller coaster scale and age group
+
+```{r}
+ggplot(data = coasters |> drop_na(scale, age_group), 
+       aes(x = scale, fill = age_group)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Side-by-Side Graph of Coaster's Scale by \nAge of the Coaster", 
+       x = "Scale", 
+       y = "# of Coasters", fill = "Age Group") +
+  theme_minimal()
+```
