@@ -6,23 +6,68 @@ source("helpers.R")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
-  "Add a title panel here!",
+  # Title
+  titlePanel("Correlation Exploration"),
+  
+  # Side Bar
   sidebarLayout(
     sidebarPanel(
+      
+      ### VARIABLE SELECTION ###
       h2("Select Variables to Find Correlation:"),
-      "Put your selectize inputs here!",
-      "Give them internal IDs of corr_x and corr_y.",
-      "Note the vector with these names comes from the helpers.R files. The object is called `numeric_vars`. Make sure you don't assign the same initial value to both inputs!",
-      br(),
-      "Place your radio buttons here! One radio button for each variable we may subset on. Set the internal IDs for these to be hhl_corr, fs_corr, and schl_corr.",
-      "Notice that you can use choiceNames and choiceValues to have different values show vs the values you use internally for comparisons. There are 'internal' values already used in the server file - the first large commented section - so you should set the internal values to match those!",
+      
+      # X-variable Drop Down
+      selectizeInput("corr_x",
+                     "x Variable",
+                     choices = numeric_vars,
+                     selected = "PINCP"),
+      # Y-variable Drop Down
+      selectizeInput("corr_y",
+                     "y Variable",
+                     choices = numeric_vars,
+                     selected = "JWMNP"),
+      
+      
+      ### SUBSET SELECTION ###
+      h2("Choose a subset of the data:"),
+      
+      # Language Button
+      radioButtons("hhl_corr",
+                   "Household Language",
+                   choiceNames = c("All", "English only", "Spanish", "Other"),
+                   choiceValues = c("all", "english", "spanish", "other")),
+      # SNAP Button
+      radioButtons("fs_corr",
+                   "SNAP Recipient",
+                   choiceNames = c("All", "Yes", "No"),
+                   choiceValues = c("all", "yes", "no")),
+      # Education Button
+      radioButtons("schl_corr",
+                   "Educational attainment",
+                   choiceNames = c("All", "High School not Completed",
+                                   "High School or GED", "College Degree"),
+                   choiceValues = c("all", "no_hs", "hs", "college")),
+      
+      
+      ### SAMPLE SIZE SELECTION ###
       h2("Select a Sample Size"),
-      "Put your slider for sample size here. Give this an ID of corr_n.",
+      
+      # Slider for Sample Size
+      sliderInput("corr_n",
+                  "",
+                  min = 20,
+                  max = 500,
+                  value = 20),
       actionButton("corr_sample","Get a Sample!")
     ),
+    
+    
+    # Main Panel
     mainPanel(
-      "Add a plotOutput here for the scatter plot!",
+      # Scatter Plot
+      plotOutput("corr_plot"),
+      
+      # Correlation Panel
       conditionalPanel("input.corr_sample", #only show if a sample has been taken
                        h2("Guess the correlation!"),
                        column(6, 
