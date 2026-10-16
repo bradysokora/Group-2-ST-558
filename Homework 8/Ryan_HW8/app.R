@@ -190,21 +190,18 @@ server <- function(input, output, session) {
     
 
     ####################################################################
+    # Create a renderPlot() object to output a scatter plot
+    output$corr_plot <- renderPlot({
+      # Message prior to sample
+      validate(
+        need(!is.null(sample_corr$corr_data), "Please select your variables, subset, and click the 'Get a Sample!' button.")
+      )
+      # Plot
+      ggplot(sample_corr$corr_data, aes_string(x = isolate(input$corr_x), y = isolate(input$corr_y))) +
+        geom_point()
+    })
 
-
-
-    # #Create a renderPlot() object to output a scatter plot
-    # #Use the code below to validate that data exists, (this goes in the renderPlot and you'll need 
-    # #to install the shinyalert package if you don't have it) and then create the appropriate
-    # #scatter plot
-    #   validate(
-    #     need(!is.null(sample_corr$corr_data), "Please select your variables, subset, and click the 'Get a Sample!' button.")
-    #   )
-    #   ggplot(sample_corr$corr_data, aes_string(x = isolate(input$corr_x), y = isolate(input$corr_y))) +
-    #     geom_point()
-
-
-    #This code does the correlation guessing game! Nothign to change here
+    #This code does the correlation guessing game! Nothing to change here
     observeEvent(input$corr_submit, {
       close <- abs(input$corr_guess - sample_corr$corr_truth) <= .05
       if(close){
