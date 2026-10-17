@@ -1,5 +1,0 @@
----
-title: "BradyHW8"
-format: html
-editor: visual
----
