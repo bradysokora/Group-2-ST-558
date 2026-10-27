@@ -1,0 +1,138 @@
+---
+title: "LoganHW9"
+format: html
+editor: visual
+---
+
+# Libraries
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+# EDA
+
+Reading in the Seoul bike data. The locale needs to be changed in order to properly read in the csv.
+
+```{r}
+bikeData <- read_csv("SeoulBikeData.csv", locale = locale(encoding = "latin1"))
+```
+
+Checking for missing data, there is not any. Also the website that the data is located in states that there is not any missing values. Checking in r does no harm though.
+
+```{r}
+sapply(bikeData, function(x) sum(is.na(x)))
+```
+
+After that we can look at the data itself, make sure everything looks good.
+
+```{r}
+bikeData %>% select(where(is.numeric)) %>% summary()
+```
+
+```{r}
+bikeData %>% select(where(is.character)) %>% select(-Date) %>% unique()
+```
+
+Making Date a lubridate date and making certain variables factors, cleaning up the date
+```{r}
+bikeDataClean <- bikeData %>% mutate(Date = dmy(Date)) %>%
+  mutate(across(where(is.character), as.factor)) %>%
+  clean_names() %>%
+  # Dont like some of the names
+  rename("temperature" = "temperature_c",
+         "wind_speed" = "wind_speed_m_s",
+         "visibility" = "visibility_10m",
+         "dew_point_temperature" = "dew_point_temperature_c",
+         "solar_radiation" = "solar_radiation_mj_m2",
+         "rainfall" = "rainfall_mm",
+         "snowfall" = "snowfall_cm")
+
+```
+
+Some more EDA with a function that examines a numerical variable over a group .Examining rentals over the categorical variables, holiday and functioning day see sharp decrease.
+```{r}
+summary_cat <- function(df, group_var, num_var) {
+  df %>%
+    group_by({{group_var}}) %>%
+    summarize(
+      n = n(),
+      mean = mean({{num_var}}, na.rm = TRUE),
+      sd = sd({{num_var}}, na.rm = TRUE),
+      median = median({{num_var}}, na.rm = TRUE),
+      min = min({{num_var}}, na.rm = TRUE),
+      max = max({{num_var}}, na.rm = TRUE),
+      .groups = "drop"
+    )
+}
+
+summary_cat(bikeDataClean, seasons, rented_bike_count)
+summary_cat(bikeDataClean, holiday, rented_bike_count)
+summary_cat(bikeDataClean, functioning_day, rented_bike_count)
+```
+Making another dataset for future use (based on specifications given in assignment)
+
+```{r}
+bikeDataFinal <- bikeDataClean %>%
+  group_by(date, seasons, holiday) %>%
+  summarize(
+    # Totals for bikes and precip
+    total_rented_bike_count = sum(rented_bike_count, na.rm = TRUE),
+    total_rainfall = sum(rainfall, na.rm = TRUE),
+    total_snowfall = sum(snowfall, na.rm = TRUE),
+    
+    # Means for weather
+    across(c(temperature,
+        humidity_percent,
+        wind_speed,
+        visibility,
+        dew_point_temperature,
+        solar_radiation,
+      ),
+      ~ mean(.x, na.rm = TRUE),
+      .names = "mean_{.col}"
+    ),
+    .groups = "drop"
+  )
+```
+
+Looking at summaries of new dataset
+
+```{r}
+summary(bikeDataFinal)
+```
+
+Lets examine this final dataset more rigorously than before
+
+## Plots
+```{r}
+ggplot(bikeDataFinal, aes())
+```
+
+
+## Correlation between some numerical vars
+
+Examining some possible relationships between bike count and weather stats
+
+```{r}
+# Cor of bikes and rainfall, maybe would be strong as biking in rain may not be good
+cor(bikeDataFinal$total_rented_bike_count, bikeDataFinal$total_rainfall)
+
+# Cor of bikes and snowfall, snow is worse rain
+cor(bikeDataFinal$total_rented_bike_count, bikeDataFinal$total_snowfall)
+
+# Cor of bikes and temp, dont want to bike when it gets hot
+cor(bikeDataFinal$total_rented_bike_count, bikeDataFinal$mean_temperature)
+
+# Cor of bikes and wind, does wind affect biking
+cor(bikeDataFinal$total_rented_bike_count, bikeDataFinal$mean_wind_speed)
+
+# Cor of bikes and solar radiation, bike more on a sunny day
+cor(bikeDataFinal$total_rented_bike_count, bikeDataFinal$mean_solar_radiation)
+```
+
+
+
+# Splitting for C-V in MLR
+
+
