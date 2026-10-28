@@ -5,9 +5,11 @@ editor: visual
 ---
 
 # Libraries
+
 ```{r}
 library(tidyverse)
 library(janitor)
+library(tidymodels)
 ```
 
 # EDA
@@ -35,6 +37,7 @@ bikeData %>% select(where(is.character)) %>% select(-Date) %>% unique()
 ```
 
 Making Date a lubridate date and making certain variables factors, cleaning up the date
+
 ```{r}
 bikeDataClean <- bikeData %>% mutate(Date = dmy(Date)) %>%
   mutate(across(where(is.character), as.factor)) %>%
@@ -51,6 +54,7 @@ bikeDataClean <- bikeData %>% mutate(Date = dmy(Date)) %>%
 ```
 
 Some more EDA with a function that examines a numerical variable over a group .Examining rentals over the categorical variables, holiday and functioning day see sharp decrease.
+
 ```{r}
 summary_cat <- function(df, group_var, num_var) {
   df %>%
@@ -70,6 +74,7 @@ summary_cat(bikeDataClean, seasons, rented_bike_count)
 summary_cat(bikeDataClean, holiday, rented_bike_count)
 summary_cat(bikeDataClean, functioning_day, rented_bike_count)
 ```
+
 Making another dataset for future use (based on specifications given in assignment)
 
 ```{r}
@@ -102,13 +107,34 @@ Looking at summaries of new dataset
 summary(bikeDataFinal)
 ```
 
-Lets examine this final dataset more rigorously than before
-
-## Plots
 ```{r}
-ggplot(bikeDataFinal, aes())
+summary_cat(bikeDataFinal, seasons, total_rented_bike_count)
 ```
 
+
+Lets examine this final dataset more rigorously than before with some graphs and correlations.
+
+## Plots
+
+```{r}
+ggplot(bikeDataFinal, aes(x = mean_visibility, y = total_rented_bike_count, color = seasons)) + geom_point() +
+  theme_minimal()
+```
+
+```{r}
+ggplot(bikeDataFinal, aes(x = total_rented_bike_count, y = holiday)) + geom_boxplot() +
+  theme_minimal()
+```
+
+```{r}
+ggplot(bikeDataFinal, aes(x = total_rented_bike_count, fill = seasons)) + geom_histogram(binwidth = 1000) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(bikeDataFinal, aes(x = mean_temperature)) + geom_density() +
+  theme_minimal()
+```
 
 ## Correlation between some numerical vars
 
@@ -131,8 +157,104 @@ cor(bikeDataFinal$total_rented_bike_count, bikeDataFinal$mean_wind_speed)
 cor(bikeDataFinal$total_rented_bike_count, bikeDataFinal$mean_solar_radiation)
 ```
 
+A correlation matrix
+
+```{r}
+cor(bikeDataFinal %>% select(where(is.numeric)), use = "complete.obs")
+```
 
 
-# Splitting for C-V in MLR
+# Splitting for MLR, and a bit more data handling
 
+
+```{r}
+set.seed(7530)
+bike_split <- rsample::initial_split(bikeDataFinal, prop = 0.75, strata = seasons)
+bike_train <- training(bike_split)
+bike_test <- testing(bike_split)
+```
+
+Adding weekday and standardizations
+
+```{r}
+num_vars <- c(
+  "total_rainfall",
+  "total_snowfall",
+  "mean_temperature",
+  "mean_humidity_percent",
+  "mean_wind_speed",
+  "mean_visibility",
+  "mean_dew_point_temperature",
+  "mean_solar_radiation"
+)
+
+bike_train_stan <- bike_train %>% mutate(weekday = factor(wday(date)))  %>%
+    mutate(across(
+      all_of(num_vars),
+        function(x) as.numeric(scale(x)), .names = "standardized_{.col}"))
+
+bike_test <- bike_test %>% mutate(weekday = factor(wday(date))) # %>%
+  # mutate(across(
+  #     all_of(num_vars),
+  #     )
+  # )
+```
+
+The models
+
+```{r}
+# these names are kinda long...
+std_names <- bike_train_stan %>%
+  select(starts_with("standardized_")) %>%
+  names()
+
+common_vars <- c("seasons", "holiday", "weekday", std_names)
+
+model1 <- lm(
+  reformulate(common_vars,
+              response = "total_rented_bike_count"),
+  data = bike_train_stan
+)
+
+model2 <- lm(
+  reformulate(
+    c(
+      common_vars,
+      "seasons:holiday",
+      "seasons:standardized_mean_temperature",
+      "standardized_mean_temperature:standardized_total_rainfall"
+    ),
+    response = "total_rented_bike_count"
+  ),
+  data = bike_train_stan
+)
+
+model3 <- lm(
+  reformulate(
+    c(
+      common_vars,
+      "seasons:holiday",
+      "seasons:standardized_mean_temperature",
+      "standardized_mean_temperature:standardized_total_rainfall",
+      "I(standardized_mean_temperature^2)",
+      "I(standardized_mean_humidity_percent^2)"
+    ),
+    response = "total_rented_bike_count"
+  ),
+  data = bike_train_stan
+)
+```
+
+Test set RMSE
+
+```{r}
+# rmse_vec(bike_test_stand$total_rented_bike_count, predict(model1, newdata = bike_test))
+```
+
+Final Model
+
+```{r}
+
+
+```
 
