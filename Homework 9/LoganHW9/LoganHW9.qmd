@@ -111,7 +111,6 @@ summary(bikeDataFinal)
 summary_cat(bikeDataFinal, seasons, total_rented_bike_count)
 ```
 
-
 Lets examine this final dataset more rigorously than before with some graphs and correlations.
 
 ## Plots
@@ -163,9 +162,7 @@ A correlation matrix
 cor(bikeDataFinal %>% select(where(is.numeric)), use = "complete.obs")
 ```
 
-
 # Splitting for MLR, and a bit more data handling
-
 
 ```{r}
 set.seed(7530)
@@ -270,7 +267,25 @@ rmse_vec(bike_test_stan$total_rented_bike_count, predict(model3, newdata = bike_
 Final Model is model2 (lowest rmse)
 
 ```{r}
-coef(model2)
+mean_final <- sapply(bikeDataFinal[num_vars], mean, na.rm = TRUE)
+sd_final <- sapply(bikeDataFinal[num_vars], sd, na.rm = TRUE)
 
+bike_final_stan <- bikeDataFinal %>%
+  mutate(weekday = factor(wday(date))) %>%
+  stand_train(mean_final, sd_final, num_vars)
+
+model2F <- lm(
+  reformulate(
+    c(
+      common_vars,
+      "seasons:holiday",
+      "seasons:standardized_mean_temperature",
+      "standardized_mean_temperature:standardized_total_rainfall"
+    ),
+    response = "total_rented_bike_count"
+  ),
+  data = bike_final_stan
+)
+
+coef(model2F)
 ```
-
