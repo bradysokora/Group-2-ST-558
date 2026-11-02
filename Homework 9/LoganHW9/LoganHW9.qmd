@@ -80,6 +80,8 @@ Making another dataset for future use (based on specifications given in assignme
 ```{r}
 bikeDataFinal <- bikeDataClean %>%
   group_by(date, seasons, holiday) %>%
+  # Subsetting function == Yes
+  filter(functioning_day == "Yes") %>%
   summarize(
     # Totals for bikes and precip
     total_rented_bike_count = sum(rented_bike_count, na.rm = TRUE),
@@ -203,11 +205,11 @@ stand_train <- function(df, mean, sd, vars) {
 }
 
 bike_train_stan <- bike_train %>%
-  mutate(weekday = factor(wday(date))) %>%
+  mutate(week = factor(if_else(wday(date) %in% c(1, 7), "Weekend", "Weekday"))) %>%
   stand_train(mean_train, sd_train, num_vars)
 
 bike_test_stan <- bike_test %>%
-  mutate(weekday = factor(wday(date))) %>%
+  mutate(week = factor(if_else(wday(date) %in% c(1, 7), "Weekend", "Weekday"))) %>%
   stand_train(mean_train, sd_train, num_vars)
 ```
 
@@ -219,7 +221,7 @@ std_names <- bike_train_stan %>%
   select(starts_with("standardized_")) %>%
   names()
 
-common_vars <- c("seasons", "holiday", "weekday", std_names)
+common_vars <- c("seasons", "holiday", "week", std_names)
 
 model1 <- lm(
   reformulate(common_vars,
@@ -271,7 +273,7 @@ mean_final <- sapply(bikeDataFinal[num_vars], mean, na.rm = TRUE)
 sd_final <- sapply(bikeDataFinal[num_vars], sd, na.rm = TRUE)
 
 bike_final_stan <- bikeDataFinal %>%
-  mutate(weekday = factor(wday(date))) %>%
+  mutate(week = factor(if_else(wday(date) %in% c(1, 7), "weekend", "weekday"))) %>%
   stand_train(mean_final, sd_final, num_vars)
 
 model2F <- lm(
