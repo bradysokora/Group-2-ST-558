@@ -1,0 +1,251 @@
+---
+title: "Mason HW9"
+format: html
+editor: visual
+---
+
+```{r}
+#| ECHO: FALSE
+library(tidyverse)
+library(lubridate)
+library(rsample)
+```
+
+Reading in the data
+```{r}
+seoul_bike <- read_csv("Homework 9/LoganHW9/SeoulBikeData.csv",
+                  locale = locale(encoding = "latin1"))
+seoul_bike
+```
+
+Checking the data
+```{r}
+seoul_bike %>% summarize(across(everything(), ~ sum(is.na(.x))))
+
+str(seoul_bike)
+
+seoul_bike %>% select(where(is.numeric)) %>% summary()
+
+unique(seoul_bike$`Functioning Day`)
+unique(seoul_bike$Holiday)
+unique(seoul_bike$Seasons)
+```
+
+Everything in the data looks good, so we move on to cleaning the data
+
+```{r}
+seoul_bike <- seoul_bike %>%
+  mutate(Date = dmy(Date),
+         Seasons = factor(Seasons, levels = c("Winter", "Spring",
+                                              "Summer", "Autumn")),
+         Holiday = factor(Holiday),
+         `Functioning Day` = factor(`Functioning Day`)) %>%
+  rename(date = Date,
+         bike = `Rented Bike Count`,
+         hour = Hour,
+         temperature = `Temperature(°C)`,
+         humidity = `Humidity(%)`,
+         wind_speed = `Wind speed (m/s)`,
+         visibility = `Visibility (10m)`,
+         dew_point = `Dew point temperature(°C)`,
+         solar_radiation = `Solar Radiation (MJ/m2)`,
+         rainfall = `Rainfall(mm)`,
+         snowfall = `Snowfall (cm)`,
+         seasons = Seasons,
+         holiday = Holiday,
+         functioning_day = `Functioning Day`)
+
+seoul_bike
+```
+
+```{r}
+seoul_bike %>% group_by(seasons) %>% 
+  summarize(n = n(),
+            mean_bike_count = mean(bike),
+            median_bike_count = median(bike),
+            sd_bike_count = sd(bike),
+            min_bike_count = min(bike),
+            max_bike_count = max(bike))
+```
+
+```{r}
+seoul_bike %>% group_by(holiday) %>% 
+  summarize(n = n(),
+            mean_bike_count = mean(bike),
+            median_bike_count = median(bike),
+            sd_bike_count = sd(bike),
+            min_bike_count = min(bike),
+            max_bike_count = max(bike))
+```
+
+```{r}
+seoul_bike %>% group_by(functioning_day) %>% 
+  summarize(n = n(),
+            mean_bike_count = mean(bike),
+            median_bike_count = median(bike),
+            sd_bike_count = sd(bike),
+            min_bike_count = min(bike),
+            max_bike_count = max(bike))
+```
+
+Filtering for only when the system is functioning
+```{r}
+seoul_bike <- seoul_bike %>% filter(functioning_day == "Yes") 
+seoul_bike
+```
+
+```{r}
+seoul_daily <- seoul_bike %>%
+  group_by(date, seasons, holiday) %>%
+  summarize(bike = sum(bike),
+            rainfall = sum(rainfall),
+            snowfall = sum(snowfall),
+            temperature = mean(temperature),
+            humidity = mean(humidity),
+            wind_speed = mean(wind_speed),
+            visibility = mean(visibility),
+            dew_point = mean(dew_point),
+            solar_radiation = mean(solar_radiation)) %>%
+  ungroup()
+seoul_daily
+```
+
+```{r}
+seoul_daily %>% 
+  select(where(is.numeric)) %>%
+  summary()
+```
+
+```{r}
+seoul_daily %>% group_by(seasons) %>% 
+  summarize(n = n(),
+            mean_bike_count = mean(bike),
+            median_bike_count = median(bike),
+            sd_bike_count = sd(bike),
+            min_bike_count = min(bike),
+            max_bike_count = max(bike))
+```
+
+```{r}
+seoul_daily %>% group_by(holiday) %>% 
+  summarize(n = n(),
+            mean_bike_count = mean(bike),
+            median_bike_count = median(bike),
+            sd_bike_count = sd(bike),
+            min_bike_count = min(bike),
+            max_bike_count = max(bike))
+```
+
+
+Creating plots to investigate relationships
+```{r}
+ggplot(data = seoul_daily, aes(x = seasons, y = bike)) +
+  geom_boxplot() +
+  theme_minimal()
+```
+
+```{r}
+ggplot(data = seoul_daily, 
+       aes(x = temperature, y = bike, color = seasons)) +
+  geom_point() + 
+  theme_minimal()
+```
+
+```{r}
+seoul_daily %>% select(where(is.numeric)) %>% cor() %>% round(2)
+```
+
+```{r}
+set.seed(67)
+seoul_split <- initial_split(seoul_daily, prop = .75, 
+                             strata = seasons)
+seoul_train <- training(seoul_split)
+seoul_test <- testing(seoul_split)
+seoul_train
+seoul_test
+```
+
+```{r}
+std_by <- function(x, ref){
+  return((x-mean(ref)) / sd(ref))
+}
+
+seoul_train <- seoul_train %>% 
+  mutate(day_type = factor(if_else(wday(date) %in% c(1, 7), 
+                                   "Weekend", "Weekday")),
+         temp_std = std_by(temperature, seoul_train$temperature),
+         humidity_std = std_by(humidity, seoul_train$humidity),
+         wind_speed_std = std_by(wind_speed, seoul_train$wind_speed),
+         visibility_std = std_by(visibility, seoul_train$visibility),
+         dew_point_temp_std = std_by(dew_point, 
+                                     seoul_train$dew_point),
+         solar_radiation_std = std_by(solar_radiation, 
+                                      seoul_train$solar_radiation),
+         rainfall_std = std_by(rainfall, seoul_train$rainfall),
+         snowfall_std = std_by(snowfall, seoul_train$snowfall))
+
+seoul_test <- seoul_test %>% 
+  mutate(day_type = factor(if_else(wday(date) %in% c(1, 7), 
+                                   "Weekend", "Weekday")),
+         temp_std = std_by(temperature, seoul_test$temperature),
+         humidity_std = std_by(humidity, seoul_test$humidity),
+         wind_speed_std = std_by(wind_speed, seoul_test$wind_speed),
+         visibility_std = std_by(visibility, seoul_test$visibility),
+         dew_point_temp_std = std_by(dew_point, 
+                                     seoul_test$dew_point),
+         solar_radiation_std = std_by(solar_radiation, 
+                                      seoul_test$solar_radiation),
+         rainfall_std = std_by(rainfall, seoul_test$rainfall),
+         snowfall_std = std_by(snowfall, seoul_test$snowfall))
+```
+
+```{r}
+fit1 <- lm(bike ~ temp_std + humidity_std + wind_speed_std + visibility_std +
+             dew_point_temp_std + solar_radiation_std + rainfall_std + snowfall_std +
+             seasons + holiday + day_type,
+           data = seoul_train)
+
+fit2 <- lm(bike ~ temp_std + humidity_std + wind_speed_std + visibility_std +
+             dew_point_temp_std + solar_radiation_std + rainfall_std + snowfall_std +
+             seasons + holiday + day_type +
+             seasons:holiday + seasons:temp_std + temp_std:rainfall_std,
+           data = seoul_train)
+
+fit3 <- lm(bike ~ temp_std + humidity_std + wind_speed_std + visibility_std +
+             dew_point_temp_std + solar_radiation_std + rainfall_std + snowfall_std +
+             seasons + holiday + day_type +
+             seasons:holiday + seasons:temp_std + temp_std:rainfall_std +
+             I(temp_std^2) + I(humidity_std^2),
+           data = seoul_train)
+```
+
+```{r}
+yardstick::rmse_vec(seoul_test$bike, predict(fit1, newdata = seoul_test))
+yardstick::rmse_vec(seoul_test$bike, predict(fit2, newdata = seoul_test))
+yardstick::rmse_vec(seoul_test$bike, predict(fit3, newdata = seoul_test))
+```
+
+```{r}
+seoul_full <- seoul_daily %>%
+  mutate(day_type = factor(if_else(wday(date) %in% c(1, 7), 
+                                   "Weekend", "Weekday")),
+         temp_std = std_by(temperature, seoul_daily$temperature),
+         humidity_std = std_by(humidity, seoul_daily$humidity),
+         wind_speed_std = std_by(wind_speed, seoul_daily$wind_speed),
+         visibility_std = std_by(visibility, seoul_daily$visibility),
+         dew_point_temp_std = std_by(dew_point, 
+                                     seoul_daily$dew_point),
+         solar_radiation_std = std_by(solar_radiation, 
+                                      seoul_daily$solar_radiation),
+         rainfall_std = std_by(rainfall, seoul_daily$rainfall),
+         snowfall_std = std_by(snowfall, seoul_daily$snowfall))
+
+final_fit <- lm(bike ~ temp_std + humidity_std + wind_speed_std + visibility_std +
+             dew_point_temp_std + solar_radiation_std + rainfall_std + snowfall_std +
+             seasons + holiday + day_type +
+             seasons:holiday + seasons:temp_std + temp_std:rainfall_std,
+           data = seoul_full)
+
+coef(final_fit)
+```
+
