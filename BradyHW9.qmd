@@ -1,0 +1,307 @@
+---
+title: "BradyHW9"
+format: html
+editor: visual
+---
+
+For this homework I'm working with the Seoul Bike Sharing data from the UCI Machine Learning Repository. It has hourly bike rentals in Seoul from December 2017 to November 2018, plus weather and holiday info for each hour. My goal is to clean it up, explore it a bit, and then fit a few linear regression models to see which one does the best job predicting daily rentals.
+
+```{r}
+#| message: false
+library(tidyverse)
+library(lubridate)
+library(rsample)
+```
+
+## Reading in the Data
+
+When I first tried `read_csv()` I got an "invalid multibyte string" error. It turns out a couple of the column names have a degree symbol in them that isn't saved as UTF-8, so I had to tell R to read it with `latin1` encoding instead.
+
+```{r}
+#| message: false
+seoul_raw <- read_csv("https://www4.stat.ncsu.edu/~online/datasets/SeoulBikeData.csv",
+                      locale = locale(encoding = "latin1"))
+seoul_raw
+```
+
+## EDA
+
+### Missing Values
+
+First thing I wanted to check was if anything was missing.
+
+```{r}
+seoul_raw |>
+  summarize(across(everything(), \(x) sum(is.na(x))))
+```
+
+Every column is zero, so there's nothing missing and I don't have to drop or fill in anything.
+
+### Checking the Columns
+
+Next I looked at how R read in each column.
+
+```{r}
+str(seoul_raw)
+```
+
+The numbers all came in as numeric which is good. `Date` came in as text though, and so did `Seasons`, `Holiday`, and `Functioning Day`. I'll fix those in a minute.
+
+Here are some quick stats on the numeric columns.
+
+```{r}
+seoul_raw |>
+  select(where(is.numeric)) |>
+  summary()
+```
+
+Nothing looks crazy here. Rainfall and snowfall both have a median of 0, so most hours don't have any rain or snow at all. Humidity has a min of 0% which seems off, but it's probably just a sensor thing and not enough for me to remove anything.
+
+And the unique values for the categorical columns:
+
+```{r}
+unique(seoul_raw$Seasons)
+unique(seoul_raw$Holiday)
+unique(seoul_raw$`Functioning Day`)
+```
+
+These all match what the data description says, so we're good.
+
+### Cleaning Up Dates, Factors, and Names
+
+Now I'm turning `Date` into an actual date with `dmy()`, making the text columns factors, and giving everything shorter names that are easier to type. I also put the seasons in calendar order so the plots make more sense.
+
+```{r}
+seoul <- seoul_raw |>
+  mutate(Date = dmy(Date),
+         Seasons = factor(Seasons, levels = c("Winter", "Spring", "Summer", "Autumn")),
+         Holiday = factor(Holiday),
+         `Functioning Day` = factor(`Functioning Day`)) |>
+  rename(date = Date,
+         rentals = `Rented Bike Count`,
+         hour = Hour,
+         temp = `Temperature(°C)`,
+         humid = `Humidity(%)`,
+         wind = `Wind speed (m/s)`,
+         vis = `Visibility (10m)`,
+         dew_point = `Dew point temperature(°C)`,
+         solar = `Solar Radiation (MJ/m2)`,
+         rain = `Rainfall(mm)`,
+         snow = `Snowfall (cm)`,
+         season = Seasons,
+         holiday = Holiday,
+         func_day = `Functioning Day`)
+seoul
+```
+
+### Rentals by Category
+
+I wanted to look at rentals across each of the categorical variables. Instead of copy and pasting the same code three times I made a small function for it.
+
+```{r}
+rental_stats <- function(df, grp) {
+  df |>
+    group_by({{ grp }}) |>
+    summarize(n = n(),
+              avg = mean(rentals),
+              med = median(rentals),
+              sd = sd(rentals),
+              low = min(rentals),
+              high = max(rentals),
+              .groups = "drop")
+}
+
+rental_stats(seoul, season)
+rental_stats(seoul, holiday)
+rental_stats(seoul, func_day)
+```
+
+A few things stand out. Summer has the most rentals and Winter has by far the least. Holidays have fewer rentals than normal days. The interesting one is `func_day`. Every single hour where it says "No" has 0 rentals, because the bike system just wasn't running then. Those aren't real zeros in terms of demand, so I'm taking them out.
+
+```{r}
+seoul <- seoul |>
+  filter(func_day == "Yes")
+seoul
+```
+
+### Getting One Row per Day
+
+To keep things simpler I collapsed the hours down so each day is one row. I grouped by date, season, and holiday. Rentals, rain, and snow get added up since those build over the day, and the rest of the weather stuff gets averaged since adding up temperatures wouldn't really mean anything.
+
+```{r}
+seoul_daily <- seoul |>
+  group_by(date, season, holiday) |>
+  summarize(rentals = sum(rentals),
+            rain = sum(rain),
+            snow = sum(snow),
+            temp = mean(temp),
+            humid = mean(humid),
+            wind = mean(wind),
+            vis = mean(vis),
+            dew_point = mean(dew_point),
+            solar = mean(solar),
+            .groups = "drop")
+seoul_daily
+```
+
+That gives me `r nrow(seoul_daily)` days to work with.
+
+### Looking at the Daily Data
+
+Redoing the summaries now that it's daily.
+
+```{r}
+seoul_daily |>
+  select(where(is.numeric)) |>
+  summary()
+
+rental_stats(seoul_daily, season)
+rental_stats(seoul_daily, holiday)
+```
+
+Same story as before. Summer is the busiest and Winter is the slowest. Holidays are still lower, but there are only `r sum(seoul_daily$holiday == "Holiday")` holiday days total so I wouldn't read too much into that.
+
+#### Plots
+
+```{r}
+ggplot(seoul_daily, aes(x = season, y = rentals, fill = season)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Daily Rentals by Season", x = "Season", y = "Total Rentals")
+```
+
+Winter really sticks out here. Rentals are low and pretty tightly packed compared to the other three seasons.
+
+```{r}
+ggplot(seoul_daily, aes(x = temp, y = rentals, color = season)) +
+  geom_point() +
+  labs(title = "Daily Rentals vs Average Temp",
+       x = "Average Temp (°C)", y = "Total Rentals", color = "Season")
+```
+
+Rentals go up as it gets warmer, but once it gets really hot they start to dip. So the relationship probably isn't a perfectly straight line.
+
+```{r}
+ggplot(seoul_daily, aes(x = rain, y = rentals)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Daily Rentals vs Total Rain",
+       x = "Total Rain (mm)", y = "Total Rentals")
+```
+
+Most days have no rain at all. The days that do tend to have fewer rentals, especially the really rainy ones, which makes sense since nobody wants to bike in a downpour.
+
+#### Correlations
+
+```{r}
+seoul_daily |>
+  select(where(is.numeric)) |>
+  cor() |>
+  round(2)
+```
+
+Rentals line up most with temp (0.75), solar (0.74), and dew point (0.65). Rain and snow have weak negative correlations. One thing I noticed is that temp and dew point are almost perfectly correlated with each other (0.96), so I'll keep that in mind when I look at the coefficients later.
+
+## Splitting the Data
+
+I split the data 75/25 into training and test sets and stratified on `season`. Since rentals change so much by season, this makes sure each season shows up about the same amount in both sets.
+
+```{r}
+set.seed(2414)
+seoul_split <- initial_split(seoul_daily, prop = 0.75, strata = season)
+train_set <- training(seoul_split)
+test_set <- testing(seoul_split)
+```
+
+The training set has `r nrow(train_set)` days and the test set has `r nrow(test_set)`.
+
+## Fitting MLR Models
+
+### Weekday vs Weekend and Standardizing
+
+I'm not using `date` in the models directly, but I'm using it to make a weekday or weekend factor called `day_kind`. After that I standardize the 8 weather variables. The important part is that both the training and test sets get standardized using the training mean and sd, so the test set doesn't sneak any info into the models.
+
+I wrote a function that does both of these steps. You give it the data you want to change and the data you want the means and sds to come from.
+
+```{r}
+wx_vars <- c("temp", "humid", "wind", "vis", "dew_point", "solar", "rain", "snow")
+
+add_z <- function(df, ref) {
+  df |>
+    mutate(day_kind = factor(if_else(wday(date) %in% c(1, 7), "Weekend", "Weekday"),
+                             levels = c("Weekday", "Weekend")),
+           across(all_of(wx_vars),
+                  \(x) (x - mean(ref[[cur_column()]])) / sd(ref[[cur_column()]]),
+                  .names = "{.col}_z"))
+}
+
+train_z <- add_z(train_set, ref = train_set)
+test_z <- add_z(test_set, ref = train_set)
+
+train_z |>
+  select(date, day_kind, ends_with("_z"))
+```
+
+Just to double check it worked, the training means should all be 0 and the test means should be close to 0 but not exactly.
+
+```{r}
+train_z |>
+  summarize(across(ends_with("_z"), \(x) round(mean(x), 3)))
+test_z |>
+  summarize(across(ends_with("_z"), \(x) round(mean(x), 3)))
+```
+
+### The Three Models
+
+Each model adds onto the last one. Model 1 is just the main effects, Model 2 adds the interactions, and Model 3 adds squared terms for temp and humidity.
+
+```{r}
+base_form <- rentals ~ temp_z + humid_z + wind_z + vis_z + dew_point_z +
+  solar_z + rain_z + snow_z + season + holiday + day_kind
+
+forms <- list(
+  "Model 1" = base_form,
+  "Model 2" = update(base_form, . ~ . + season:holiday + season:temp_z + temp_z:rain_z),
+  "Model 3" = update(base_form, . ~ . + season:holiday + season:temp_z + temp_z:rain_z +
+                       I(temp_z^2) + I(humid_z^2))
+)
+
+fits <- map(forms, \(f) lm(f, data = train_z))
+```
+
+### Test Set RMSE
+
+```{r}
+get_rmse <- function(actual, pred) {
+  sqrt(mean((actual - pred)^2))
+}
+
+rmse_tbl <- tibble(
+  model = names(fits),
+  rmse = map_dbl(fits, \(m) get_rmse(test_z$rentals, predict(m, newdata = test_z)))
+) |>
+  arrange(rmse)
+
+rmse_tbl
+
+winner <- rmse_tbl$model[1]
+```
+
+The best model on the test set is `r winner`, which is off by about `r format(round(rmse_tbl$rmse[1]), big.mark = ",")` rentals a day on average. The biggest jump came from adding the interactions, which cut the RMSE by about 1,000 compared to just the main effects. The squared terms in Model 3 only helped a little on top of that, around 50 rentals, so Models 2 and 3 are really close.
+
+## Final Model on All the Data
+
+Last step is refitting the best model on all `r nrow(seoul_daily)` days. This time I'm standardizing with the mean and sd of the full data set and making `day_kind` again the same way.
+
+```{r}
+all_z <- add_z(seoul_daily, ref = seoul_daily)
+
+final_mod <- lm(forms[[winner]], data = all_z)
+
+broom::tidy(final_mod) |>
+  mutate(across(where(is.numeric), \(x) round(x, 2)))
+```
+
+The intercept (`r format(round(coef(final_mod)["(Intercept)"]), big.mark = ",")`) is the predicted rentals for a Winter weekday that's a holiday with average weather, since those are the baseline levels. Holding everything else the same, weekends change rentals by about `r format(round(coef(final_mod)["day_kindWeekend"]), big.mark = ",")` compared to weekdays. The squared temp term (`r format(round(coef(final_mod)["I(temp_z^2)"]), big.mark = ",")`) lets the model curve instead of being a straight line, which fits what I saw in the scatterplot where rentals dipped on the hottest days. Since temp and dew point are so tied together, I wouldn't trust either of their coefficients by themselves.
+
+## Wrapping Up
+
+Overall, daily bike rentals in Seoul mostly come down to the season, the temperature, and whether it's raining. The interactions made the biggest difference, and the squared terms helped a little more, which makes sense since the temp plot looked curved. The test set is only `r nrow(test_set)` days though, and Models 2 and 3 were so close that a different random split could easily pick Model 2 instead.
