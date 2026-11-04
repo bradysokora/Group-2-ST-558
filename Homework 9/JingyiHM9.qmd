@@ -1,0 +1,57 @@
+---
+title: "Zuo_hm9"
+author: Jingyi Zuo 
+format: html
+---
+
+
+# Read data
+```{r }
+library(tidyverse)
+data <- readr::read_csv("SeoulBikeData.csv",
+                        locale = locale(encoding = "Latin1"),
+  show_col_types = FALSE)
+dim(data)
+head(data)
+```
+
+# EDA
+
+```{r }
+# missing 
+colSums(is.na(data)) 
+# no missinhg data 
+
+# check column type and basic values and range 
+str(data)
+summary(data)
+head(data$Date)
+
+# convert date
+library(lubridate)
+data$Date <- dmy(data$Date)
+
+# convert variables into factor (Seasons, Holiday, and Functioning Day)
+data$Seasons <- factor(data$Seasons)
+data$Holiday <- factor(data$Holiday)
+data$`Functioning Day` <- factor(data$`Functioning Day`)
+
+# change name easily
+names(data) <- tolower(gsub(" ", "_", names(data)))
+
+# summary again
+summary(data)
+
+# subset, there is some day functioning is 0? 
+data <- data %>%
+  filter(functioning_day = 1)
+#
+data <- data %>%
+  group_by(data$Date, seasons, holiday)
+  summarise(
+    total_bike_count <- sum(total_bike_count),
+    total_rainfall <- sum(rainfall),
+    total_snowfall <- sum(snowfall)
+  )
+  
+```
