@@ -37,21 +37,153 @@ data$Holiday <- factor(data$Holiday)
 data$`Functioning Day` <- factor(data$`Functioning Day`)
 
 # change name easily
-names(data) <- tolower(gsub(" ", "_", names(data)))
+data <- data %>%
+  rename_with(~ tolower(gsub(" ", "_", .x))) %>%
+  rename( temperature = `temperature(°c)`) %>%
+  rename( humidity =  `humidity(%)`) %>%
+  rename(dew_point_temperature = `dew_point_temperature(°c)`) %>%
+    rename(
+    bike_count = rented_bike_count,
+    rainfall = `rainfall(mm)`,
+    snowfall = `snowfall_(cm)`,
+    wind_speed = `wind_speed_(m/s)`
+  ) 
 
 # summary again
 summary(data)
 
 # subset, there is some day functioning is 0? 
 data <- data %>%
-  filter(functioning_day = 1)
+  filter(functioning_day == "Yes")
 #
 data <- data %>%
-  group_by(data$Date, seasons, holiday)
+  group_by(date, seasons, holiday) %>%
   summarise(
-    total_bike_count <- sum(total_bike_count),
-    total_rainfall <- sum(rainfall),
-    total_snowfall <- sum(snowfall)
+    total_bike_count = sum(bike_count),
+    total_rainfall = sum(rainfall),
+    total_snowfall = sum(snowfall),
+    mean_temperature = mean(temperature),
+    mean_humidity = mean(humidity),
+    mean_wind_speed = mean(wind_speed,),
+    mean_dew_point_temperature = mean(dew_point_temperature),
+    .groups = "drop"
   )
-  
+```
+
+## plot
+```{r}
+library(ggplot2)
+
+#histogram 
+ggplot(data = data,
+       aes(x =total_bike_count))+
+    geom_histogram() +
+    geom_density()
+
+## boxplot
+ggplot (data = data,
+        aes(x = seasons, y = total_bike_count)) +
+          geom_boxplot()
+ggplot (data = data,
+        aes(x = date, y = total_bike_count)) +
+          geom_boxplot()
+ggplot (data = data,
+        aes(x = holiday, y = total_bike_count)) +
+          geom_boxplot()
+#scattar
+ggplot (data = data,
+        aes(x = total_rainfall, y = total_bike_count)) +
+          geom_point()
+
+ggplot (data = data,
+        aes(x = total_snowfall, y = total_bike_count)) +
+          geom_point()
+
+```
+
+## strata and split data 
+```{r}
+library(rsample)
+set.seed (2738)
+split_data <- rsample::initial_split(
+  data,
+  prop = .75,
+  strata = seasons
+)
+
+train_data <- rsample::training(split_data)
+test_data <- rsample::testing(split_data)
+
+```
+# model
+```{r }
+### classify weekday or weekend 
+
+train_data <- train_data %>%
+  mutate(weekday = factor(ifelse(wday(date, week_start = 1 )>= 6, "Weekends", "Weekday")))
+
+test_data <- test_data %>%
+  mutate(weekday = factor(ifelse(wday(date, week_start = 1 )>= 6, "Weekends", "Weekday")))
+
+
+
+
+### standardization 
+
+numerica_vars <- c("total_bike_count",
+    "total_rainfall",
+    "total_snowfall",
+    "mean_temperature",
+    "mean_humidity",
+    "mean_wind_speed",
+    "mean_dew_point_temperature")
+
+train_mean_num <- sapply(train_data[numerica_vars], mean)
+train_sd_num <- sapply(train_data[numerica_vars], sd)
+
+test_mean_num <- sapply(test_data[numerica_vars], mean)
+test_sd_num <- sapply(test_data[numerica_vars], sd)
+
+train_data <- train_data %>%
+  mutate (
+    across(all_of(numerica_vars), ~ (.x-train_mean_num[cur_column()])/train_sd_num[cur_column()])
+    ) 
+
+test_data <- test_data %>%
+  mutate (
+    across(all_of(numerica_vars), ~ (.x-test_mean_num[cur_column()])/test_sd_num[cur_column()])
+    ) 
+
+## modeling
+# A model with all the standardized numeric variables included along with the seasons, holiday, and weekend/weekday variables.
+
+model1 <- lm (total_bike_count ~  total_rainfall + total_snowfall + mean_temperature+ mean_humidity + mean_wind_speed + mean_dew_point_temperature + seasons + holiday + weekday, data = train_data)
+
+# 2. A model with all the terms in the first model but also interactions between seasons and holiday, seasons and temp, and temp and rainfall (all standardized variables used here).
+
+model2 <- lm (total_bike_count ~  total_rainfall + total_snowfall + mean_temperature+ mean_humidity + mean_wind_speed + mean_dew_point_temperature + seasons:holiday + seasons:mean_temperature + mean_temperature:total_rainfall, data = train_data)
+
+            
+#3. A model with all the terms in the second model and also squared terms for the temp and humidity variables (standardized versions). Use I() here to create the quadratic terms.
+train_data$squared_temp <- I(train_data$mean_temperature)*train_data$mean_temperature
+train_data$squared_humi <- I(train_data$mean_humidity)*train_data$mean_humidity
+model3 <- lm (total_bike_count ~  total_rainfall + total_snowfall + mean_temperature+ mean_humidity + mean_wind_speed + mean_dew_point_temperature + seasons:holiday + seasons:mean_temperature + mean_temperature:total_rainfall + squared_temp + squared_humi, data = train_data)
+```
+
+# predicted value and rmse
+```{r}
+# fit model1 
+test_data$predicted <- predict(model1, newdata = test_data)
+rmse_model1 <- sqrt(mean(test_data$total_bike_count - test_data$predicted)^2)  
+
+# fit model2 
+test_data$predicted2 <- predict(model2, newdata = test_data)
+rmse_model2 <- sqrt(mean(test_data$total_bike_count - test_data$predicted2)^2)  
+
+# generate new variables for test data 
+test_data$squared_temp <- I(test_data$mean_temperature)*test_data$mean_temperature
+test_data$squared_humi <- I(test_data$mean_humidity)*test_data$mean_humidity
+
+test_data$predicted3 <- predict(model3, newdata = test_data)
+rmse_model3 <- sqrt(mean(test_data$total_bike_count - test_data$predicted3)^2)  
 ```
