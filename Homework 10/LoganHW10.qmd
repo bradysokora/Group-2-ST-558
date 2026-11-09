@@ -9,6 +9,7 @@ library(tidyverse)
 library(tidymodels)
 library(janitor)
 library(baguette)
+library(ranger)
 ```
 
 # EDA from hw9
@@ -131,7 +132,7 @@ Model1 looks the best as it has the lowest rmse (4189.7715963)
 ```{r}
 mlr_final <- workflow() %>% add_recipe(bike_rec1) %>%
   add_model(bike_mod) %>%
-  last_fit(bike_split)
+  last_fit(bike_split, metrics = metric_set(rmse, mae))
 ```
 
 
@@ -166,7 +167,7 @@ tree_best_params <- select_best(tree_fits, metric = "rmse")
 
 tree_final_wkf <- tree_wkf %>% finalize_workflow(tree_best_params)
 
-tree_final_fit <- tree_final_wkf %>% last_fit(bike_split)
+tree_final_fit <- tree_final_wkf %>% last_fit(bike_split, metrics = metric_set(rmse, mae))
 ```
 
 
@@ -177,7 +178,7 @@ Workflow for bagged tree
 ```{r}
 bag_spec <- bag_tree(tree_depth = 5, min_n = 10, cost_complexity = tune()) %>% 
   set_engine("rpart") %>%
-  set_mode("classification")
+  set_mode("regression")
 
 bag_wkf <- workflow() %>% add_recipe(bike_rec1) %>% 
   add_model(bag_spec)
@@ -187,16 +188,40 @@ Fit workflow on folds
 
 ```{r}
 bag_fit <- bag_wkf %>% tune_grid(resamples = bike_10_fold, 
-                                 grid = grid_regular(cost_complexity(),levels = 15),
-                                 metrics = metric_set(accuracy, mn_log_loss))
+                                 grid = grid_regular(cost_complexity(),levels = 15))
 
-bag_best_params <- select_best(bag_fit, metric = "mn_log_loss")
+bag_best_params <- select_best(bag_fit, metric = "rmse")
 
 bag_final_wkf <- bag_wkf %>% finalize_workflow(bag_best_params)
-bag_final_fit <- bag_final_wkf %>% last_fit(heart_split, metrics = metric_set(accuracy, mn_log_loss))
+bag_final_fit <- bag_final_wkf %>% last_fit(bike_split, metrics = metric_set(rmse, mae))
 ```
 
 ## Random Forest
+
+Workflow for random forest
+
+```{r}
+rf_spec <- rand_forest(mtry = tune()) %>% 
+  set_engine("ranger", importance = "impurity") %>%
+  set_mode("regression")
+
+rf_wkf <- workflow() %>% 
+  add_recipe(bike_rec1) %>%
+  add_model(rf_spec)
+```
+
+Fit workflow on folds
+
+```{r}
+rf_fit <- rf_wkf %>% tune_grid(resamples = bike_10_fold, 
+                                 grid = 10)
+
+rf_best_params <- select_best(rf_fit, metric = "rmse")
+
+rf_final_wkf <- rf_wkf %>% finalize_workflow(rf_best_params)
+rf_final_fit <- rf_final_wkf %>% last_fit(bike_split, metrics = metric_set(rmse, mae))
+```
+
 
 ## Finding best model in each of other models
 
@@ -212,9 +237,79 @@ rbind(
     mutate(Model = "TREE", .before = ".metric"),
   bag_final_fit %>%
     collect_metrics() %>% 
-    mutate(Model = "BAG", .before = ".metric")
+    mutate(Model = "BAG", .before = ".metric"),
+  rf_final_fit %>%
+    collect_metrics() %>% 
+    mutate(Model = "RF", .before = ".metric")  
 )
 ```
 
+Looks like the rf model has the lowest rmse, we'll use that model to fit the entire dataset then.
+
+## Some more summaries of the models
+
+### Mlr coeff
+
+```{r}
+mlr_final %>%
+  extract_workflow() %>%
+  extract_fit_parsnip() %>%
+  tidy()
+```
+
+### Reg plot of final fit
+
+```{r}
+tree_final_fit |>
+  extract_fit_engine() |>
+  rpart.plot::rpart.plot(roundint = FALSE)
+```
+
+### Bagged Variable Importance plot
+
+```{r}
+bag_final_model <- extract_fit_engine(bag_final_fit)
+bag_final_model$imp |>
+  mutate(term = factor(term, levels = term)) |>
+  ggplot(aes(x = term, y = value)) +
+  geom_bar(stat ="identity") +
+  coord_flip()
+```
+
+### RF Variable Importance plot, just used a similar thing to above, could not understand how to use the stack version
+
+
+```{r}
+rf_model <- extract_fit_engine(rf_final_fit)
+
+rf_imp <- tibble(term = names(rf_model$variable.importance), value = unname(rf_model$variable.importance))
+
+rf_imp %>%
+  mutate(term = factor(term, levels = term[order(value, decreasing = TRUE)])) %>%
+  ggplot(aes(x = term, y = value)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+
+
 # Fitting the best of the best to full dataset
+
+```{r}
+rf_final_model_full <- rf_final_wkf %>%
+  fit(data = bike_data_final)
+
+rf_model_full <- extract_fit_engine(rf_final_model_full)
+```
+
+```{r}
+rf_imp_full <- tibble(term = names(rf_model_full$variable.importance), value = unname(rf_model_full$variable.importance))
+
+rf_imp_full %>%
+  mutate(term = factor(term, levels = term[order(value, decreasing = TRUE)])) %>%
+  ggplot(aes(x = term, y = value)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
 
