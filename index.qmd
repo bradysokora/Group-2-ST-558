@@ -8,3 +8,4 @@ format: html
 - [Homework 4](/Homework 4/ST558HW4.qmd)
 - [Homework 5](/Homework 5/Zuohw5.qmd)
 - [Homework 9](/Homework 9/LoganHW9/LoganHW9.qmd)
+- [Homework 10](/Homework 10/RyanHW10.qmd)
