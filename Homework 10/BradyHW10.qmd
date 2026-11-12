@@ -1,0 +1,506 @@
+---
+title: "BradyHW10"
+format: html
+editor: visual
+---
+
+For this homework I'm going back to the Seoul Bike Sharing data from HW9. It has hourly bike rentals in Seoul from December 2017 to November 2018, plus weather and holiday info for each hour. This time I'm redoing the MLR models with `tidymodels`, and then comparing the best one to a regression tree, a bagged tree, and a random forest to see which does the best job predicting daily rentals.
+
+```{r}
+#| message: false
+library(tidyverse)
+library(lubridate)
+library(tidymodels)
+library(baguette)
+library(ranger)
+library(rpart.plot)
+
+# rounds a number and adds commas so it reads nicely in the text
+nice <- function(x) format(round(x), big.mark = ",")
+```
+
+## Reading in the Data
+
+When I first tried `read_csv()` I got an "invalid multibyte string" error. It turns out a couple of the column names have a degree symbol in them that isn't saved as UTF-8, so I had to tell R to read it with `latin1` encoding instead.
+
+```{r}
+#| message: false
+seoul_raw <- read_csv("https://www4.stat.ncsu.edu/~online/datasets/SeoulBikeData.csv",
+                      locale = locale(encoding = "latin1"))
+seoul_raw
+```
+
+## EDA
+
+### Missing Values
+
+First thing I wanted to check was if anything was missing.
+
+```{r}
+seoul_raw |>
+  summarize(across(everything(), \(x) sum(is.na(x))))
+```
+
+Every column is zero, so there's nothing missing and I don't have to drop or fill in anything.
+
+### Checking the Columns
+
+Next I looked at how R read in each column.
+
+```{r}
+str(seoul_raw)
+```
+
+The numbers all came in as numeric which is good. `Date` came in as text though, and so did `Seasons`, `Holiday`, and `Functioning Day`. I'll fix those in a minute.
+
+Here are some quick stats on the numeric columns.
+
+```{r}
+seoul_raw |>
+  select(where(is.numeric)) |>
+  summary()
+```
+
+Nothing looks crazy here. Rainfall and snowfall both have a median of 0, so most hours don't have any rain or snow at all. Humidity has a min of 0% which seems off, but it's probably just a sensor thing and not enough for me to remove anything.
+
+And the unique values for the categorical columns:
+
+```{r}
+unique(seoul_raw$Seasons)
+unique(seoul_raw$Holiday)
+unique(seoul_raw$`Functioning Day`)
+```
+
+These all match what the data description says, so we're good.
+
+### Cleaning Up Dates, Factors, and Names
+
+Now I'm turning `Date` into an actual date with `dmy()`, making the text columns factors, and giving everything shorter names that are easier to type. I also put the seasons in calendar order so the plots make more sense.
+
+```{r}
+seoul <- seoul_raw |>
+  mutate(Date = dmy(Date),
+         Seasons = factor(Seasons, levels = c("Winter", "Spring", "Summer", "Autumn")),
+         Holiday = factor(Holiday),
+         `Functioning Day` = factor(`Functioning Day`)) |>
+  rename(date = Date,
+         rentals = `Rented Bike Count`,
+         hour = Hour,
+         temp = `Temperature(°C)`,
+         humid = `Humidity(%)`,
+         wind = `Wind speed (m/s)`,
+         vis = `Visibility (10m)`,
+         dew_point = `Dew point temperature(°C)`,
+         solar = `Solar Radiation (MJ/m2)`,
+         rain = `Rainfall(mm)`,
+         snow = `Snowfall (cm)`,
+         season = Seasons,
+         holiday = Holiday,
+         func_day = `Functioning Day`)
+seoul
+```
+
+### Rentals by Category
+
+I wanted to look at rentals across each of the categorical variables. Instead of copy and pasting the same code three times I made a small function for it.
+
+```{r}
+rental_stats <- function(df, grp) {
+  df |>
+    group_by({{ grp }}) |>
+    summarize(n = n(),
+              avg = mean(rentals),
+              med = median(rentals),
+              sd = sd(rentals),
+              low = min(rentals),
+              high = max(rentals),
+              .groups = "drop")
+}
+
+rental_stats(seoul, season)
+rental_stats(seoul, holiday)
+rental_stats(seoul, func_day)
+```
+
+A few things stand out. Summer has the most rentals and Winter has by far the least. Holidays have fewer rentals than normal days. The interesting one is `func_day`. Every single hour where it says "No" has 0 rentals, because the bike system just wasn't running then. Those aren't real zeros in terms of demand, so I'm taking them out.
+
+```{r}
+seoul <- seoul |>
+  filter(func_day == "Yes")
+seoul
+```
+
+### Getting One Row per Day
+
+To keep things simpler I collapsed the hours down so each day is one row. I grouped by date, season, and holiday. Rentals, rain, and snow get added up since those build over the day, and the rest of the weather stuff gets averaged since adding up temperatures wouldn't really mean anything.
+
+```{r}
+seoul_daily <- seoul |>
+  group_by(date, season, holiday) |>
+  summarize(rentals = sum(rentals),
+            rain = sum(rain),
+            snow = sum(snow),
+            temp = mean(temp),
+            humid = mean(humid),
+            wind = mean(wind),
+            vis = mean(vis),
+            dew_point = mean(dew_point),
+            solar = mean(solar),
+            .groups = "drop")
+seoul_daily
+```
+
+That gives me `r nrow(seoul_daily)` days to work with.
+
+### Looking at the Daily Data
+
+Redoing the summaries now that it's daily.
+
+```{r}
+seoul_daily |>
+  select(where(is.numeric)) |>
+  summary()
+
+rental_stats(seoul_daily, season)
+rental_stats(seoul_daily, holiday)
+```
+
+Same story as before. Summer is the busiest and Winter is the slowest. Holidays are still lower, but there are only `r sum(seoul_daily$holiday == "Holiday")` holiday days total so I wouldn't read too much into that.
+
+#### Plots
+
+```{r}
+ggplot(seoul_daily, aes(x = season, y = rentals, fill = season)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Daily Rentals by Season", x = "Season", y = "Total Rentals")
+```
+
+Winter really sticks out here. Rentals are low and pretty tightly packed compared to the other three seasons.
+
+```{r}
+ggplot(seoul_daily, aes(x = temp, y = rentals, color = season)) +
+  geom_point() +
+  labs(title = "Daily Rentals vs Average Temp",
+       x = "Average Temp (°C)", y = "Total Rentals", color = "Season")
+```
+
+Rentals go up as it gets warmer, but once it gets really hot they start to dip. So the relationship probably isn't a perfectly straight line.
+
+```{r}
+ggplot(seoul_daily, aes(x = rain, y = rentals)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Daily Rentals vs Total Rain",
+       x = "Total Rain (mm)", y = "Total Rentals")
+```
+
+Most days have no rain at all. The days that do tend to have fewer rentals, especially the really rainy ones, which makes sense since nobody wants to bike in a downpour.
+
+#### Correlations
+
+```{r}
+seoul_daily |>
+  select(where(is.numeric)) |>
+  cor() |>
+  round(2)
+```
+
+Rentals line up most with temp, solar, and dew point. Rain and snow have weak negative correlations. One thing I noticed is that temp and dew point are almost perfectly correlated with each other, so I'll keep that in mind when I look at the coefficients later.
+
+## Splitting the Data
+
+Same as HW9, I split the data 75/25 and stratified on `season` so each season shows up about the same amount in both sets. The difference this time is I'm also making 10 CV folds on the training set. I'll use those folds to pick the best model in each family, and only touch the test set at the very end.
+
+```{r}
+set.seed(2414)
+seoul_split <- initial_split(seoul_daily, prop = 0.75, strata = season)
+train_set <- training(seoul_split)
+test_set <- testing(seoul_split)
+seoul_folds <- vfold_cv(train_set, v = 10)
+
+seoul_split
+```
+
+The training set has `r nrow(train_set)` days and the test set has `r nrow(test_set)`.
+
+## Fitting MLR Models
+
+### Recipes
+
+In HW9 I had to write my own `add_z()` function to make the weekday/weekend variable and standardize everything using the training mean and sd. With recipes, `tidymodels` keeps track of all that for me, so it automatically uses the training set values on the test set and inside each CV fold.
+
+Recipe 1 pulls the day of the week out of `date` with `step_date()`, turns it into a weekday or weekend factor called `day_kind`, then drops `date` and the in between `date_dow` column since I don't want either one in the model. After that it standardizes the 8 weather variables and makes dummy variables for `season`, `holiday`, and `day_kind`.
+
+```{r}
+rec1 <- recipe(rentals ~ ., data = train_set) |>
+  step_date(date, features = "dow") |>
+  step_mutate(day_kind = factor(if_else(date_dow %in% c("Sat", "Sun"), "Weekend", "Weekday"),
+                                levels = c("Weekday", "Weekend"))) |>
+  step_rm(date, date_dow) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_dummy(season, holiday, day_kind)
+```
+
+Just to make sure it did what I wanted, here's what the training data looks like after the recipe runs.
+
+```{r}
+rec1 |>
+  prep() |>
+  bake(new_data = NULL) |>
+  glimpse()
+```
+
+The weather columns are standardized now and the categorical ones turned into dummy columns, so it looks right.
+
+Recipe 2 is the same thing plus the interactions from HW9: season with holiday, season with temp, and temp with rain. Since the seasons are dummy columns now, `starts_with()` grabs all of them at once.
+
+```{r}
+rec2 <- rec1 |>
+  step_interact(terms = ~ starts_with("season_"):starts_with("holiday_") +
+                  starts_with("season_"):temp +
+                  temp:rain)
+```
+
+Recipe 3 is recipe 2 plus squared terms for temp and humidity. These come after the normalize step, so they're squares of the standardized values.
+
+```{r}
+rec3 <- rec2 |>
+  step_mutate(temp_sq = temp^2,
+              humid_sq = humid^2)
+```
+
+### Fitting with CV
+
+I'm setting up one linear model with the `lm` engine and pairing it with each recipe in a workflow. Then each workflow gets fit on the 10 folds with `fit_resamples()`. I used `map()` here so I'm not writing the same code three times.
+
+```{r}
+lm_spec <- linear_reg() |>
+  set_engine("lm")
+
+mlr_recs <- list("Model 1" = rec1, "Model 2" = rec2, "Model 3" = rec3)
+
+mlr_wkfs <- map(mlr_recs, \(r) workflow() |> add_recipe(r) |> add_model(lm_spec))
+
+mlr_cv <- map(mlr_wkfs, \(w) fit_resamples(w, resamples = seoul_folds))
+
+mlr_cv_tbl <- map(mlr_cv, \(f) collect_metrics(f) |> filter(.metric == "rmse")) |>
+  list_rbind(names_to = "model") |>
+  select(model, cv_rmse = mean, n, std_err) |>
+  arrange(cv_rmse)
+
+mlr_cv_tbl
+
+best_mlr <- mlr_cv_tbl$model[1]
+```
+
+`r best_mlr` has the lowest CV RMSE at about `r nice(mlr_cv_tbl$cv_rmse[1])`, so that's my best MLR model. The worst one was `r mlr_cv_tbl$model[3]` at about `r nice(mlr_cv_tbl$cv_rmse[3])`.
+
+### Best MLR Model on the Full Training Set
+
+Now I fit `r best_mlr` on the whole training set with `last_fit()`. This also predicts on the test set, and I'm asking for both RMSE and MAE since that's what I'll compare all the models on later.
+
+```{r}
+test_metrics <- metric_set(rmse, mae)
+
+mlr_test_fit <- mlr_wkfs[[best_mlr]] |>
+  last_fit(seoul_split, metrics = test_metrics)
+
+mlr_test_fit |>
+  collect_metrics()
+```
+
+## Fitting Other Models
+
+For the tree models I'm using recipe 1 like the assignment says. All three get tuned the same way: try a grid of tuning values on the CV folds, keep the values with the lowest CV RMSE, then fit that version on the full training set and predict on the test set. Since that's the same process three times, I wrote a function for it.
+
+```{r}
+tune_family <- function(wkf, grid) {
+  tuned <- tune_grid(wkf, resamples = seoul_folds, grid = grid)
+  best <- select_best(tuned, metric = "rmse")
+  final_wkf <- finalize_workflow(wkf, best)
+  list(tuned = tuned,
+       best = best,
+       wkf = final_wkf,
+       test_fit = last_fit(final_wkf, seoul_split, metrics = test_metrics))
+}
+```
+
+### Regression Tree
+
+I'm tuning the tree depth and the cost complexity, which controls how much the tree gets pruned back. `min_n` is set at 20.
+
+```{r}
+tree_spec <- decision_tree(tree_depth = tune(),
+                           min_n = 20,
+                           cost_complexity = tune()) |>
+  set_engine("rpart") |>
+  set_mode("regression")
+
+tree_wkf <- workflow() |>
+  add_recipe(rec1) |>
+  add_model(tree_spec)
+
+tree_res <- tune_family(tree_wkf,
+                        grid = grid_regular(cost_complexity(),
+                                            tree_depth(),
+                                            levels = c(10, 5)))
+
+show_best(tree_res$tuned, metric = "rmse", n = 5)
+tree_res$best
+```
+
+The best tree has a cost complexity of `r signif(tree_res$best$cost_complexity, 2)` and a max depth of `r tree_res$best$tree_depth`.
+
+### Bagged Tree
+
+For the bagged tree I'm holding the depth at 5 and `min_n` at 10 and just tuning the cost complexity. Bagging uses bootstrap samples, so I set a seed first to make the results the same every time I render.
+
+```{r}
+bag_spec <- bag_tree(tree_depth = 5, min_n = 10, cost_complexity = tune()) |>
+  set_engine("rpart") |>
+  set_mode("regression")
+
+bag_wkf <- workflow() |>
+  add_recipe(rec1) |>
+  add_model(bag_spec)
+
+set.seed(2414)
+bag_res <- tune_family(bag_wkf,
+                       grid = grid_regular(cost_complexity(), levels = 15))
+
+show_best(bag_res$tuned, metric = "rmse", n = 5)
+bag_res$best
+```
+
+### Random Forest
+
+For the random forest I'm tuning `mtry`, which is how many predictors each split gets to pick from. After recipe 1 there are 13 predictors, so I'm trying values from 1 to 13. I also set `importance = "impurity"` so I can make an importance plot later.
+
+```{r}
+rf_spec <- rand_forest(mtry = tune()) |>
+  set_engine("ranger", importance = "impurity") |>
+  set_mode("regression")
+
+rf_wkf <- workflow() |>
+  add_recipe(rec1) |>
+  add_model(rf_spec)
+
+set.seed(2414)
+rf_res <- tune_family(rf_wkf,
+                      grid = grid_regular(mtry(range = c(1, 13)), levels = 7))
+
+show_best(rf_res$tuned, metric = "rmse", n = 5)
+rf_res$best
+```
+
+The best random forest uses `mtry` = `r rf_res$best$mtry`.
+
+## Comparing on the Test Set
+
+Now I have the best model from each family fit on the full training set. Here's how all four did on the test set.
+
+```{r}
+test_fits <- list("MLR" = mlr_test_fit,
+                  "Regression Tree" = tree_res$test_fit,
+                  "Bagged Tree" = bag_res$test_fit,
+                  "Random Forest" = rf_res$test_fit)
+
+test_tbl <- map(test_fits, collect_metrics) |>
+  list_rbind(names_to = "model") |>
+  select(model, .metric, .estimate) |>
+  pivot_wider(names_from = .metric, values_from = .estimate) |>
+  arrange(rmse)
+
+test_tbl
+
+winner <- test_tbl$model[1]
+```
+
+The `r winner` did the best on the test set with an RMSE of about `r nice(test_tbl$rmse[1])` and an MAE of about `r nice(test_tbl$mae[1])`. The `r test_tbl$model[4]` did the worst with an RMSE of about `r nice(test_tbl$rmse[4])`. MAE is always lower than RMSE here since RMSE punishes the really big misses more.
+
+## Summaries of Each Model
+
+### MLR Coefficients
+
+Here's the coefficient table for `r best_mlr` fit on the training set.
+
+```{r}
+mlr_test_fit |>
+  extract_workflow() |>
+  extract_fit_parsnip() |>
+  tidy() |>
+  print(n = Inf)
+```
+
+Since temp and dew point are so correlated, I wouldn't read their individual coefficients on their own.
+
+### Regression Tree Plot
+
+```{r}
+tree_res$test_fit |>
+  extract_workflow() |>
+  extract_fit_engine() |>
+  rpart.plot(roundint = FALSE)
+```
+
+### Variable Importance
+
+I'm making the same kind of plot for both the bagged tree and the random forest, so here's a function for it. It sorts the bars so the most important variable is on top.
+
+```{r}
+imp_plot <- function(imp_df, title) {
+  imp_df |>
+    mutate(term = fct_reorder(term, value)) |>
+    ggplot(aes(x = term, y = value)) +
+    geom_col() +
+    coord_flip() +
+    labs(title = title, x = "Variable", y = "Importance")
+}
+```
+
+The bagged tree already stores its importance as a table with `term` and `value` columns.
+
+```{r}
+bag_imp <- bag_res$test_fit |>
+  extract_workflow() |>
+  extract_fit_engine() |>
+  pluck("imp") |>
+  arrange(desc(value))
+
+imp_plot(bag_imp, "Bagged Tree Variable Importance")
+```
+
+The random forest was the tricky one. `ranger` stores importance as a named vector instead of a table, so I used `enframe()` to turn it into one with the same column names.
+
+```{r}
+rf_imp <- rf_res$test_fit |>
+  extract_workflow() |>
+  extract_fit_engine() |>
+  pluck("variable.importance") |>
+  enframe(name = "term", value = "value") |>
+  arrange(desc(value))
+
+imp_plot(rf_imp, "Random Forest Variable Importance")
+```
+
+The bagged tree's top 3 are `r bag_imp$term[1]`, `r bag_imp$term[2]`, and `r bag_imp$term[3]`, and the random forest's top 3 are `r rf_imp$term[1]`, `r rf_imp$term[2]`, and `r rf_imp$term[3]`.
+
+## Final Model
+
+Since the `r winner` won on the test set, I'm fitting it on the entire data set. Because it's a workflow, the recipe gets redone using all the data instead of just the training set.
+
+```{r}
+final_wkfs <- list("MLR" = mlr_wkfs[[best_mlr]],
+                   "Regression Tree" = tree_res$wkf,
+                   "Bagged Tree" = bag_res$wkf,
+                   "Random Forest" = rf_res$wkf)
+
+set.seed(2414)
+final_model <- final_wkfs[[winner]] |>
+  fit(seoul_daily)
+
+final_model
+```
+
+## Conclusion
+
+I redid the HW9 MLR models with `tidymodels` and used 10 fold CV on the training set to pick `r best_mlr` as the best MLR model. Then I tuned a regression tree, bagged tree, and random forest the same way and compared all four on the test set. The `r winner` came out on top, so that's the one I fit to the whole data set. Across the tree models, `r rf_imp$term[1]` was one of the strongest predictors of daily rentals, which lines up with the EDA. The test set is only `r nrow(test_set)` days though, so a different split could end up favoring a different model.
